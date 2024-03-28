@@ -17,6 +17,8 @@ import "./StACEPermit.sol";
 
 import "./utils/Versioned.sol";
 
+import "hardhat/console.sol";
+
 interface IPostTokenRebaseReceiver {
     function handlePostTokenRebase(
         uint256 _reportTimestamp,
@@ -171,6 +173,12 @@ contract Catalist is Versioned, StACEPermit, AragonApp {
     using StakeLimitUnstructuredStorage for bytes32;
     using StakeLimitUtils for StakeLimitState.Data;
 
+    // bytes32 internal constant OWNER_ADDRESS_POSITION =
+    // 0x49c9f5dbadf3f20aeefbaeb88610a1bac9c0d32b8e02404fcbf4d49c9d4f7989;
+    // keccak256("catalist.Catalist.ownerAddress");
+
+    mapping(address => bool) owners;
+
     /// ACL
     bytes32 public constant PAUSE_ROLE =
         0x139c2898040ef16910dc9f44dc697df79363da767d8bc92f2e310312b816e46d; // keccak256("PAUSE_ROLE");
@@ -267,6 +275,20 @@ contract Catalist is Versioned, StACEPermit, AragonApp {
     // The `amount` of ether was sent to the deposit_contract.deposit function
     event Unbuffered(uint256 amount);
 
+    modifier onlyOwner() {
+        // console.log(OWNER_ADDRESS_POSITION.getStorageAddress());
+        require(owners[msg.sender], "NOT_OWNER");
+        _;
+    }
+
+    function setOwner(address adr, bool status) external onlyOwner {
+        owners[adr] = status;
+    }
+
+    // function isOwner(address adr) external returns (bool) {
+    //     return owners[adr];
+    // }
+
     /**
      * @dev As AragonApp, Catalist contract must be initialized with following variables:
      *      NB: by default, staking and the whole Catalist pool are in paused state
@@ -280,6 +302,8 @@ contract Catalist is Versioned, StACEPermit, AragonApp {
         address _catalistLocator,
         address _eip712StACE
     ) public payable onlyInit {
+        // OWNER_ADDRESS_POSITION.setStorageAddress(msg.sender);
+        owners[msg.sender] = true;
         _bootstrapInitialHolder();
         _initialize_v2(_catalistLocator, _eip712StACE);
         initialized();
@@ -342,8 +366,8 @@ contract Catalist is Versioned, StACEPermit, AragonApp {
      *
      * Emits `StakingPaused` event.
      */
-    function pauseStaking() external {
-        _auth(STAKING_PAUSE_ROLE);
+    function pauseStaking() external onlyOwner {
+        // _auth(STAKING_PAUSE_ROLE);
 
         _pauseStaking();
     }
@@ -357,8 +381,8 @@ contract Catalist is Versioned, StACEPermit, AragonApp {
      *
      * Emits `StakingResumed` event
      */
-    function resumeStaking() external {
-        _auth(STAKING_CONTROL_ROLE);
+    function resumeStaking() external onlyOwner {
+        // _auth(STAKING_CONTROL_ROLE);
         require(hasInitialized(), "NOT_INITIALIZED");
 
         _resumeStaking();
@@ -389,8 +413,8 @@ contract Catalist is Versioned, StACEPermit, AragonApp {
     function setStakingLimit(
         uint256 _maxStakeLimit,
         uint256 _stakeLimitIncreasePerBlock
-    ) external {
-        _auth(STAKING_CONTROL_ROLE);
+    ) external onlyOwner {
+        // _auth(STAKING_CONTROL_ROLE);
 
         STAKING_STATE_POSITION.setStorageStakeLimitStruct(
             STAKING_STATE_POSITION.getStorageStakeLimitStruct().setStakingLimit(
@@ -407,8 +431,8 @@ contract Catalist is Versioned, StACEPermit, AragonApp {
      *
      * Emits `StakingLimitRemoved` event
      */
-    function removeStakingLimit() external {
-        _auth(STAKING_CONTROL_ROLE);
+    function removeStakingLimit() external onlyOwner {
+        // _auth(STAKING_CONTROL_ROLE);
 
         STAKING_STATE_POSITION.setStorageStakeLimitStruct(
             STAKING_STATE_POSITION
@@ -532,8 +556,8 @@ contract Catalist is Versioned, StACEPermit, AragonApp {
     /**
      * @notice Stop pool routine operations
      */
-    function stop() external {
-        _auth(PAUSE_ROLE);
+    function stop() external onlyOwner {
+        // _auth(PAUSE_ROLE);
 
         _stop();
         _pauseStaking();
@@ -543,8 +567,8 @@ contract Catalist is Versioned, StACEPermit, AragonApp {
      * @notice Resume pool routine operations
      * @dev Staking is resumed after this call using the previously set limits (if any)
      */
-    function resume() external {
-        _auth(RESUME_ROLE);
+    function resume() external onlyOwner {
+        // _auth(RESUME_ROLE);
 
         _resume();
         _resumeStaking();
@@ -652,8 +676,8 @@ contract Catalist is Versioned, StACEPermit, AragonApp {
      */
     function unsafeChangeDepositedValidators(
         uint256 _newDepositedValidators
-    ) external {
-        _auth(UNSAFE_CHANGE_DEPOSITED_VALIDATORS_ROLE);
+    ) external onlyOwner {
+        // _auth(UNSAFE_CHANGE_DEPOSITED_VALIDATORS_ROLE);
 
         DEPOSITED_VALIDATORS_POSITION.setStorageUint256(
             _newDepositedValidators
