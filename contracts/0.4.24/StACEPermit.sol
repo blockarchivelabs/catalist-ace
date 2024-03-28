@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2023 OpenZeppelin, Lido <info@lido.fi>
+// SPDX-FileCopyrightText: 2023 OpenZeppelin, Lido <info@catalist.fi>
 // SPDX-License-Identifier: GPL-3.0
 
 /* See contracts/COMPILERS.md */
@@ -75,10 +75,10 @@ contract StACEPermit is IERC2612, StACE {
     /**
      * @dev Storage position used for the EIP712 message utils contract
      *
-     * keccak256("lido.StACEPermit.eip712StACE")
+     * keccak256("catalist.StACEPermit.eip712StACE")
      */
     bytes32 internal constant EIP712_STACE_POSITION =
-        0x42b2d95e1ce15ce63bf9a8d9f6312cf44b23415c977ffa3b884333422af8941c;
+        keccak256("catalist.StACEPermit.eip712StACE");
 
     /**
      * @dev Typehash constant for ERC-2612 (Permit)
@@ -86,7 +86,9 @@ contract StACEPermit is IERC2612, StACE {
      * keccak256("Permit(address owner,address spender,uint256 value,uint256 nonce,uint256 deadline)")
      */
     bytes32 internal constant PERMIT_TYPEHASH =
-        0x6e71edae12b1b97f4d1f60370fef10105fa2faae0126114a169c64845d6126c9;
+        keccak256(
+            "Permit(address owner,address spender,uint256 value,uint256 nonce,uint256 deadline)"
+        );
 
     /**
      * @dev Sets `value` as the allowance of `spender` over ``owner``'s tokens,

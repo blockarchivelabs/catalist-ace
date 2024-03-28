@@ -8,6 +8,7 @@ import "openzeppelin-solidity/contracts/token/ERC20/IERC20.sol";
 import "@aragon/os/contracts/common/UnstructuredStorage.sol";
 import "@aragon/os/contracts/lib/math/SafeMath.sol";
 import "./utils/Pausable.sol";
+import "hardhat/console.sol";
 
 /**
  * @title Interest-bearing ERC20-like token for Catalist Liquid Stacking protocol.
@@ -84,7 +85,7 @@ contract StACE is IERC20, Pausable {
      * keccak256("catalist.StACE.totalShares")
      */
     bytes32 internal constant TOTAL_SHARES_POSITION =
-        0xe3b4b636e601189b5f4c6742edf2538ac12bb61ed03e6da26949d69838fa447e;
+        keccak256("catalist.StACE.totalShares");
 
     /**
      * @notice An executed shares transfer from `sender` to `recipient`.
@@ -518,6 +519,7 @@ contract StACE is IERC20, Pausable {
     ) internal returns (uint256 newTotalShares) {
         require(_recipient != address(0), "MINT_TO_ZERO_ADDR");
 
+        console.log("minting shares for %s", _recipient);
         newTotalShares = _getTotalShares().add(_sharesAmount);
         TOTAL_SHARES_POSITION.setStorageUint256(newTotalShares);
 

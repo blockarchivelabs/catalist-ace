@@ -339,7 +339,7 @@
   "chainSpec": {
     "slotsPerEpoch": 32,
     "secondsPerSlot": 12,
-    "genesisTime": 1711430381,
+    "genesisTime": 1705568400,
     "depositContract": "0x6f22fFbC56eFF051aECF839396DD1eD9aD6BBA9D"
   },
   "createAppReposTx": "0x2700a14ad3c87d97e9492d377716c621fce11869fd4bd613efc7214d031e6ff7",
