@@ -83,6 +83,13 @@ const getNetConfig = (networkName, ethAccountName) => {
       ensAddress: netState.ensAddress,
       timeout: 100000,
       accounts: ['f11a771308f235a1331b098d0212db69ac049e56c9f1e0da739a39e8b743363c'],
+      gasPrice: 1010000000,
+    },
+    ace_mainnet: {
+      url: 'http://20.197.13.207:8545',
+      timeout: 100000,
+      ensAddress: netState.ensAddress,
+      accounts: ['f11a771308f235a1331b098d0212db69ac049e56c9f1e0da739a39e8b743363c'],
       gasPrice: 10100,
     },
     goerli: {
