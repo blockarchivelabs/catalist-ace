@@ -993,7 +993,9 @@ contract HashConsensus is AccessControlEnumerable {
         if (slot > type(uint64).max) revert NumericOverflow();
         if (report == ZERO_HASH) revert EmptyReport();
 
+        // msg.sender가 멤버인지 확인 후 맞으면 인덱스 반환
         uint256 memberIndex = _getMemberIndex(_msgSender());
+        // 반환한 인덱스로 멤버 상태를 가져옴
         MemberState memory memberState = _memberStates[memberIndex];
 
         uint256 expectedConsensusVersion = _getConsensusVersion();
@@ -1031,7 +1033,13 @@ contract HashConsensus is AccessControlEnumerable {
             }
         }
 
+        // 아마 이건 몇번째 보고서인지?
         uint256 variantsLength;
+
+        // 마지막으로 수신된 리포트의 refSlot이 현재 slot과 다르면
+        // 새로운 슬롯에 대한 첫번째 리포트이므로
+        // lastReportRefSlot을 slot으로 초기화하고
+        // variantsLength를 0으로 초기화
 
         if (_reportingState.lastReportRefSlot != slot) {
             // first report for a new slot => clear report variants
@@ -1059,7 +1067,8 @@ contract HashConsensus is AccessControlEnumerable {
             } else {
                 uint256 support = --_reportVariants[prevVarIndex].support;
                 if (support == _quorum - 1) {
-                    prevConsensusLost = true;
+                    // 1을 뺀 값인데 이게 정족수 - 1이랑 같으면
+                    prevConsensusLost = true; // 이전 consensus 리포트에서 합의가 끊어진거니까
                 }
             }
         }
@@ -1067,6 +1076,7 @@ contract HashConsensus is AccessControlEnumerable {
         uint256 support;
 
         if (varIndex < variantsLength) {
+            //
             support = ++_reportVariants[varIndex].support;
         } else {
             support = 1;

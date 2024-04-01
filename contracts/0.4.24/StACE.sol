@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2023 Catalist <info@catalist.fi>
+// SPDX-FileCopyrightText: 2023 Lido <info@lido.fi>
 // SPDX-License-Identifier: GPL-3.0
 
 /* See contracts/COMPILERS.md */
@@ -245,10 +245,11 @@ contract StACE is IERC20, Pausable {
      * @dev The `_amount` argument is the amount of tokens, not shares.
      */
     function transferFrom(
-        address _sender,
-        address _recipient,
+        address _sender, // msg.sender
+        address _recipient, // queue
         uint256 _amount
     ) external returns (bool) {
+        console.log(msg.sender, _sender, allowances[_sender][msg.sender]);
         _spendAllowance(_sender, msg.sender, _amount);
         _transfer(_sender, _recipient, _amount);
         return true;
@@ -519,7 +520,6 @@ contract StACE is IERC20, Pausable {
     ) internal returns (uint256 newTotalShares) {
         require(_recipient != address(0), "MINT_TO_ZERO_ADDR");
 
-        console.log("minting shares for %s", _recipient);
         newTotalShares = _getTotalShares().add(_sharesAmount);
         TOTAL_SHARES_POSITION.setStorageUint256(newTotalShares);
 

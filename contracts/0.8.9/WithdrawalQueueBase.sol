@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2023 Lido <info@catalist.fi>
+// SPDX-FileCopyrightText: 2023 Lido <info@lido.fi>
 // SPDX-License-Identifier: GPL-3.0
 
 /* See contracts/COMPILERS.md */
@@ -286,10 +286,10 @@ abstract contract WithdrawalQueueBase {
                 // so we're taking requests that are placed during the same report
                 // as equal even if their actual share rate are different
                 prevRequest.reportTimestamp == request.reportTimestamp ||
-                // both requests are below the line
+                    // both requests are below the line
                     (prevRequestShareRate <= _maxShareRate &&
                         requestShareRate <= _maxShareRate) ||
-                // both requests are above the line
+                    // both requests are above the line
                     (prevRequestShareRate > _maxShareRate &&
                         requestShareRate > _maxShareRate))
             ) {

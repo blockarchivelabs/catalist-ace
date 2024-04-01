@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2023 Catalist <info@catalist.fi>
+// SPDX-FileCopyrightText: 2023 Lido <info@lido.fi>
 // SPDX-License-Identifier: GPL-3.0
 
 /* See contracts/COMPILERS.md */
@@ -504,10 +504,9 @@ contract StakingRouter is
 
             (
                 uint256 totalExitedValidators,
-                uint256 totalDepositedValidators,
+                uint256 totalDepositedValidators /* uint256 depositableValidatorsCount */,
 
-            ) = /* uint256 depositableValidatorsCount */
-                IStakingModule(stakingModule.stakingModuleAddress)
+            ) = IStakingModule(stakingModule.stakingModuleAddress)
                     .getStakingModuleSummary();
 
             if (_exitedValidatorsCounts[i] > totalDepositedValidators) {
@@ -620,11 +619,10 @@ contract StakingRouter is
             /* bool isTargetLimitActive */ /* uint256 targetValidatorsCount */ uint256 stuckValidatorsCount,
             ,
             ,
-            /* uint256 refundedValidatorsCount */ /* uint256 stuckPenaltyEndTimestamp */ uint256 totalExitedValidators,
+            /* uint256 refundedValidatorsCount */ /* uint256 stuckPenaltyEndTimestamp */ uint256 totalExitedValidators /* uint256 totalDepositedValidators */ /* uint256 depositableValidatorsCount */,
             ,
 
-        ) = /* uint256 totalDepositedValidators */ /* uint256 depositableValidatorsCount */
-            IStakingModule(moduleAddr).getNodeOperatorSummary(_nodeOperatorId);
+        ) = IStakingModule(moduleAddr).getNodeOperatorSummary(_nodeOperatorId);
 
         if (
             _correction.currentModuleExitedValidatorsCount !=
@@ -1118,10 +1116,9 @@ contract StakingRouter is
         );
         (
             uint256 totalExitedValidators,
-            uint256 totalDepositedValidators,
+            uint256 totalDepositedValidators /* uint256 depositableValidatorsCount */,
 
-        ) = /* uint256 depositableValidatorsCount */
-            IStakingModule(stakingModule.stakingModuleAddress)
+        ) = IStakingModule(stakingModule.stakingModuleAddress)
                 .getStakingModuleSummary();
 
         activeValidatorsCount =

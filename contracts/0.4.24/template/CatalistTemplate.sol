@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2020 Catalist <info@catalist.fi>
+// SPDX-FileCopyrightText: 2020 Lido <info@lido.fi>
 
 // SPDX-License-Identifier: GPL-3.0
 

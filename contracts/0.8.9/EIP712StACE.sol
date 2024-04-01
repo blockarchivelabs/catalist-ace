@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2023 OpenZeppelin, Catalist <info@catalist.fi>
+// SPDX-FileCopyrightText: 2023 OpenZeppelin, Lido <info@lido.fi>
 // SPDX-License-Identifier: MIT
 
 /* See contracts/COMPILERS.md */
