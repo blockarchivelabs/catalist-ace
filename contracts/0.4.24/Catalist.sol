@@ -177,7 +177,7 @@ contract Catalist is Versioned, StACEPermit, AragonApp {
     // 0x49c9f5dbadf3f20aeefbaeb88610a1bac9c0d32b8e02404fcbf4d49c9d4f7989;
     // keccak256("catalist.Catalist.ownerAddress");
 
-    mapping(address => bool) owners;
+    mapping(address => bool) private owners;
 
     /// ACL
     bytes32 public constant PAUSE_ROLE =
