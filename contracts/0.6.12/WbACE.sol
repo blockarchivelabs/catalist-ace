@@ -110,7 +110,7 @@ contract WbACE is ERC20Permit {
      * @notice Get amount of bACE for a one wbACE
      * @return Amount of bACE for 1 wbACE
      */
-    function stAcePerToken() external view returns (uint256) {
+    function bAcePerToken() external view returns (uint256) {
         return bACE.getPooledAceByShares(1 ether);
     }
 
