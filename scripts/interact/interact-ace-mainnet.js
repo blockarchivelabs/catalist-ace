@@ -100,7 +100,7 @@ async function main() {
   // )
   // console.log('Operator ID:', operatorId)
 
-  const operatorId = 0
+  // const operatorId = 0
   // console.log()
   // console.log('Querying add signing keys...')
   // await nodeOperatorRegistry.addSigningKeys(
@@ -124,20 +124,20 @@ async function main() {
   //   }
   // );
 
-  console.log()
-  console.log('Querying get singing keys...')
-  const signingKeys = await nodeOperatorRegistry.getSigningKeys(operatorId, 0, 5)
-  console.log('Signing Keys:', signingKeys)
+  // console.log()
+  // console.log('Querying get singing keys...')
+  // const signingKeys = await nodeOperatorRegistry.getSigningKeys(operatorId, 0, 5)
+  // console.log('Signing Keys:', signingKeys)
 
-  console.log()
-  console.log('Querying active operators count...')
-  const activeOperators = await nodeOperatorRegistry.getActiveNodeOperatorsCount()
-  console.log('Active Operators:', activeOperators.toString())
+  // console.log()
+  // console.log('Querying active operators count...')
+  // const activeOperators = await nodeOperatorRegistry.getActiveNodeOperatorsCount()
+  // console.log('Active Operators:', activeOperators.toString())
 
-  console.log()
-  console.log('Querying node operator summary...')
-  const operatorSummary = await nodeOperatorRegistry.getNodeOperatorSummary(operatorId)
-  console.log('Operator Summary:', operatorSummary)
+  // console.log()
+  // console.log('Querying node operator summary...')
+  // const operatorSummary = await nodeOperatorRegistry.getNodeOperatorSummary(operatorId)
+  // console.log('Operator Summary:', operatorSummary)
 }
 
 main()

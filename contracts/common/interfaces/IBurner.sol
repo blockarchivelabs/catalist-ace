@@ -11,7 +11,7 @@ interface IBurner {
      *
      * NB: The real burn enactment to be invoked after the call (via internal Lido._burnShares())
      */
-    function commitSharesToBurn(uint256 _stACESharesToBurn) external;
+    function commitSharesToBurn(uint256 _bACESharesToBurn) external;
 
     /**
      * Request burn shares

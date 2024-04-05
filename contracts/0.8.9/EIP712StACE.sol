@@ -4,13 +4,13 @@
 /* See contracts/COMPILERS.md */
 pragma solidity 0.8.9;
 
-import { ECDSA } from "@openzeppelin/contracts-v4.4/utils/cryptography/ECDSA.sol";
+import {ECDSA} from "@openzeppelin/contracts-v4.4/utils/cryptography/ECDSA.sol";
 
-import { IEIP712StACE } from "../common/interfaces/IEIP712StACE.sol";
+import {IEIP712BACE} from "../common/interfaces/IEIP712BACE.sol";
 
 /**
  * NOTE: The code below is taken from "@openzeppelin/contracts-v4.4/utils/cryptography/draft-EIP712.sol"
- * With a main difference to store the stACE contract address internally and use it for signing.
+ * With a main difference to store the bACE contract address internally and use it for signing.
  */
 
 /**
@@ -31,26 +31,26 @@ import { IEIP712StACE } from "../common/interfaces/IEIP712StACE.sol";
  * https://docs.metamask.io/guide/signing-data.html[`eth_signTypedDataV4` in MetaMask].
  *
  */
-contract EIP712StACE is IEIP712StACE {
+contract EIP712BACE is IEIP712BACE {
     /* solhint-disable var-name-mixedcase */
     // Cache the domain separator as an immutable value, but also store the chain id that it corresponds to, in order to
     // invalidate the cached domain separator if the chain id changes.
     bytes32 private immutable _CACHED_DOMAIN_SEPARATOR;
     uint256 private immutable _CACHED_CHAIN_ID;
-    address private immutable _CACHED_STACE;
+    address private immutable _CACHED_BACE;
 
     bytes32 private immutable _HASHED_NAME;
     bytes32 private immutable _HASHED_VERSION;
     bytes32 private immutable _TYPE_HASH;
 
-    error ZeroStACEAddress();
+    error ZeroBACEAddress();
 
     /**
-     * @dev Constructs specialized EIP712 instance for StACE token, version "2".
+     * @dev Constructs specialized EIP712 instance for BACE token, version "2".
      */
-    constructor(address _stACE) {
-        if (_stACE == address(0)) {
-            revert ZeroStACEAddress();
+    constructor(address _bACE) {
+        if (_bACE == address(0)) {
+            revert ZeroBACEAddress();
         }
 
         bytes32 hashedName = keccak256("Liquid staked Ace 2.0");
@@ -66,9 +66,9 @@ contract EIP712StACE is IEIP712StACE {
             typeHash,
             hashedName,
             hashedVersion,
-            _stACE
+            _bACE
         );
-        _CACHED_STACE = _stACE;
+        _CACHED_BACE = _bACE;
         _TYPE_HASH = typeHash;
     }
 
@@ -76,9 +76,9 @@ contract EIP712StACE is IEIP712StACE {
      * @dev Returns the domain separator for the current chain.
      */
     function domainSeparatorV4(
-        address _stACE
+        address _bACE
     ) public view override returns (bytes32) {
-        if (_stACE == _CACHED_STACE && block.chainid == _CACHED_CHAIN_ID) {
+        if (_bACE == _CACHED_BACE && block.chainid == _CACHED_CHAIN_ID) {
             return _CACHED_DOMAIN_SEPARATOR;
         } else {
             return
@@ -86,7 +86,7 @@ contract EIP712StACE is IEIP712StACE {
                     _TYPE_HASH,
                     _HASHED_NAME,
                     _HASHED_VERSION,
-                    _stACE
+                    _bACE
                 );
         }
     }
@@ -95,7 +95,7 @@ contract EIP712StACE is IEIP712StACE {
         bytes32 _typeHash,
         bytes32 _nameHash,
         bytes32 _versionHash,
-        address _stACE
+        address _bACE
     ) private view returns (bytes32) {
         return
             keccak256(
@@ -104,7 +104,7 @@ contract EIP712StACE is IEIP712StACE {
                     _nameHash,
                     _versionHash,
                     block.chainid,
-                    _stACE
+                    _bACE
                 )
             );
     }
@@ -125,18 +125,18 @@ contract EIP712StACE is IEIP712StACE {
      * ```
      */
     function hashTypedDataV4(
-        address _stACE,
+        address _bACE,
         bytes32 _structHash
     ) external view override returns (bytes32) {
-        return ECDSA.toTypedDataHash(domainSeparatorV4(_stACE), _structHash);
+        return ECDSA.toTypedDataHash(domainSeparatorV4(_bACE), _structHash);
     }
 
     /**
      * @dev returns the fields and values that describe the domain separator
-     * used by stACE for EIP-712 signature.
+     * used by bACE for EIP-712 signature.
      */
     function eip712Domain(
-        address _stACE
+        address _bACE
     )
         external
         view
@@ -147,6 +147,6 @@ contract EIP712StACE is IEIP712StACE {
             address verifyingContract
         )
     {
-        return ("Liquid staked Ace 2.0", "2", block.chainid, _stACE);
+        return ("Liquid staked Ace 2.0", "2", block.chainid, _bACE);
     }
 }

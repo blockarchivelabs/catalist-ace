@@ -14,10 +14,10 @@ import "hardhat/console.sol";
  * @title Interest-bearing ERC20-like token for Catalist Liquid Stacking protocol.
  *
  * This contract is abstract. To make the contract deployable override the
- * `_getTotalPooledAce` function. `Catalist.sol` contract inherits StACE and defines
+ * `_getTotalPooledAce` function. `Catalist.sol` contract inherits bACE and defines
  * the `_getTotalPooledAce` function.
  *
- * StACE balances are dynamic and represent the holder's share in the total amount
+ * bACE balances are dynamic and represent the holder's share in the total amount
  * of Ace controlled by the protocol. Account shares aren't normalized, so the
  * contract also stores the sum of all shares to calculate each account's token balance
  * which equals to:
@@ -47,7 +47,7 @@ import "hardhat/console.sol";
  * DAO. This is useful for emergency scenarios, e.g. a protocol bug, where one might want
  * to freeze all token transfers and approvals until the emergency is resolved.
  */
-contract StACE is IERC20, Pausable {
+contract BACE is IERC20, Pausable {
     using SafeMath for uint256;
     using UnstructuredStorage for bytes32;
 
@@ -55,7 +55,7 @@ contract StACE is IERC20, Pausable {
     uint256 internal constant INFINITE_ALLOWANCE = ~uint256(0);
 
     /**
-     * @dev StACE balances are dynamic and are calculated based on the accounts' shares
+     * @dev bACE balances are dynamic and are calculated based on the accounts' shares
      * and the total amount of Ace controlled by the protocol. Account shares aren't
      * normalized, so the contract also stores the sum of all shares to calculate
      * each account's token balance which equals to:
@@ -82,10 +82,10 @@ contract StACE is IERC20, Pausable {
      * and error-prone to implement reference-type unstructured storage using Solidity v0.4;
      * see https://github.com/catalistfinance/catalist-dao/issues/181#issuecomment-736098834
      *
-     * keccak256("catalist.StACE.totalShares")
+     * keccak256("catalist.bACE.totalShares")
      */
     bytes32 internal constant TOTAL_SHARES_POSITION =
-        keccak256("catalist.StACE.totalShares");
+        keccak256("catalist.bACE.totalShares");
 
     /**
      * @notice An executed shares transfer from `sender` to `recipient`.
@@ -102,12 +102,12 @@ contract StACE is IERC20, Pausable {
      * @notice An executed `burnShares` request
      *
      * @dev Reports simultaneously burnt shares amount
-     * and corresponding stACE amount.
-     * The stACE amount is calculated twice: before and after the burning incurred rebase.
+     * and corresponding bACE amount.
+     * The bACE amount is calculated twice: before and after the burning incurred rebase.
      *
      * @param account holder of the burnt shares
-     * @param preRebaseTokenAmount amount of stACE the burnt shares corresponded to before the burn
-     * @param postRebaseTokenAmount amount of stACE the burnt shares corresponded to after the burn
+     * @param preRebaseTokenAmount amount of bACE the burnt shares corresponded to before the burn
+     * @param postRebaseTokenAmount amount of bACE the burnt shares corresponded to after the burn
      * @param sharesAmount amount of burnt shares
      */
     event SharesBurnt(
@@ -129,7 +129,7 @@ contract StACE is IERC20, Pausable {
      * name.
      */
     function symbol() external pure returns (string) {
-        return "stACE";
+        return "bACE";
     }
 
     /**
@@ -152,7 +152,7 @@ contract StACE is IERC20, Pausable {
     /**
      * @return the entire amount of Ace controlled by the protocol.
      *
-     * @dev The sum of all ACE balances in the protocol, equals to the total supply of stACE.
+     * @dev The sum of all ACE balances in the protocol, equals to the total supply of bACE.
      */
     function getTotalPooledAce() external view returns (uint256) {
         return _getTotalPooledAce();
@@ -482,7 +482,7 @@ contract StACE is IERC20, Pausable {
      * Requirements:
      *
      * - `_sender` cannot be the zero address.
-     * - `_recipient` cannot be the zero address or the `stACE` token contract itself
+     * - `_recipient` cannot be the zero address or the `bACE` token contract itself
      * - `_sender` must hold at least `_sharesAmount` shares.
      * - the contract must not be paused.
      */
@@ -493,7 +493,7 @@ contract StACE is IERC20, Pausable {
     ) internal {
         require(_sender != address(0), "TRANSFER_FROM_ZERO_ADDR");
         require(_recipient != address(0), "TRANSFER_TO_ZERO_ADDR");
-        require(_recipient != address(this), "TRANSFER_TO_STACE_CONTRACT");
+        require(_recipient != address(this), "TRANSFER_TO_BACE_CONTRACT");
         _whenNotStopped();
 
         uint256 currentSenderShares = shares[_sender];

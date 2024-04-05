@@ -6,16 +6,16 @@
 pragma solidity >=0.4.24 <0.9.0;
 
 /**
- * @dev Helper interface of EIP712 StACE-dedicated helper.
+ * @dev Helper interface of EIP712 BACE-dedicated helper.
  *
  * Has an access to the CHAIN_ID opcode and relies on immutables internally
  * Both are unavailable for Solidity 0.4.24.
  */
-interface IEIP712StACE {
+interface IEIP712BACE {
     /**
      * @dev Returns the domain separator for the current chain.
      */
-    function domainSeparatorV4(address _stACE) external view returns (bytes32);
+    function domainSeparatorV4(address _bACE) external view returns (bytes32);
 
     /**
      * @dev Given an already https://eips.ethereum.org/EIPS/eip-712#definition-of-hashstruct[hashed struct], this
@@ -33,16 +33,16 @@ interface IEIP712StACE {
      * ```
      */
     function hashTypedDataV4(
-        address _stACE,
+        address _bACE,
         bytes32 _structHash
     ) external view returns (bytes32);
 
     /**
      * @dev returns the fields and values that describe the domain separator
-     * used by stACE for EIP-712 signature.
+     * used by bACE for EIP-712 signature.
      */
     function eip712Domain(
-        address _stACE
+        address _bACE
     )
         external
         view

@@ -5,7 +5,7 @@
 pragma solidity 0.8.9;
 
 import "@openzeppelin/contracts-v4.4/utils/structs/EnumerableSet.sol";
-import { UnstructuredStorage } from "./lib/UnstructuredStorage.sol";
+import {UnstructuredStorage} from "./lib/UnstructuredStorage.sol";
 
 /// @title Queue to store and manage WithdrawalRequests.
 /// @dev Use an optimizations to store max share rates for finalized requests heavily inspired
@@ -51,8 +51,8 @@ abstract contract WithdrawalQueueBase {
 
     /// @notice structure representing a request for withdrawal
     struct WithdrawalRequest {
-        /// @notice sum of the all stACE submitted for withdrawals including this request
-        uint128 cumulativeStACE;
+        /// @notice sum of the all bACE submitted for withdrawals including this request
+        uint128 cumulativeBACE;
         /// @notice sum of the all shares locked for withdrawal including this request
         uint128 cumulativeShares;
         /// @notice address that can claim or transfer the request
@@ -73,9 +73,9 @@ abstract contract WithdrawalQueueBase {
 
     /// @notice output format struct for `_getWithdrawalStatus()` method
     struct WithdrawalRequestStatus {
-        /// @notice stACE token amount that was locked on withdrawal queue for this request
-        uint256 amountOfStACE;
-        /// @notice amount of stACE shares locked on withdrawal queue for this request
+        /// @notice bACE token amount that was locked on withdrawal queue for this request
+        uint256 amountOfBACE;
+        /// @notice amount of bACE shares locked on withdrawal queue for this request
         uint256 amountOfShares;
         /// @notice address that can claim or transfer this request
         address owner;
@@ -87,12 +87,12 @@ abstract contract WithdrawalQueueBase {
         bool isClaimed;
     }
 
-    /// @dev Contains both stACE token amount and its corresponding shares amount
+    /// @dev Contains both bACE token amount and its corresponding shares amount
     event WithdrawalRequested(
         uint256 indexed requestId,
         address indexed requestor,
         address indexed owner,
-        uint256 amountOfStACE,
+        uint256 amountOfBACE,
         uint256 amountOfShares
     );
     event WithdrawalsFinalized(
@@ -153,11 +153,11 @@ abstract contract WithdrawalQueueBase {
         return getLastRequestId() - getLastFinalizedRequestId();
     }
 
-    /// @notice Returns the amount of stACE in the queue yet to be finalized
-    function unfinalizedStACE() external view returns (uint256) {
+    /// @notice Returns the amount of bACE in the queue yet to be finalized
+    function unfinalizedBACE() external view returns (uint256) {
         return
-            _getQueue()[getLastRequestId()].cumulativeStACE -
-            _getQueue()[getLastFinalizedRequestId()].cumulativeStACE;
+            _getQueue()[getLastRequestId()].cumulativeBACE -
+            _getQueue()[getLastFinalizedRequestId()].cumulativeBACE;
     }
 
     //
@@ -165,7 +165,7 @@ abstract contract WithdrawalQueueBase {
     //
     // Process when protocol is fixing the withdrawal request value and lock the required amount of ACE.
     // The value of a request after finalization can be:
-    //  - nominal (when the amount of eth locked for this request are equal to the request's stACE)
+    //  - nominal (when the amount of eth locked for this request are equal to the request's bACE)
     //  - discounted (when the amount of eth will be lower, because the protocol share rate dropped
     //   before request is finalized, so it will be equal to `request's shares` * `protocol share rate`)
     // The parameters that are required for finalization are:
@@ -346,18 +346,17 @@ abstract contract WithdrawalQueueBase {
 
             WithdrawalRequest memory batchEnd = _getQueue()[batchEndRequestId];
 
-            (
-                uint256 batchShareRate,
-                uint256 stACE,
-                uint256 shares
-            ) = _calcBatch(prevBatchEnd, batchEnd);
+            (uint256 batchShareRate, uint256 bACE, uint256 shares) = _calcBatch(
+                prevBatchEnd,
+                batchEnd
+            );
 
             if (batchShareRate > _maxShareRate) {
                 // discounted
                 ethToLock += (shares * _maxShareRate) / E27_PRECISION_BASE;
             } else {
                 // nominal
-                ethToLock += stACE;
+                ethToLock += bACE;
             }
             sharesToBurn += shares;
 
@@ -389,10 +388,10 @@ abstract contract WithdrawalQueueBase {
             _lastRequestIdToBeFinalized
         ];
 
-        uint128 stACEToFinalize = requestToFinalize.cumulativeStACE -
-            lastFinalizedRequest.cumulativeStACE;
-        if (_amountOfACE > stACEToFinalize)
-            revert TooMuchAceToFinalize(_amountOfACE, stACEToFinalize);
+        uint128 bACEToFinalize = requestToFinalize.cumulativeBACE -
+            lastFinalizedRequest.cumulativeBACE;
+        if (_amountOfACE > bACEToFinalize)
+            revert TooMuchAceToFinalize(_amountOfACE, bACEToFinalize);
 
         uint256 firstRequestIdToFinalize = lastFinalizedRequestId + 1;
         uint256 lastCheckpointIndex = getLastCheckpointIndex();
@@ -420,7 +419,7 @@ abstract contract WithdrawalQueueBase {
     /// @dev creates a new `WithdrawalRequest` in the queue
     ///  Emits WithdrawalRequested event
     function _enqueue(
-        uint128 _amountOfStACE,
+        uint128 _amountOfBACE,
         uint128 _amountOfShares,
         address _owner
     ) internal returns (uint256 requestId) {
@@ -429,14 +428,14 @@ abstract contract WithdrawalQueueBase {
 
         uint128 cumulativeShares = lastRequest.cumulativeShares +
             _amountOfShares;
-        uint128 cumulativeStACE = lastRequest.cumulativeStACE + _amountOfStACE;
+        uint128 cumulativeBACE = lastRequest.cumulativeBACE + _amountOfBACE;
 
         requestId = lastRequestId + 1;
 
         _setLastRequestId(requestId);
 
         WithdrawalRequest memory newRequest = WithdrawalRequest(
-            cumulativeStACE,
+            cumulativeBACE,
             cumulativeShares,
             _owner,
             uint40(block.timestamp),
@@ -450,7 +449,7 @@ abstract contract WithdrawalQueueBase {
             requestId,
             msg.sender,
             _owner,
-            _amountOfStACE,
+            _amountOfBACE,
             _amountOfShares
         );
     }
@@ -466,7 +465,7 @@ abstract contract WithdrawalQueueBase {
         WithdrawalRequest memory previousRequest = _getQueue()[_requestId - 1];
 
         status = WithdrawalRequestStatus(
-            request.cumulativeStACE - previousRequest.cumulativeStACE,
+            request.cumulativeBACE - previousRequest.cumulativeBACE,
             request.cumulativeShares - previousRequest.cumulativeShares,
             request.owner,
             request.timestamp,
@@ -560,7 +559,7 @@ abstract contract WithdrawalQueueBase {
             _requestId,
             _hint
         );
-        // because of the stACE rounding issue
+        // because of the bACE rounding issue
         // (issue: https://github.com/catalistfinance/catalist-dao/issues/442 )
         // some dust (1-2 wei per request) will be accumulated upon claiming
         _setLockedAceAmount(getLockedAceAmount() - ethWithDiscount);
@@ -632,21 +631,21 @@ abstract contract WithdrawalQueueBase {
         if (address(this).balance < _amount) revert NotEnoughAce();
 
         // solhint-disable-next-line
-        (bool success, ) = _recipient.call{ value: _amount }("");
+        (bool success, ) = _recipient.call{value: _amount}("");
         if (!success) revert CantSendValueRecipientMayHaveReverted();
     }
 
-    /// @dev calculate batch stats (shareRate, stACE and shares) for the range of `(_preStartRequest, _endRequest]`
+    /// @dev calculate batch stats (shareRate, bACE and shares) for the range of `(_preStartRequest, _endRequest]`
     function _calcBatch(
         WithdrawalRequest memory _preStartRequest,
         WithdrawalRequest memory _endRequest
-    ) internal pure returns (uint256 shareRate, uint256 stACE, uint256 shares) {
-        stACE = _endRequest.cumulativeStACE - _preStartRequest.cumulativeStACE;
+    ) internal pure returns (uint256 shareRate, uint256 bACE, uint256 shares) {
+        bACE = _endRequest.cumulativeBACE - _preStartRequest.cumulativeBACE;
         shares =
             _endRequest.cumulativeShares -
             _preStartRequest.cumulativeShares;
 
-        shareRate = (stACE * E27_PRECISION_BASE) / shares;
+        shareRate = (bACE * E27_PRECISION_BASE) / shares;
     }
 
     //

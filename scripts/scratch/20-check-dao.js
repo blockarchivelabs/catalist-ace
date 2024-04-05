@@ -30,9 +30,9 @@ const TOKEN_DECIMALS = 18
 const TOKEN_MAX_PER_ACCOUNT = '115792089237316195423570985008687907853269984665640564039457584007913129639935'
 const FINANCE_DEFAULT_PERIOD = 60 * 60 * 24 * 30 // 30 days
 
-const STACE_TOKEN_NAME = 'Liquid staked Ace 2.0'
-const STACE_TOKEN_SYMBOL = 'stACE'
-const STACE_TOKEN_DECIMALS = 18
+const BACE_TOKEN_NAME = 'Liquid staked Ace 2.0'
+const BACE_TOKEN_SYMBOL = 'bACE'
+const BACE_TOKEN_DECIMALS = 18
 
 const ZERO_WITHDRAWAL_CREDENTIALS = '0x0000000000000000000000000000000000000000000000000000000000000000'
 const PROTOCOL_PAUSED_AFTER_DEPLOY = true
@@ -335,11 +335,11 @@ async function assertDAOConfig({
   log.splitter()
   await assertKernel(catalist, 'catalist')
 
-  assert.log(assert.equal, await catalist.name(), STACE_TOKEN_NAME, `catalist.name is ${yl(STACE_TOKEN_NAME)}`)
+  assert.log(assert.equal, await catalist.name(), BACE_TOKEN_NAME, `catalist.name is ${yl(BACE_TOKEN_NAME)}`)
 
-  assert.log(assert.equal, await catalist.symbol(), STACE_TOKEN_SYMBOL, `catalist.symbol is ${yl(STACE_TOKEN_SYMBOL)}`)
+  assert.log(assert.equal, await catalist.symbol(), BACE_TOKEN_SYMBOL, `catalist.symbol is ${yl(BACE_TOKEN_SYMBOL)}`)
 
-  assert.log(assert.bnEqual, await catalist.decimals(), STACE_TOKEN_DECIMALS, `catalist.decimals is ${yl(STACE_TOKEN_DECIMALS)}`)
+  assert.log(assert.bnEqual, await catalist.decimals(), BACE_TOKEN_DECIMALS, `catalist.decimals is ${yl(BACE_TOKEN_DECIMALS)}`)
 
   // TODO
   // DAO_LIVE || assert.log(assert.bnEqual, await catalist.totalSupply(), 0, `catalist.totalSupply() is ${yl(0)}`)

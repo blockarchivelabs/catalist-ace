@@ -4,20 +4,20 @@
 /* See contracts/COMPILERS.md */
 pragma solidity 0.8.9;
 
-import { IERC721 } from "@openzeppelin/contracts-v4.4/token/ERC721/IERC721.sol";
-import { IERC721Receiver } from "@openzeppelin/contracts-v4.4/token/ERC721/IERC721Receiver.sol";
-import { IERC721Metadata } from "@openzeppelin/contracts-v4.4/token/ERC721/extensions/IERC721Metadata.sol";
-import { IERC165 } from "@openzeppelin/contracts-v4.4/utils/introspection/IERC165.sol";
-import { IERC4906 } from "./interfaces/IERC4906.sol";
+import {IERC721} from "@openzeppelin/contracts-v4.4/token/ERC721/IERC721.sol";
+import {IERC721Receiver} from "@openzeppelin/contracts-v4.4/token/ERC721/IERC721Receiver.sol";
+import {IERC721Metadata} from "@openzeppelin/contracts-v4.4/token/ERC721/extensions/IERC721Metadata.sol";
+import {IERC165} from "@openzeppelin/contracts-v4.4/utils/introspection/IERC165.sol";
+import {IERC4906} from "./interfaces/IERC4906.sol";
 
-import { EnumerableSet } from "@openzeppelin/contracts-v4.4/utils/structs/EnumerableSet.sol";
-import { Address } from "@openzeppelin/contracts-v4.4/utils/Address.sol";
-import { Strings } from "@openzeppelin/contracts-v4.4/utils/Strings.sol";
+import {EnumerableSet} from "@openzeppelin/contracts-v4.4/utils/structs/EnumerableSet.sol";
+import {Address} from "@openzeppelin/contracts-v4.4/utils/Address.sol";
+import {Strings} from "@openzeppelin/contracts-v4.4/utils/Strings.sol";
 
-import { IWstACE, WithdrawalQueue } from "./WithdrawalQueue.sol";
-import { AccessControlEnumerable } from "./utils/access/AccessControlEnumerable.sol";
-import { UnstructuredRefStorage } from "./lib/UnstructuredRefStorage.sol";
-import { UnstructuredStorage } from "./lib/UnstructuredStorage.sol";
+import {IWbACE, WithdrawalQueue} from "./WithdrawalQueue.sol";
+import {AccessControlEnumerable} from "./utils/access/AccessControlEnumerable.sol";
+import {UnstructuredRefStorage} from "./lib/UnstructuredRefStorage.sol";
+import {UnstructuredStorage} from "./lib/UnstructuredStorage.sol";
 
 /// @title Interface defining INFTDescriptor to generate ERC721 tokenURI
 interface INFTDescriptor {
@@ -77,14 +77,14 @@ contract WithdrawalQueueERC721 is IERC721Metadata, IERC4906, WithdrawalQueue {
     bytes32 private immutable NAME;
     bytes32 private immutable SYMBOL;
 
-    /// @param _wstACE address of WstACE contract
+    /// @param _wbACE address of WbACE contract
     /// @param _name IERC721Metadata name string. Should be shorter than 32 bytes
     /// @param _symbol IERC721Metadata symbol string. Should be shorter than 32 bytes
     constructor(
-        address _wstACE,
+        address _wbACE,
         string memory _name,
         string memory _symbol
-    ) WithdrawalQueue(IWstACE(_wstACE)) {
+    ) WithdrawalQueue(IWbACE(_wbACE)) {
         if (bytes(_name).length == 0 || bytes(_symbol).length == 0)
             revert ZeroMetadata();
         NAME = _toBytes32(_name);
@@ -468,8 +468,8 @@ contract WithdrawalQueueERC721 is IERC721Metadata, IERC4906, WithdrawalQueue {
                 bytes("?requested="),
                 bytes(
                     uint256(
-                        _getQueue()[_requestId].cumulativeStACE -
-                            _getQueue()[_requestId - 1].cumulativeStACE
+                        _getQueue()[_requestId].cumulativeBACE -
+                            _getQueue()[_requestId - 1].cumulativeBACE
                     ).toString()
                 ),
                 bytes("&created_at="),

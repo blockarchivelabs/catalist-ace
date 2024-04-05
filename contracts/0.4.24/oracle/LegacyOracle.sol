@@ -201,7 +201,7 @@ contract LegacyOracle is Versioned, AragonApp {
      * @notice DEPRECATED, kept for compatibility purposes only.
      *
      * The change of the protocol TVL that the last rebase resulted in. Notice that, during
-     * a rebase, stACE shares can be minted to distribute protocol fees and burnt to apply
+     * a rebase, bACE shares can be minted to distribute protocol fees and burnt to apply
      * cover for losses incurred by slashed or unresponsive validators. A rebase might be
      * triggered without changing the protocol TVL. Thus, it's impossible to correctly
      * calculate APR from the numbers returned by this function.

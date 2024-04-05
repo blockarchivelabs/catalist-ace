@@ -17,7 +17,7 @@ const REQUIRED_NET_STATE = [
   "accountingOracle",
   "burner",
   "daoInitialSettings",
-  "eip712StACE",
+  "eip712BACE",
   "hashConsensusForAccountingOracle",
   "hashConsensusForValidatorsExitBusOracle",
   "catalistLocator",

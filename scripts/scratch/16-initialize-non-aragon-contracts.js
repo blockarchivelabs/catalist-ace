@@ -16,7 +16,7 @@ const REQUIRED_NET_STATE = [
   "catalistLocator",
   "stakingRouter",
   "daoInitialSettings",
-  "eip712StACE",
+  "eip712BACE",
   "accountingOracle",
   "hashConsensusForAccountingOracle",
   "validatorsExitBusOracle",
@@ -50,7 +50,7 @@ async function deployNewContracts({ web3, artifacts }) {
   const hashConsensusForAccountingAddress = state["hashConsensusForAccountingOracle"].address
   const ValidatorsExitBusOracleAddress = state["validatorsExitBusOracle"].proxy.address
   const hashConsensusForValidatorsExitBusOracleAddress = state["hashConsensusForValidatorsExitBusOracle"].address
-  const eip712StACEAddress = state["eip712StACE"].address
+  const eip712BACEAddress = state["eip712BACE"].address
   const withdrawalVaultAddress = state["withdrawalVault"].proxy.address
   const oracleDaemonConfigAddress = state.oracleDaemonConfig.address
 
@@ -80,7 +80,7 @@ async function deployNewContracts({ web3, artifacts }) {
   //
   const catalistInitArgs = [
     catalistLocatorAddress,
-    eip712StACEAddress,
+    eip712BACEAddress,
   ]
   const bootstrapInitBalance = 10 // wei
   const catalist = await artifacts.require('Catalist').at(catalistAddress)

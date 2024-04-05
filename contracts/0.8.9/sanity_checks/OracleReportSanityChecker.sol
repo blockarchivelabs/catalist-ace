@@ -4,19 +4,19 @@
 /* See contracts/COMPILERS.md */
 pragma solidity 0.8.9;
 
-import { SafeCast } from "@openzeppelin/contracts-v4.4/utils/math/SafeCast.sol";
+import {SafeCast} from "@openzeppelin/contracts-v4.4/utils/math/SafeCast.sol";
 
-import { Math256 } from "../../common/lib/Math256.sol";
-import { AccessControlEnumerable } from "../utils/access/AccessControlEnumerable.sol";
-import { PositiveTokenRebaseLimiter, TokenRebaseLimiterData } from "../lib/PositiveTokenRebaseLimiter.sol";
-import { ICatalistLocator } from "../../common/interfaces/ICatalistLocator.sol";
-import { IBurner } from "../../common/interfaces/IBurner.sol";
+import {Math256} from "../../common/lib/Math256.sol";
+import {AccessControlEnumerable} from "../utils/access/AccessControlEnumerable.sol";
+import {PositiveTokenRebaseLimiter, TokenRebaseLimiterData} from "../lib/PositiveTokenRebaseLimiter.sol";
+import {ICatalistLocator} from "../../common/interfaces/ICatalistLocator.sol";
+import {IBurner} from "../../common/interfaces/IBurner.sol";
 
 interface IWithdrawalQueue {
     struct WithdrawalRequestStatus {
-        /// @notice stACE token amount that was locked on withdrawal queue for this request
-        uint256 amountOfStACE;
-        /// @notice amount of stACE shares locked on withdrawal queue for this request
+        /// @notice bACE token amount that was locked on withdrawal queue for this request
+        uint256 amountOfBACE;
+        /// @notice amount of bACE shares locked on withdrawal queue for this request
         uint256 amountOfShares;
         /// @notice address that can claim or transfer this request
         address owner;
@@ -209,7 +209,7 @@ contract OracleReportSanityChecker is AccessControlEnumerable {
     /// @dev Get max positive rebase allowed per single oracle report token rebase happens on total
     ///     supply adjustment, huge positive rebase can incur oracle report sandwiching.
     ///
-    ///     stACE balance for the `account` defined as:
+    ///     bACE balance for the `account` defined as:
     ///         balanceOf(account) =
     ///             shares[account] * totalPooledAce / totalShares = shares[account] * shareRate
     ///
@@ -348,7 +348,7 @@ contract OracleReportSanityChecker is AccessControlEnumerable {
     /// @notice Returns the allowed ACE amount that might be taken from the withdrawal vault and EL
     ///     rewards vault during Catalist's oracle report processing
     /// @param _preTotalPooledAce total amount of ACE controlled by the protocol
-    /// @param _preTotalShares total amount of minted stACE shares
+    /// @param _preTotalShares total amount of minted bACE shares
     /// @param _preCLBalance sum of all Catalist validators' balances on the Consensus Layer before the
     ///     current oracle report
     /// @param _postCLBalance sum of all Catalist validators' balances on the Consensus Layer after the
@@ -705,11 +705,11 @@ contract OracleReportSanityChecker is AccessControlEnumerable {
         }
 
         // the simulated share rate can be either higher or lower than the actual one
-        // in case of new user-submitted ether & minted `stACE` between the oracle reference slot
+        // in case of new user-submitted ether & minted `bACE` between the oracle reference slot
         // and the actual report delivery slot
         //
         // it happens because the oracle daemon snapshots rewards or losses at the reference slot,
-        // and then calculates simulated share rate, but if new ether was submitted together with minting new `stACE`
+        // and then calculates simulated share rate, but if new ether was submitted together with minting new `bACE`
         // after the reference slot passed, the oracle daemon still submits the same amount of rewards or losses,
         // which now is applicable to more 'shareholders', lowering the impact per a single share
         // (i.e, changing the actual share rate)
@@ -719,7 +719,7 @@ contract OracleReportSanityChecker is AccessControlEnumerable {
         //
         // Given that:
         // 1) CL one-off balance decrease ≤ token rebase ≤ max positive token rebase
-        // 2) user-submitted ether & minted `stACE` don't exceed the current staking rate limit
+        // 2) user-submitted ether & minted `bACE` don't exceed the current staking rate limit
         // (see Catalist.getCurrentStakeLimit())
         //
         // can conclude that `simulatedShareRateDeviationBPLimit` (L) should be set as follows:

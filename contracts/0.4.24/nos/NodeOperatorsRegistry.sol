@@ -16,7 +16,7 @@ import {SigningKeys} from "../lib/SigningKeys.sol";
 import {Packed64x4} from "../lib/Packed64x4.sol";
 import {Versioned} from "../utils/Versioned.sol";
 
-interface IStACE {
+interface IBACE {
     function sharesOf(address _account) external view returns (uint256);
     function transferShares(
         address _recipient,
@@ -227,7 +227,7 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
     struct NodeOperator {
         /// @dev Flag indicating if the operator can participate in further staking and reward distribution
         bool active;
-        /// @dev Ethereum address on Execution Layer which receives stACE rewards for this operator
+        /// @dev Ethereum address on Execution Layer which receives bACE rewards for this operator
         address rewardAddress;
         /// @dev Human-readable name
         string name;
@@ -389,7 +389,7 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
 
         // set unlimited allowance for burner from staking router
         // to burn stuck keys penalized shares
-        IStACE(getLocator().catalist()).approve(
+        IBACE(getLocator().catalist()).approve(
             getLocator().burner(),
             ~uint256(0)
         );
@@ -400,7 +400,7 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
 
     /// @notice Add node operator named `name` with reward address `rewardAddress` and staking limit = 0 validators
     /// @param _name Human-readable name
-    /// @param _rewardAddress Ethereum 1 address which receives stACE rewards for this operator
+    /// @param _rewardAddress Ethereum 1 address which receives bACE rewards for this operator
     /// @return id a unique key of the added operator
     function addNodeOperator(
         string _name,
@@ -592,7 +592,7 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
         _increaseValidatorsKeysNonce();
     }
 
-    /// @notice Called by StakingRouter to signal that stACE rewards were minted for this module.
+    /// @notice Called by StakingRouter to signal that bACE rewards were minted for this module.
     function onRewardsMinted(uint256 /* _totalShares */) external view {
         _auth(STAKING_ROUTER_ROLE);
         // since we're pushing rewards to operators after exited validators counts are
@@ -1986,11 +1986,11 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
     }
 
     /// @notice distributes rewards among node operators
-    /// @return the amount of stACE shares distributed among node operators
+    /// @return the amount of bACE shares distributed among node operators
     function _distributeRewards() internal returns (uint256 distributed) {
-        IStACE stACE = IStACE(getLocator().catalist());
+        IBACE bACE = IBACE(getLocator().catalist());
 
-        uint256 sharesToDistribute = stACE.sharesOf(address(this));
+        uint256 sharesToDistribute = bACE.sharesOf(address(this));
         if (sharesToDistribute == 0) {
             return;
         }
@@ -2012,7 +2012,7 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
                 toBurn = toBurn.add(shares[idx]);
                 emit NodeOperatorPenalized(recipients[idx], shares[idx]);
             }
-            stACE.transferShares(recipients[idx], shares[idx]);
+            bACE.transferShares(recipients[idx], shares[idx]);
             distributed = distributed.add(shares[idx]);
             emit RewardsDistributed(recipients[idx], shares[idx]);
         }
@@ -2161,8 +2161,8 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
 
     function _onlyValidRewardAddress(address _rewardAddress) internal view {
         _onlyNonZeroAddress(_rewardAddress);
-        // The Catalist address is forbidden explicitly because stACE transfers on this contract will revert
-        // See onExitedAndStuckValidatorsCountsUpdated() and StACE._transferShares() for details
+        // The Catalist address is forbidden explicitly because bACE transfers on this contract will revert
+        // See onExitedAndStuckValidatorsCountsUpdated() and BACE._transferShares() for details
         require(
             _rewardAddress != getLocator().catalist(),
             "CATALIST_REWARD_ADDRESS"

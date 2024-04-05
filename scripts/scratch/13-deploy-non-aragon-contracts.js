@@ -103,22 +103,22 @@ async function deployNewContracts({ web3, artifacts }) {
   logWideSplitter()
 
   //
-  // === EIP712StACE ===
+  // === EIP712BACE ===
   //
-  await deployWithoutProxy("eip712StACE", "EIP712StACE", deployer, [catalistAddress])
+  await deployWithoutProxy("eip712BACE", "EIP712BACE", deployer, [catalistAddress])
   logWideSplitter()
 
   //
-  // === WstACE ===
+  // === WbACE ===
   //
-  const wstACEAddress = await deployWithoutProxy("wstACE", "WstACE", deployer, [catalistAddress])
+  const wbACEAddress = await deployWithoutProxy("wbACE", "WbACE", deployer, [catalistAddress])
   logWideSplitter()
 
   //
   // === WithdrawalQueueERC721 ===
   //
   const withdrawalQueueERC721Args = [
-    wstACEAddress,
+    wbACEAddress,
     withdrawalQueueERC721Params.name,
     withdrawalQueueERC721Params.symbol,
   ]

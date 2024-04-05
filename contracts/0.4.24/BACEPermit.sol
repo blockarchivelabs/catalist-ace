@@ -4,12 +4,12 @@
 /* See contracts/COMPILERS.md */
 pragma solidity 0.4.24;
 
-import { UnstructuredStorage } from "@aragon/os/contracts/common/UnstructuredStorage.sol";
+import {UnstructuredStorage} from "@aragon/os/contracts/common/UnstructuredStorage.sol";
 
-import { SignatureUtils } from "../common/lib/SignatureUtils.sol";
-import { IEIP712StACE } from "../common/interfaces/IEIP712StACE.sol";
+import {SignatureUtils} from "../common/lib/SignatureUtils.sol";
+import {IEIP712BACE} from "../common/interfaces/IEIP712BACE.sol";
 
-import { StACE } from "./StACE.sol";
+import {BACE} from "./BACE.sol";
 
 /**
  * @dev Interface of the ERC20 Permit extension allowing approvals to be made via signatures, as defined in
@@ -59,13 +59,13 @@ interface IERC2612 {
     function DOMAIN_SEPARATOR() external view returns (bytes32);
 }
 
-contract StACEPermit is IERC2612, StACE {
+contract BACEPermit is IERC2612, BACE {
     using UnstructuredStorage for bytes32;
 
     /**
      * @dev Service event for initialization
      */
-    event EIP712StACEInitialized(address eip712StACE);
+    event EIP712BACEInitialized(address eip712BACE);
 
     /**
      * @dev Nonces for ERC-2612 (Permit)
@@ -75,10 +75,10 @@ contract StACEPermit is IERC2612, StACE {
     /**
      * @dev Storage position used for the EIP712 message utils contract
      *
-     * keccak256("catalist.StACEPermit.eip712StACE")
+     * keccak256("catalist.BACEPermit.eip712BACE")
      */
-    bytes32 internal constant EIP712_STACE_POSITION =
-        keccak256("catalist.StACEPermit.eip712StACE");
+    bytes32 internal constant EIP712_BACE_POSITION =
+        keccak256("catalist.BACEPermit.eip712BACE");
 
     /**
      * @dev Typehash constant for ERC-2612 (Permit)
@@ -125,7 +125,7 @@ contract StACEPermit is IERC2612, StACE {
             )
         );
 
-        bytes32 hash = IEIP712StACE(getEIP712StACE()).hashTypedDataV4(
+        bytes32 hash = IEIP712BACE(getEIP712BACE()).hashTypedDataV4(
             address(this),
             structHash
         );
@@ -153,7 +153,7 @@ contract StACEPermit is IERC2612, StACE {
      */
     // solhint-disable-next-line func-name-mixedcase
     function DOMAIN_SEPARATOR() external view returns (bytes32) {
-        return IEIP712StACE(getEIP712StACE()).domainSeparatorV4(address(this));
+        return IEIP712BACE(getEIP712BACE()).domainSeparatorV4(address(this));
     }
 
     /**
@@ -176,7 +176,7 @@ contract StACEPermit is IERC2612, StACE {
             address verifyingContract
         )
     {
-        return IEIP712StACE(getEIP712StACE()).eip712Domain(address(this));
+        return IEIP712BACE(getEIP712BACE()).eip712Domain(address(this));
     }
 
     /**
@@ -188,21 +188,21 @@ contract StACEPermit is IERC2612, StACE {
     }
 
     /**
-     * @dev Initialize EIP712 message utils contract for stACE
+     * @dev Initialize EIP712 message utils contract for bACE
      */
-    function _initializeEIP712StACE(address _eip712StACE) internal {
-        require(_eip712StACE != address(0), "ZERO_EIP712STACE");
-        require(getEIP712StACE() == address(0), "EIP712STACE_ALREADY_SET");
+    function _initializeEIP712BACE(address _eip712BACE) internal {
+        require(_eip712BACE != address(0), "ZERO_EIP712BACE");
+        require(getEIP712BACE() == address(0), "EIP712BACE_ALREADY_SET");
 
-        EIP712_STACE_POSITION.setStorageAddress(_eip712StACE);
+        EIP712_BACE_POSITION.setStorageAddress(_eip712BACE);
 
-        emit EIP712StACEInitialized(_eip712StACE);
+        emit EIP712BACEInitialized(_eip712BACE);
     }
 
     /**
      * @dev Get EIP712 message utils contract
      */
-    function getEIP712StACE() public view returns (address) {
-        return EIP712_STACE_POSITION.getStorageAddress();
+    function getEIP712BACE() public view returns (address) {
+        return EIP712_BACE_POSITION.getStorageAddress();
     }
 }

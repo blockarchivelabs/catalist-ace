@@ -13,7 +13,7 @@ import "../common/interfaces/IBurner.sol";
 import "./lib/StakeLimitUtils.sol";
 import "../common/lib/Math256.sol";
 
-import "./StACEPermit.sol";
+import "./BACEPermit.sol";
 
 import "./utils/Versioned.sol";
 
@@ -140,7 +140,7 @@ interface IWithdrawalQueue {
 
     function isPaused() external view returns (bool);
 
-    function unfinalizedStACE() external view returns (uint256);
+    function unfinalizedBACE() external view returns (uint256);
 
     function isBunkerModeActive() external view returns (bool);
 }
@@ -160,14 +160,14 @@ interface IWithdrawalQueue {
  * ---
  * NB: Order of inheritance must preserve the structured storage layout of the previous versions.
  *
- * @dev Catalist is derived from `StACEPermit` that has a structured storage:
- * SLOT 0: mapping (address => uint256) private shares (`StACE`)
- * SLOT 1: mapping (address => mapping (address => uint256)) private allowances (`StACE`)
- * SLOT 2: mapping(address => uint256) internal noncesByAddress (`StACEPermit`)
+ * @dev Catalist is derived from `BACEPermit` that has a structured storage:
+ * SLOT 0: mapping (address => uint256) private shares (`BACE`)
+ * SLOT 1: mapping (address => mapping (address => uint256)) private allowances (`BACE`)
+ * SLOT 2: mapping(address => uint256) internal noncesByAddress (`BACEPermit`)
  *
  * `Versioned` and `AragonApp` both don't have the pre-allocated structured storage.
  */
-contract Catalist is Versioned, StACEPermit, AragonApp {
+contract Catalist is Versioned, BACEPermit, AragonApp {
     using SafeMath for uint256;
     using UnstructuredStorage for bytes32;
     using StakeLimitUnstructuredStorage for bytes32;
@@ -296,16 +296,16 @@ contract Catalist is Versioned, StACEPermit, AragonApp {
      * The contract's balance must be non-zero to allow initial holder bootstrap.
      *
      * @param _catalistLocator catalist locator contract
-     * @param _eip712StACE eip712 helper contract for StACE
+     * @param _eip712BACE eip712 helper contract for BACE
      */
     function initialize(
         address _catalistLocator,
-        address _eip712StACE
+        address _eip712BACE
     ) public payable onlyInit {
         // OWNER_ADDRESS_POSITION.setStorageAddress(msg.sender);
         owners[msg.sender] = true;
         _bootstrapInitialHolder();
-        _initialize_v2(_catalistLocator, _eip712StACE);
+        _initialize_v2(_catalistLocator, _eip712BACE);
         initialized();
     }
 
@@ -314,12 +314,12 @@ contract Catalist is Versioned, StACEPermit, AragonApp {
      */
     function _initialize_v2(
         address _catalistLocator,
-        address _eip712StACE
+        address _eip712BACE
     ) internal {
         _setContractVersion(2);
 
         CATALIST_LOCATOR_POSITION.setStorageAddress(_catalistLocator);
-        _initializeEIP712StACE(_eip712StACE);
+        _initializeEIP712BACE(_eip712BACE);
 
         // set infinite allowance for burner from withdrawal queue
         // to burn finalized requests' shares
@@ -342,7 +342,7 @@ contract Catalist is Versioned, StACEPermit, AragonApp {
      */
     function finalizeUpgrade_v2(
         address _catalistLocator,
-        address _eip712StACE
+        address _eip712BACE
     ) external {
         _checkContractVersion(0);
         require(hasInitialized(), "NOT_INITIALIZED");
@@ -351,11 +351,11 @@ contract Catalist is Versioned, StACEPermit, AragonApp {
             _catalistLocator != address(0),
             "CATALIST_LOCATOR_ZERO_ADDRESS"
         );
-        require(_eip712StACE != address(0), "EIP712_STACE_ZERO_ADDRESS");
+        require(_eip712BACE != address(0), "EIP712_BACE_ZERO_ADDRESS");
 
         require(_sharesOf(INITIAL_TOKEN_HOLDER) != 0, "INITIAL_HOLDER_EXISTS");
 
-        _initialize_v2(_catalistLocator, _eip712StACE);
+        _initialize_v2(_catalistLocator, _eip712BACE);
     }
 
     /**
@@ -521,7 +521,7 @@ contract Catalist is Versioned, StACEPermit, AragonApp {
     /**
      * @notice Send funds to the pool with optional _referral parameter
      * @dev This function is alternative way to submit funds. Supports optional referral address.
-     * @return Amount of StACE shares generated
+     * @return Amount of BACE shares generated
      */
     function submit(address _referral) external payable returns (uint256) {
         return _submit(_referral);
@@ -753,11 +753,11 @@ contract Catalist is Versioned, StACEPermit, AragonApp {
 
     /**
      * @dev Returns depositable ether amount.
-     * Takes into account unfinalized stACE required by WithdrawalQueue
+     * Takes into account unfinalized bACE required by WithdrawalQueue
      */
     function getDepositableAce() public view returns (uint256) {
         uint256 bufferedAce = _getBufferedAce();
-        uint256 withdrawalReserve = _withdrawalQueue().unfinalizedStACE();
+        uint256 withdrawalReserve = _withdrawalQueue().unfinalizedBACE();
         return
             bufferedAce > withdrawalReserve
                 ? bufferedAce - withdrawalReserve
@@ -1045,7 +1045,7 @@ contract Catalist is Versioned, StACEPermit, AragonApp {
     /**
      * @dev Process user deposit, mints liquid tokens and increase the pool buffer
      * @param _referral address of referral.
-     * @return amount of StACE shares generated
+     * @return amount of BACE shares generated
      */
     function _submit(address _referral) internal returns (uint256) {
         require(msg.value != 0, "ZERO_DEPOSIT");
@@ -1135,11 +1135,11 @@ contract Catalist is Versioned, StACEPermit, AragonApp {
     ) internal returns (uint256 sharesMintedAsFees) {
         // We need to take a defined percentage of the reported reward as a fee, and we do
         // this by minting new token shares and assigning them to the fee recipients (see
-        // StACE docs for the explanation of the shares mechanics). The staking rewards fee
+        // BACE docs for the explanation of the shares mechanics). The staking rewards fee
         // is defined in basis points (1 basis point is equal to 0.01%, 10000 (TOTAL_BASIS_POINTS) is 100%).
         //
         // Since we are increasing totalPooledAce by _totalRewards (totalPooledAceWithRewards),
-        // the combined cost of all holders' shares has became _totalRewards StACE tokens more,
+        // the combined cost of all holders' shares has became _totalRewards BACE tokens more,
         // effectively splitting the reward between each token holder proportionally to their token share.
         //
         // Now we want to mint new shares to the fee recipient, so that the total cost of the

@@ -6,7 +6,7 @@ pragma solidity ^0.6.12; // latest available for using OZ
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-interface IStACE is IERC20 {
+interface IBACE is IERC20 {
     function getPooledAceByShares(
         uint256 _sharesAmount
     ) external view returns (uint256);

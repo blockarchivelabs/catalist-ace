@@ -4,20 +4,20 @@
 /* See contracts/COMPILERS.md */
 pragma solidity 0.8.9;
 
-import { IERC20 } from "@openzeppelin/contracts-v4.4/token/ERC20/IERC20.sol";
-import { IERC721 } from "@openzeppelin/contracts-v4.4/token/ERC721/IERC721.sol";
-import { SafeERC20 } from "@openzeppelin/contracts-v4.4/token/ERC20/utils/SafeERC20.sol";
-import { Math } from "@openzeppelin/contracts-v4.4/utils/math/Math.sol";
+import {IERC20} from "@openzeppelin/contracts-v4.4/token/ERC20/IERC20.sol";
+import {IERC721} from "@openzeppelin/contracts-v4.4/token/ERC721/IERC721.sol";
+import {SafeERC20} from "@openzeppelin/contracts-v4.4/token/ERC20/utils/SafeERC20.sol";
+import {Math} from "@openzeppelin/contracts-v4.4/utils/math/Math.sol";
 
-import { AccessControlEnumerable } from "./utils/access/AccessControlEnumerable.sol";
-import { IBurner } from "../common/interfaces/IBurner.sol";
+import {AccessControlEnumerable} from "./utils/access/AccessControlEnumerable.sol";
+import {IBurner} from "../common/interfaces/IBurner.sol";
 
 /**
- * @title Interface defining ERC20-compatible StACE token
+ * @title Interface defining ERC20-compatible BACE token
  */
-interface IStACE is IERC20 {
+interface IBACE is IERC20 {
     /**
-     * @notice Get stACE amount by the provided shares amount
+     * @notice Get bACE amount by the provided shares amount
      * @param _sharesAmount shares amount
      * @dev dual to `getSharesByPooledAce`.
      */
@@ -26,8 +26,8 @@ interface IStACE is IERC20 {
     ) external view returns (uint256);
 
     /**
-     * @notice Get shares amount by the provided stACE amount
-     * @param _pooledAceAmount stACE amount
+     * @notice Get shares amount by the provided bACE amount
+     * @param _pooledAceAmount bACE amount
      * @dev dual to `getPooledAceByShares`.
      */
     function getSharesByPooledAce(
@@ -41,7 +41,7 @@ interface IStACE is IERC20 {
     function sharesOf(address _account) external view returns (uint256);
 
     /**
-     * @notice Transfer `_sharesAmount` stACE shares from `_sender` to `_receiver` using allowance.
+     * @notice Transfer `_sharesAmount` bACE shares from `_sender` to `_receiver` using allowance.
      */
     function transferSharesFrom(
         address _sender,
@@ -51,9 +51,9 @@ interface IStACE is IERC20 {
 }
 
 /**
- * @notice A dedicated contract for stACE burning requests scheduling
+ * @notice A dedicated contract for bACE burning requests scheduling
  *
- * @dev Burning stACE means 'decrease total underlying shares amount to perform stACE positive token rebase'
+ * @dev Burning bACE means 'decrease total underlying shares amount to perform bACE positive token rebase'
  */
 contract Burner is IBurner, AccessControlEnumerable {
     using SafeERC20 for IERC20;
@@ -61,7 +61,7 @@ contract Burner is IBurner, AccessControlEnumerable {
     error AppAuthCatalistFailed();
     error DirectACETransfer();
     error ZeroRecoveryAmount();
-    error StACERecoveryWrongFunc();
+    error BACERecoveryWrongFunc();
     error ZeroBurnAmount();
     error BurnAmountExceedsActual(
         uint256 requestedAmount,
@@ -69,8 +69,8 @@ contract Burner is IBurner, AccessControlEnumerable {
     );
     error ZeroAddress(string field);
 
-    bytes32 public constant REQUEST_BURN_MY_STACE_ROLE =
-        keccak256("REQUEST_BURN_MY_STACE_ROLE");
+    bytes32 public constant REQUEST_BURN_MY_BACE_ROLE =
+        keccak256("REQUEST_BURN_MY_BACE_ROLE");
     bytes32 public constant REQUEST_BURN_SHARES_ROLE =
         keccak256("REQUEST_BURN_SHARES_ROLE");
 
@@ -80,35 +80,35 @@ contract Burner is IBurner, AccessControlEnumerable {
     uint256 private totalCoverSharesBurnt;
     uint256 private totalNonCoverSharesBurnt;
 
-    address public immutable STACE;
+    address public immutable BACE;
     address public immutable TREASURY;
 
     /**
-     * Emitted when a new stACE burning request is added by the `requestedBy` address.
+     * Emitted when a new bACE burning request is added by the `requestedBy` address.
      */
-    event StACEBurnRequested(
+    event BACEBurnRequested(
         bool indexed isCover,
         address indexed requestedBy,
-        uint256 amountOfStACE,
+        uint256 amountOfBACE,
         uint256 amountOfShares
     );
 
     /**
-     * Emitted when the stACE `amount` (corresponding to `amountOfShares` shares) burnt for the `isCover` reason.
+     * Emitted when the bACE `amount` (corresponding to `amountOfShares` shares) burnt for the `isCover` reason.
      */
-    event StACEBurnt(
+    event BACEBurnt(
         bool indexed isCover,
-        uint256 amountOfStACE,
+        uint256 amountOfBACE,
         uint256 amountOfShares
     );
 
     /**
-     * Emitted when the excessive stACE `amount` (corresponding to `amountOfShares` shares) recovered (i.e. transferred)
+     * Emitted when the excessive bACE `amount` (corresponding to `amountOfShares` shares) recovered (i.e. transferred)
      * to the Catalist treasure address by `requestedBy` sender.
      */
-    event ExcessStACERecovered(
+    event ExcessBACERecovered(
         address indexed requestedBy,
-        uint256 amountOfStACE,
+        uint256 amountOfBACE,
         uint256 amountOfShares
     );
 
@@ -136,148 +136,140 @@ contract Burner is IBurner, AccessControlEnumerable {
      * Ctor
      *
      * @param _admin the Catalist DAO Aragon agent contract address
-     * @param _treasury the Catalist treasury address (see StACE/ERC20/ERC721-recovery interfaces)
-     * @param _stACE stACE token address
+     * @param _treasury the Catalist treasury address (see BACE/ERC20/ERC721-recovery interfaces)
+     * @param _bACE bACE token address
      * @param _totalCoverSharesBurnt Shares burnt counter init value (cover case)
      * @param _totalNonCoverSharesBurnt Shares burnt counter init value (non-cover case)
      */
     constructor(
         address _admin,
         address _treasury,
-        address _stACE,
+        address _bACE,
         uint256 _totalCoverSharesBurnt,
         uint256 _totalNonCoverSharesBurnt
     ) {
         if (_admin == address(0)) revert ZeroAddress("_admin");
         if (_treasury == address(0)) revert ZeroAddress("_treasury");
-        if (_stACE == address(0)) revert ZeroAddress("_stACE");
+        if (_bACE == address(0)) revert ZeroAddress("_bACE");
 
         _setupRole(DEFAULT_ADMIN_ROLE, _admin);
-        _setupRole(REQUEST_BURN_SHARES_ROLE, _stACE);
+        _setupRole(REQUEST_BURN_SHARES_ROLE, _bACE);
 
         TREASURY = _treasury;
-        STACE = _stACE;
+        BACE = _bACE;
 
         totalCoverSharesBurnt = _totalCoverSharesBurnt;
         totalNonCoverSharesBurnt = _totalNonCoverSharesBurnt;
     }
 
     /**
-     * @notice BE CAREFUL, the provided stACE will be burnt permanently.
+     * @notice BE CAREFUL, the provided bACE will be burnt permanently.
      *
-     * Transfers `_stACEAmountToBurn` stACE tokens from the message sender and irreversibly locks these
-     * on the burner contract address. Internally converts `_stACEAmountToBurn` amount into underlying
-     * shares amount (`_stACEAmountToBurnAsShares`) and marks the converted amount for burning
+     * Transfers `_bACEAmountToBurn` bACE tokens from the message sender and irreversibly locks these
+     * on the burner contract address. Internally converts `_bACEAmountToBurn` amount into underlying
+     * shares amount (`_bACEAmountToBurnAsShares`) and marks the converted amount for burning
      * by increasing the `coverSharesBurnRequested` counter.
      *
-     * @param _stACEAmountToBurn stACE tokens to burn
+     * @param _bACEAmountToBurn bACE tokens to burn
      *
      */
-    function requestBurnMyStACEForCover(
-        uint256 _stACEAmountToBurn
-    ) external onlyRole(REQUEST_BURN_MY_STACE_ROLE) {
-        IStACE(STACE).transferFrom(
-            msg.sender,
-            address(this),
-            _stACEAmountToBurn
+    function requestBurnMyBACEForCover(
+        uint256 _bACEAmountToBurn
+    ) external onlyRole(REQUEST_BURN_MY_BACE_ROLE) {
+        IBACE(BACE).transferFrom(msg.sender, address(this), _bACEAmountToBurn);
+        uint256 sharesAmount = IBACE(BACE).getSharesByPooledAce(
+            _bACEAmountToBurn
         );
-        uint256 sharesAmount = IStACE(STACE).getSharesByPooledAce(
-            _stACEAmountToBurn
-        );
-        _requestBurn(sharesAmount, _stACEAmountToBurn, true /* _isCover */);
+        _requestBurn(sharesAmount, _bACEAmountToBurn, true /* _isCover */);
     }
 
     /**
-     * @notice BE CAREFUL, the provided stACE will be burnt permanently.
+     * @notice BE CAREFUL, the provided bACE will be burnt permanently.
      *
-     * Transfers `_sharesAmountToBurn` stACE shares from `_from` and irreversibly locks these
+     * Transfers `_sharesAmountToBurn` bACE shares from `_from` and irreversibly locks these
      * on the burner contract address. Marks the shares amount for burning
      * by increasing the `coverSharesBurnRequested` counter.
      *
      * @param _from address to transfer shares from
-     * @param _sharesAmountToBurn stACE shares to burn
+     * @param _sharesAmountToBurn bACE shares to burn
      *
      */
     function requestBurnSharesForCover(
         address _from,
         uint256 _sharesAmountToBurn
     ) external onlyRole(REQUEST_BURN_SHARES_ROLE) {
-        uint256 stACEAmount = IStACE(STACE).transferSharesFrom(
+        uint256 bACEAmount = IBACE(BACE).transferSharesFrom(
             _from,
             address(this),
             _sharesAmountToBurn
         );
-        _requestBurn(_sharesAmountToBurn, stACEAmount, true /* _isCover */);
+        _requestBurn(_sharesAmountToBurn, bACEAmount, true /* _isCover */);
     }
 
     /**
-     * @notice BE CAREFUL, the provided stACE will be burnt permanently.
+     * @notice BE CAREFUL, the provided bACE will be burnt permanently.
      *
-     * Transfers `_stACEAmountToBurn` stACE tokens from the message sender and irreversibly locks these
-     * on the burner contract address. Internally converts `_stACEAmountToBurn` amount into underlying
-     * shares amount (`_stACEAmountToBurnAsShares`) and marks the converted amount for burning
+     * Transfers `_bACEAmountToBurn` bACE tokens from the message sender and irreversibly locks these
+     * on the burner contract address. Internally converts `_bACEAmountToBurn` amount into underlying
+     * shares amount (`_bACEAmountToBurnAsShares`) and marks the converted amount for burning
      * by increasing the `nonCoverSharesBurnRequested` counter.
      *
-     * @param _stACEAmountToBurn stACE tokens to burn
+     * @param _bACEAmountToBurn bACE tokens to burn
      *
      */
-    function requestBurnMyStACE(
-        uint256 _stACEAmountToBurn
-    ) external onlyRole(REQUEST_BURN_MY_STACE_ROLE) {
-        IStACE(STACE).transferFrom(
-            msg.sender,
-            address(this),
-            _stACEAmountToBurn
+    function requestBurnMyBACE(
+        uint256 _bACEAmountToBurn
+    ) external onlyRole(REQUEST_BURN_MY_BACE_ROLE) {
+        IBACE(BACE).transferFrom(msg.sender, address(this), _bACEAmountToBurn);
+        uint256 sharesAmount = IBACE(BACE).getSharesByPooledAce(
+            _bACEAmountToBurn
         );
-        uint256 sharesAmount = IStACE(STACE).getSharesByPooledAce(
-            _stACEAmountToBurn
-        );
-        _requestBurn(sharesAmount, _stACEAmountToBurn, false /* _isCover */);
+        _requestBurn(sharesAmount, _bACEAmountToBurn, false /* _isCover */);
     }
 
     /**
-     * @notice BE CAREFUL, the provided stACE will be burnt permanently.
+     * @notice BE CAREFUL, the provided bACE will be burnt permanently.
      *
-     * Transfers `_sharesAmountToBurn` stACE shares from `_from` and irreversibly locks these
+     * Transfers `_sharesAmountToBurn` bACE shares from `_from` and irreversibly locks these
      * on the burner contract address. Marks the shares amount for burning
      * by increasing the `nonCoverSharesBurnRequested` counter.
      *
      * @param _from address to transfer shares from
-     * @param _sharesAmountToBurn stACE shares to burn
+     * @param _sharesAmountToBurn bACE shares to burn
      *
      */
     function requestBurnShares(
         address _from,
         uint256 _sharesAmountToBurn
     ) external onlyRole(REQUEST_BURN_SHARES_ROLE) {
-        uint256 stACEAmount = IStACE(STACE).transferSharesFrom(
+        uint256 bACEAmount = IBACE(BACE).transferSharesFrom(
             _from,
             address(this),
             _sharesAmountToBurn
         );
-        _requestBurn(_sharesAmountToBurn, stACEAmount, false /* _isCover */);
+        _requestBurn(_sharesAmountToBurn, bACEAmount, false /* _isCover */);
     }
 
     /**
-     * Transfers the excess stACE amount (e.g. belonging to the burner contract address
+     * Transfers the excess bACE amount (e.g. belonging to the burner contract address
      * but not marked for burning) to the Catalist treasury address set upon the
      * contract construction.
      */
-    function recoverExcessStACE() external {
-        uint256 excessStACE = getExcessStACE();
+    function recoverExcessBACE() external {
+        uint256 excessBACE = getExcessBACE();
 
-        if (excessStACE > 0) {
-            uint256 excessSharesAmount = IStACE(STACE).getSharesByPooledAce(
-                excessStACE
+        if (excessBACE > 0) {
+            uint256 excessSharesAmount = IBACE(BACE).getSharesByPooledAce(
+                excessBACE
             );
 
-            emit ExcessStACERecovered(
+            emit ExcessBACERecovered(
                 msg.sender,
-                excessStACE,
+                excessBACE,
                 excessSharesAmount
             );
 
-            IStACE(STACE).transfer(TREASURY, excessStACE);
+            IBACE(BACE).transfer(TREASURY, excessBACE);
         }
     }
 
@@ -297,7 +289,7 @@ contract Burner is IBurner, AccessControlEnumerable {
      */
     function recoverERC20(address _token, uint256 _amount) external {
         if (_amount == 0) revert ZeroRecoveryAmount();
-        if (_token == STACE) revert StACERecoveryWrongFunc();
+        if (_token == BACE) revert BACERecoveryWrongFunc();
 
         emit ERC20Recovered(msg.sender, _token, _amount);
 
@@ -312,7 +304,7 @@ contract Burner is IBurner, AccessControlEnumerable {
      * @param _tokenId minted token id
      */
     function recoverERC721(address _token, uint256 _tokenId) external {
-        if (_token == STACE) revert StACERecoveryWrongFunc();
+        if (_token == BACE) revert BACERecoveryWrongFunc();
 
         emit ERC721Recovered(msg.sender, _token, _tokenId);
 
@@ -333,7 +325,7 @@ contract Burner is IBurner, AccessControlEnumerable {
     function commitSharesToBurn(
         uint256 _sharesToBurn
     ) external virtual override {
-        if (msg.sender != STACE) revert AppAuthCatalistFailed();
+        if (msg.sender != BACE) revert AppAuthCatalistFailed();
 
         if (_sharesToBurn == 0) {
             return;
@@ -357,12 +349,12 @@ contract Burner is IBurner, AccessControlEnumerable {
             );
 
             totalCoverSharesBurnt += sharesToBurnNowForCover;
-            uint256 stACEToBurnNowForCover = IStACE(STACE).getPooledAceByShares(
+            uint256 bACEToBurnNowForCover = IBACE(BACE).getPooledAceByShares(
                 sharesToBurnNowForCover
             );
-            emit StACEBurnt(
+            emit BACEBurnt(
                 true /* isCover */,
-                stACEToBurnNowForCover,
+                bACEToBurnNowForCover,
                 sharesToBurnNowForCover
             );
 
@@ -379,11 +371,12 @@ contract Burner is IBurner, AccessControlEnumerable {
             );
 
             totalNonCoverSharesBurnt += sharesToBurnNowForNonCover;
-            uint256 stACEToBurnNowForNonCover = IStACE(STACE)
-                .getPooledAceByShares(sharesToBurnNowForNonCover);
-            emit StACEBurnt(
+            uint256 bACEToBurnNowForNonCover = IBACE(BACE).getPooledAceByShares(
+                sharesToBurnNowForNonCover
+            );
+            emit BACEBurnt(
                 false /* isCover */,
-                stACEToBurnNowForNonCover,
+                bACEToBurnNowForNonCover,
                 sharesToBurnNowForNonCover
             );
 
@@ -434,16 +427,16 @@ contract Burner is IBurner, AccessControlEnumerable {
     }
 
     /**
-     * Returns the stACE amount belonging to the burner contract address but not marked for burning.
+     * Returns the bACE amount belonging to the burner contract address but not marked for burning.
      */
-    function getExcessStACE() public view returns (uint256) {
-        return IStACE(STACE).getPooledAceByShares(_getExcessStACEShares());
+    function getExcessBACE() public view returns (uint256) {
+        return IBACE(BACE).getPooledAceByShares(_getExcessBACEShares());
     }
 
-    function _getExcessStACEShares() internal view returns (uint256) {
+    function _getExcessBACEShares() internal view returns (uint256) {
         uint256 sharesBurnRequested = (coverSharesBurnRequested +
             nonCoverSharesBurnRequested);
-        uint256 totalShares = IStACE(STACE).sharesOf(address(this));
+        uint256 totalShares = IBACE(BACE).sharesOf(address(this));
 
         // sanity check, don't revert
         if (totalShares <= sharesBurnRequested) {
@@ -455,15 +448,15 @@ contract Burner is IBurner, AccessControlEnumerable {
 
     function _requestBurn(
         uint256 _sharesAmount,
-        uint256 _stACEAmount,
+        uint256 _bACEAmount,
         bool _isCover
     ) private {
         if (_sharesAmount == 0) revert ZeroBurnAmount();
 
-        emit StACEBurnRequested(
+        emit BACEBurnRequested(
             _isCover,
             msg.sender,
-            _stACEAmount,
+            _bACEAmount,
             _sharesAmount
         );
 

@@ -4,10 +4,10 @@
 /* See contracts/COMPILERS.md */
 pragma solidity 0.8.9;
 
-import { Math256 } from "../../common/lib/Math256.sol";
+import {Math256} from "../../common/lib/Math256.sol";
 
 /**
- * This library implements positive rebase limiter for `stACE` token.
+ * This library implements positive rebase limiter for `bACE` token.
  * One needs to initialize `LimiterState` with the desired parameters:
  * - _rebaseLimit (limiter max value, nominated in LIMITER_PRECISION_BASE)
  * - _preTotalPooledAce (see `Catalist.getTotalPooledAce()`), pre-rebase value
