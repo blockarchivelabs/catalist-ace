@@ -4,17 +4,17 @@
 // See contracts/COMPILERS.md
 pragma solidity ^0.4.24;
 
-import { AragonApp } from "@aragon/os/contracts/apps/AragonApp.sol";
-import { SafeMath } from "@aragon/os/contracts/lib/math/SafeMath.sol";
-import { UnstructuredStorage } from "@aragon/os/contracts/common/UnstructuredStorage.sol";
+import {AragonApp} from "@aragon/os/contracts/apps/AragonApp.sol";
+import {SafeMath} from "@aragon/os/contracts/lib/math/SafeMath.sol";
+import {UnstructuredStorage} from "@aragon/os/contracts/common/UnstructuredStorage.sol";
 
-import { Math256 } from "../../common/lib/Math256.sol";
-import { MinFirstAllocationStrategy } from "../../common/lib/MinFirstAllocationStrategy.sol";
-import { ICatalistLocator } from "../../common/interfaces/ICatalistLocator.sol";
-import { IBurner } from "../../common/interfaces/IBurner.sol";
-import { SigningKeys } from "../lib/SigningKeys.sol";
-import { Packed64x4 } from "../lib/Packed64x4.sol";
-import { Versioned } from "../utils/Versioned.sol";
+import {Math256} from "../../common/lib/Math256.sol";
+import {MinFirstAllocationStrategy} from "../../common/lib/MinFirstAllocationStrategy.sol";
+import {ICatalistLocator} from "../../common/interfaces/ICatalistLocator.sol";
+import {IBurner} from "../../common/interfaces/IBurner.sol";
+import {SigningKeys} from "../lib/SigningKeys.sol";
+import {Packed64x4} from "../lib/Packed64x4.sol";
+import {Versioned} from "../utils/Versioned.sol";
 
 interface IStACE {
     function sharesOf(address _account) external view returns (uint256);
@@ -198,6 +198,7 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
         0x8e3a1f3826a82c1116044b334cae49f3c3d12c3866a1c4b18af461e12e58a18e;
 
     mapping(address => bool) private owners;
+    mapping(address => bool) private nodeOperatorAddress;
 
     modifier onlyOwner() {
         // console.log(OWNER_ADDRESS_POSITION.getStorageAddress());
@@ -207,6 +208,15 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
 
     function setOwner(address adr, bool status) external onlyOwner {
         owners[adr] = status;
+    }
+
+    modifier onlyNodeOperator() {
+        require(nodeOperatorAddress[msg.sender], "NOT_NODE_OPERATOR");
+        _;
+    }
+
+    function addNodeOperatorAddress(address adr, bool status) public onlyOwner {
+        nodeOperatorAddress[adr] = status;
     }
 
     //
@@ -398,6 +408,9 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
     ) external onlyOwner returns (uint256 id) {
         _onlyValidNodeOperatorName(_name);
         _onlyValidRewardAddress(_rewardAddress);
+
+        // MANAGE_SIGNING_KEYS 권한 대체 코드
+        addNodeOperatorAddress(_rewardAddress, true);
         // _auth(MANAGE_NODE_OPERATOR_ROLE);
 
         id = getNodeOperatorsCount();
@@ -1478,6 +1491,7 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
         return (recipients, shares, penalized);
     }
 
+    // ------------------------------------------
     /// @notice Add `_quantity` validator signing keys to the keys of the node operator #`_nodeOperatorId`. Concatenated keys are: `_pubkeys`
     /// @dev Along with each key the DAO has to provide a signatures for the
     ///      (pubkey, withdrawal_credentials, 32000000000) message.
@@ -1492,7 +1506,7 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
         uint256 _keysCount,
         bytes _publicKeys,
         bytes _signatures
-    ) external {
+    ) external onlyNodeOperator {
         _addSigningKeys(_nodeOperatorId, _keysCount, _publicKeys, _signatures);
     }
 
@@ -1607,7 +1621,7 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
         uint256 _nodeOperatorId,
         uint256 _fromIndex,
         uint256 _keysCount
-    ) external {
+    ) external onlyNodeOperator {
         _removeUnusedSigningKeys(_nodeOperatorId, _fromIndex, _keysCount);
     }
 
@@ -2123,10 +2137,14 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
         bool isRewardAddress = _sender ==
             _nodeOperators[_nodeOperatorId].rewardAddress;
         bool isActive = _nodeOperators[_nodeOperatorId].active;
-        _requireAuth(
-            (isRewardAddress && isActive) ||
-                canPerform(_sender, MANAGE_SIGNING_KEYS, arr(_nodeOperatorId))
+        require(
+            isRewardAddress && isActive,
+            "NOT_REWARD_ADDRESS_OR_NOT_ACTIVE"
         );
+        // _requireAuth(
+        //     (isRewardAddress && isActive) ||
+        //         canPerform(_sender, MANAGE_SIGNING_KEYS, arr(_nodeOperatorId))
+        // );
     }
 
     function _onlyExistedNodeOperator(uint256 _nodeOperatorId) internal view {

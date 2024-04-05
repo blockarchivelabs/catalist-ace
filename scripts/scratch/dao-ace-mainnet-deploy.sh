@@ -2,6 +2,8 @@
 set -e +u
 set -o pipefail
 
+# bash scripts/scratch/dao-ace-mainnet-deploy.sh
+
 export DEPLOYER=0x63cac65c5eb17E6Dd47D9313e23169f79d1Ab058
 # export RPC_URL=https://endurance2-rpc-partner.archivenode.club/
 export RPC_URL=http://20.197.13.207:8545
