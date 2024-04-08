@@ -7,7 +7,7 @@
   },
   "catalistApmEnsName": "catalistpm.eth",
   "catalistApmEnsRegDurationSec": 94608000,
-  "daoAragonId": "lido-dao",
+  "daoAragonId": "catalist-dao",
   "chainSpec": {
     "slotsPerEpoch": 32,
     "secondsPerSlot": 12,
@@ -27,8 +27,8 @@
       "nodeOperatorsPercent": 50
     },
     "token": {
-      "name": "TEST Lido DAO Token",
-      "symbol": "TLDO"
+      "name": "TEST DAO Token",
+      "symbol": "TDT"
     }
   },
   "vestingParams": {
@@ -118,8 +118,8 @@
   },
   "withdrawalQueueERC721": {
     "deployParameters": {
-      "name": "Catalist: stACE Withdrawal NFT",
-      "symbol": "unstACE",
+      "name": "Catalist: bACE Withdrawal NFT",
+      "symbol": "unbACE",
       "baseUri": null
     }
   }
