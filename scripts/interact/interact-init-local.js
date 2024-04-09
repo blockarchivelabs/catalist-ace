@@ -23,6 +23,11 @@ async function main() {
 
   const [owner, ad1] = await ethers.getSigners()
 
+  const chainSpec = JSON.parse(fs.readFileSync('./deployed-testnet-defaults.json', 'utf-8')).chainSpec
+  const GENESIS_TIME = chainSpec.genesisTime
+  const SLOTS_PER_EPOCH = chainSpec.slotsPerEpoch
+  const SECONDS_PER_SLOT = chainSpec.secondsPerSlot
+
   console.log()
   console.log('Querying resume staking...')
   await catalist.connect(owner).resume({
@@ -46,10 +51,15 @@ async function main() {
 
   console.log()
   console.log('Querying update initial epoch...')
-  await hashConsensus.connect(owner).updateInitialEpoch(1, {
+  const latestBlockTimestamp = (await ethers.provider.getBlock('latest')).timestamp
+  const initialEpoch = Math.floor((latestBlockTimestamp - GENESIS_TIME)
+    / (SLOTS_PER_EPOCH * SECONDS_PER_SLOT))
+  await hashConsensus.connect(owner).updateInitialEpoch(initialEpoch, {
     gasLimit: 1000000,
     gasPrice: 1000000000,
   })
+  console.log('Latest Block Timestamp:', latestBlockTimestamp)
+  console.log('Initial Epoch:', initialEpoch)
 
   console.log()
   console.log('Querying grant role to owner...')

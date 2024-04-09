@@ -24,6 +24,11 @@ async function main() {
   const oracleMemberAddress = '0xB458c332C242247C46e065Cf987a05bAf7612904'
   const account2 = '0x0e540Fa9958f9fbE75C627442C86E8C5019C6db7'
 
+  const chainSpec = JSON.parse(fs.readFileSync('./deployed-testnet-defaults.json', 'utf-8')).chainSpec
+  const GENESIS_TIME = chainSpec.genesisTime
+  const SLOTS_PER_EPOCH = chainSpec.slotsPerEpoch
+  const SECONDS_PER_SLOT = chainSpec.secondsPerSlot
+
   // --------------------최초 배포시 초기화 코드--------------------
   console.log()
   console.log('Querying resume staking...')
@@ -66,13 +71,18 @@ async function main() {
 
   console.log()
   console.log('Querying update initial epoch...')
+  const latestBlockTimestamp = (await ethers.provider.getBlock('latest')).timestamp
+  const initialEpoch = Math.floor((latestBlockTimestamp - GENESIS_TIME)
+    / (SLOTS_PER_EPOCH * SECONDS_PER_SLOT))
   await hashConsensus.updateInitialEpoch(
-    1, 
+    initialEpoch, 
     {
       gasLimit: 1000000,
       gasPrice: 100000,
     }
   )
+  console.log('Latest Block Timestamp:', latestBlockTimestamp)
+  console.log('Initial Epoch:', initialEpoch)
   // --------------------여기까지 초기화 코드--------------------
 }
 

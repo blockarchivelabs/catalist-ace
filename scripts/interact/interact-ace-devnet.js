@@ -1,15 +1,17 @@
 const { parseEther } = require('ethers/lib/utils')
 const { ethers } = require('hardhat')
+const fs = require('fs')
 
-// RPC_URL=http://20.197.51.29:8545 npx hardhat run scripts/interact/interact-ace-devnet.js --network ace_test
+// RPC_URL=http://20.197.51.29:8545 npx hardhat run scripts/interact/interact-ace-devnet.js --network ace_devnet
 async function main() {
   console.log('Getting the deposit contract...')
-  const CatalistAddress = '0x72bB7806B8459337b231016e182348CD853E3106'
-  const HashConsensusAddress = '0x9A956d3b228C3e212D96480938003fc686f51380'
-  const StakingRouterAddress = '0x7b6d791175eB131f66d4E7ed732b8FE5686ED668'
-  const AccountingOracleAddress = '0xD908fB45e9550fA989F45bF8C661E97f9C5FAc43'
-  const WithdrawalQueueERC721Address = '0x86c0c0b392c71c954F92eE02E63413A145B70A31'
-  const NodeOperatorRegistryAddress = '0xAE6c0F93fB6E4A87d2DA9F199f3CfEeF67AEC6B5'
+  const addresses = JSON.parse(fs.readFileSync('./deployed-ace_devnet.json', 'utf-8'))
+  const CatalistAddress = addresses['app:catalist'].proxy.address
+  const HashConsensusAddress = addresses.hashConsensusForAccountingOracle.address
+  const StakingRouterAddress = addresses.stakingRouter.proxy.address
+  const AccountingOracleAddress = addresses.accountingOracle.proxy.address
+  const WithdrawalQueueERC721Address = addresses.withdrawalQueueERC721.proxy.address
+  const NodeOperatorRegistryAddress = addresses['app:node-operators-registry'].proxy.address
 
   const catalist = await ethers.getContractAt('Catalist', CatalistAddress)
   const hashConsensus = await ethers.getContractAt('HashConsensus', HashConsensusAddress)
@@ -22,74 +24,26 @@ async function main() {
   const oracleMemberAddress = '0xB458c332C242247C46e065Cf987a05bAf7612904'
   const account2 = '0x0e540Fa9958f9fbE75C627442C86E8C5019C6db7'
 
-  // --------------------최초 배포시 초기화 코드--------------------
-  // console.log()
-  // console.log('Querying resume staking...')
-  // await catalist.resume({
-  //   gasLimit: 1000000,
-  //   gasPrice: 1000000,
-  // })
+  const chainSpec = JSON.parse(fs.readFileSync('./deployed-testnet-defaults.json', 'utf-8')).chainSpec
+  const GENESIS_TIME = 1705568400
+  const SLOTS_PER_EPOCH = chainSpec.slotsPerEpoch
+  const SECONDS_PER_SLOT = chainSpec.secondsPerSlot
 
-  // console.log()
-  // console.log('Querying grant role RESUME_ROLE to owner...')
-  // await withdrawalQueueERC721.grantRole(
-  //   await withdrawalQueueERC721.RESUME_ROLE(),
-  //   deployerAddress
-  // )
-
-  // console.log()
-  // console.log('Querying resume withdrawalQueueERC721...')
-  // await withdrawalQueueERC721.resume({
-  //   gasLimit: 1000000,
-  //   gasPrice: 1000000,
-  // })
-
-  // console.log()
-  // console.log('Querying add MANAGE_MEMBERS_AND_QUORUM_ROLE to deployer')
-  // await hashConsensus.grantRole(
-  //   await hashConsensus.MANAGE_MEMBERS_AND_QUORUM_ROLE(), 
-  //   deployerAddress
-  // )
+  console.log()
+  console.log('Querying update initial epoch...')
+  const latestBlockTimestamp = (await ethers.provider.getBlock('latest')).timestamp
+  const initialEpoch = Math.floor((latestBlockTimestamp - GENESIS_TIME)
+    / (SLOTS_PER_EPOCH * SECONDS_PER_SLOT))
+  await hashConsensus.updateInitialEpoch(
+    initialEpoch, 
+    {
+      gasLimit: 1000000,
+      gasPrice: 100000,
+    }
+  )
+  console.log('Latest Block Timestamp:', latestBlockTimestamp)
+  console.log('Initial Epoch:', initialEpoch)
   
-  // console.log()
-  // console.log('Querying add to hash consensus member...')
-  // await hashConsensus.addMember(
-  //   oracleMemberAddress, 
-  //   1, 
-  //   {
-  //     gasLimit: 1000000,
-  //     gasPrice: 100000,
-  //   }
-  // )
-
-  // console.log()
-  // console.log('Querying update initial epoch...')
-  // await hashConsensus.updateInitialEpoch(
-  //   1, 
-  //   {
-  //     gasLimit: 1000000,
-  //     gasPrice: 100000,
-  //   }
-  // )
-  // --------------------여기까지 초기화 코드--------------------
-
-  // console.log()
-  // console.log('Querying token name...')
-  // const name = await catalist.name()
-  // console.log('Name:', name)
-
-  // console.log()
-  // console.log('Querying isStakingPaused()...')
-  // const isStakingPaused = await catalist.isStakingPaused()
-  // console.log('Is Staking Paused:', isStakingPaused)
-
-  // console.log()
-  // console.log('Querying total pooled ace...')
-  // const decimal = await catalist.decimals()
-  // const fix = 10 ** decimal
-  // const totalPooledAce = await catalist.getTotalPooledAce()
-  // console.log('Total Pooled ACE:', +totalPooledAce / fix)
-
   // console.log()
   // const beforeBalance = await catalist.balanceOf(deployerAddress)
   // console.log('Before Balance: ', beforeBalance.toString())
@@ -110,7 +64,10 @@ async function main() {
   
   console.log()
   console.log('Querying get member...')
-  const members = await hashConsensus.getMembers()
+  const members = await hashConsensus.getMembers({
+    gasLimit: 1000000,
+    gasPrice: 100000,
+  })
   console.log('Members:', members)
 
   // console.log()

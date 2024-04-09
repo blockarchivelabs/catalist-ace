@@ -61,16 +61,25 @@ async function main() {
     }
   )
 
+  const chainSpec = JSON.parse(fs.readFileSync('./deployed-testnet-defaults.json', 'utf-8')).chainSpec
+  const GENESIS_TIME = chainSpec.genesisTime
+  const SLOTS_PER_EPOCH = chainSpec.slotsPerEpoch
+  const SECONDS_PER_SLOT = chainSpec.secondsPerSlot
+
   console.log()
   console.log('Querying update initial epoch...')
+  const latestBlockTimestamp = (await ethers.provider.getBlock('latest')).timestamp
+  const initialEpoch = Math.floor((latestBlockTimestamp - GENESIS_TIME)
+    / (SLOTS_PER_EPOCH * SECONDS_PER_SLOT))
   await hashConsensus.updateInitialEpoch(
-    1, 
+    initialEpoch, 
     {
       gasLimit: 1000000,
       gasPrice: 100000,
     }
   )
-  // 여기까지 초기화 코드
+  console.log('Latest Block Timestamp:', latestBlockTimestamp)
+  console.log('Initial Epoch:', initialEpoch)
 }
 
 main()

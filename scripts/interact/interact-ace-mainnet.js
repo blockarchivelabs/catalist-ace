@@ -1,16 +1,18 @@
 const { parseEther } = require('ethers/lib/utils')
 const { ethers } = require('hardhat')
 const { hexConcat, pad, ETH, e27, e18, toBN } = require('./utils')
+const fs = require('fs')
 
 // RPC_URL=http://20.197.13.207:8545 npx hardhat run scripts/interact/interact-ace-mainnet.js --network ace_mainnet
 async function main() {
   console.log('Getting the deposit contract...')
-  const CatalistAddress = '0x23bBA284db799Ca49381bEA734F1A55f14692f5c'
-  const HashConsensusAddress = '0x23b1f732c9B20CC09b8046931407ED2A883Cca82'
-  const StakingRouterAddress = '0x630941c45Cd3BC0B4FC843900C29c8432f4e935d'
-  const AccountingOracleAddress = '0xAC9d01Fa37A9492876Ead645D95011795e07bFEE'
-  const WithdrawalQueueERC721Address = '0x9B6C9256f63a855f761A1ffEC792376346855406'
-  const NodeOperatorRegistryAddress = '0x1B731c8e3Cb936440F5298DBE548A7C9d765264C'
+  const addresses = JSON.parse(fs.readFileSync('./deployed-ace_mainnet.json', 'utf-8'))
+  const CatalistAddress = addresses['app:catalist'].proxy.address
+  const HashConsensusAddress = addresses.hashConsensusForAccountingOracle.address
+  const StakingRouterAddress = addresses.stakingRouter.proxy.address
+  const AccountingOracleAddress = addresses.accountingOracle.proxy.address
+  const WithdrawalQueueERC721Address = addresses.withdrawalQueueERC721.proxy.address
+  const NodeOperatorRegistryAddress = addresses['app:node-operators-registry'].proxy.address
 
   const catalist = await ethers.getContractAt('Catalist', CatalistAddress)
   const hashConsensus = await ethers.getContractAt('HashConsensus', HashConsensusAddress)
@@ -21,54 +23,6 @@ async function main() {
 
   const deployerAddress = '0x63cac65c5eb17E6Dd47D9313e23169f79d1Ab058'
   const oracleMemberAddress = '0xB458c332C242247C46e065Cf987a05bAf7612904'
-
-  // 최초 배포시 초기화 코드
-  // console.log()
-  // console.log('Querying resume staking...')
-  // await catalist.resume()
-
-  // console.log()
-  // console.log('Querying grant role RESUME_ROLE to owner...')
-  // await withdrawalQueueERC721.grantRole(
-  //   await withdrawalQueueERC721.RESUME_ROLE(),
-  //   deployerAddress
-  // )
-
-  // console.log()
-  // console.log('Querying resume withdrawalQueueERC721...')
-  // await withdrawalQueueERC721.resume({
-  //   gasLimit: 1000000,
-  //   gasPrice: 1000000,
-  // })
-
-  // console.log()
-  // console.log('Querying add MANAGE_MEMBERS_AND_QUORUM_ROLE to deployer')
-  // await hashConsensus.grantRole(
-  //   await hashConsensus.MANAGE_MEMBERS_AND_QUORUM_ROLE(), 
-  //   deployerAddress
-  // )
-  
-  // console.log()
-  // console.log('Querying add to hash consensus member...')
-  // await hashConsensus.addMember(
-  //   oracleMemberAddress, 
-  //   1, 
-  //   {
-  //     gasLimit: 1000000,
-  //     gasPrice: 100000,
-  //   }
-  // )
-
-  // console.log()
-  // console.log('Querying update initial epoch...')
-  // await hashConsensus.updateInitialEpoch(
-  //   1, 
-  //   {
-  //     gasLimit: 1000000,
-  //     gasPrice: 100000,
-  //   }
-  // )
-  // 여기까지 초기화 코드
 
   // console.log()
   // const beforeBalance = await catalist.balanceOf(deployerAddress)
@@ -86,10 +40,10 @@ async function main() {
   // const afterBalance = await catalist.balanceOf(deployerAddress)
   // console.log('After Balance: ', afterBalance.toString())
   
-  console.log()
-  console.log('Querying get member...')
-  const members = await hashConsensus.getMembers()
-  console.log('Members:', members)
+  // console.log()
+  // console.log('Querying get member...')
+  // const members = await hashConsensus.getMembers()
+  // console.log('Members:', members)
 
   // console.log()
   // console.log('Querying add STAKING_MODULE_MANAGE_ROLE to deployer and ad1...')
@@ -106,24 +60,24 @@ async function main() {
   // )
   // console.log('Operator ID:', operatorId)
 
-  // const operatorId = 0
+  const operatorId = 0
   // console.log()
   // console.log('Querying add signing keys...')
   // await nodeOperatorRegistry.addSigningKeys(
   //   operatorId,
   //   5,
   //   hexConcat(
-  //     'b1b42665c10fddd6f312e2e0912ad7f1b1edc7ba98c7c9628ad477924e1ec565f5ac143cba08fcf8a26d591692b5371b',
-  //     '943589a55d2a87515820b41697406d02698d51772e6762c3ad2083e966aa8b14df0186246a75f007bf9b16615d87d3c8',
-  //     'a5a5dbbd14777ba04014485649532563f5cf6528f252c3980925eccca846e874968670253f441537066fd9797d0f55d0',
-  //     '8ecdfe9dde0773736595c4547957413c90f5416ef122fabeeaedbb9c98b8fa630a61b0539b8809e2d449c3854bc88e2f',
-  //     'b585fe8b5269dd7d92fe57f9d3090951d2847d1e960309188cbe58f8725b036e758c17fd9900fd2856b9e950cc231482'),
+  //     '9063b434700f10568b925d20ca9913005ac84e5084901517ff6a572e786bb8c2c51aee081f4046af7e697216751b179c',
+  //     'b7ba13f57af0846cbc09884adb56387e2b4124cbc54ed13401c91be688020b3a9efcbadb456fd3e2991cc0dfaf538bfe',
+  //     'b011f9177135ed1720000a9dc8faf6e632bce36647771166abf7b6ef3c8d2fabf06a5082a17fe837beac8c2667158ca7',
+  //     'b7818959cc0abca70ab853a1e5df6fc25c5edb1b6152f316aca3bbbde8c53e5bbf3d7c4f2fe7a2a4536301f3577f28a9',
+  //     'a0043c4372f8e552b211fd49cec76c7cd3ad4d5922d17cc09b1e6318f6832ac86c41cd51bc5c8a7bc7b868f6d25a9cb4'),
   //   hexConcat(
-  //     '9711fbb89d7164069488680b3eb53618954ea3135feb5d9cf32e8a9202e6891a75ec0cf7be0593e29870fa910c06348312379052db181e2acbaa73525302f4d13680b57f30855dbfa1a1430dcc92b957f1cbb88db40848fabe61ad3c0c787b01',
-  //     '968b05ee2482010bddc5d63419e50e1dfe209367f11eacd4a982af6d30817e27cb4e4223a87e9e5fad55fc094c1e4561078e607689cc7324795c0da991fb06efeb111546c49becea3e636dc1c1b6aa6eb2509a664cba0b46edcab5203fe57662',
-  //     'b28d73b5ad6b61d0a83c09762cd635e8cb92dcbe8db40fd85948966af51df08b5f483b9d00647ccc96afc68b91f3442c13e1fce2be3473aef0498993c44632534467b3ac227243a2f617c1bad85c16f5ba4a087c10b27a5caadd96f0f98de1a6',
-  //     '977daeb615afcde1bf630b7447f1bfee900febab74a37271b0e1b11997610e785f8157252e73d2b61f3bb98db605dda40cbc86547598da3a8ca4dd25a82bb4f0cc7749bb3dfb33de21e225bad5169f498ea7a63e123db71727893b38f27b7193',
-  //     'a1d8b1a83e52c636e8e4d12c97846e9ac52b48ebc433f8ffb54e9f619974d3b1799bc0f4664366ba799147b988a69731123d2d4734d84d31e57b9ed545b09682314b54ba5d38ac50f36bf63abc7102db762c6e272a1f2f628b18b506dff5c0ed'),
+  //     '8ace7716703d8baf5c6863cdcbec7b3b3286c60ab68c29157b3c2f7ceecfefccd79d79b732932d5659886eae7162b05009c549eb42dbd4d17501c04d427801676597531bbbb6c85226420eebf0cd8189895ffffd8c2c3bd3cdda2c72a299e41c',
+  //     'b80ad171cf720d85f3fe6b6a94886685848bc7508cdeb91d6347b839f79ab57afe590e19ff4c465ae27c71d4facb248307285eb93b507e2e41336cf40c0d8456879504f1dfc1681a5809decb534bdf11be4e5789aa05275ace4bf0febfc50f8b',
+  //     'b611d17db6a918b8c277ba8e1951673044085aa3089c56bd1a635353c547bd933eaa17eaf7466a73ca548dfd0f425acc04ad241334f190b8a8592ebdcd7c02d65fee1f549e032e42390866d757d7dc9211f37bae48bae6747abea4efa505f0e6',
+  //     '8de5c0216fcf872b780835bef9b48f2f0d8173d13fc4348f56e79f77b0335eaebdfa0219a5b6f66c4d4f04f3fbb30ed4109e5bdf85bfcc4b8fde07bdf87941a788f017db181e015ecb42131487d08fcf43dcf8d93753a5e7d5bb06797074d375',
+  //     'b513f2a6a947f1c640c19a3bd6242be9801583ab187bc584130bbb8f437988e5c02e3c37e6c2293daf79238f70c2a7ec11c2aed187862efbf5b07b22b81a9f37ec97bd946b5d47310c9890b3f1fecabe853104f93a3e43ba1b329f872c1cc208'),
   //   {
   //     gasLimit: 1000000,
   //     gasPrice: 100000,
@@ -131,9 +85,46 @@ async function main() {
   // );
 
   // console.log()
-  // console.log('Querying get singing keys...')
-  // const signingKeys = await nodeOperatorRegistry.getSigningKeys(operatorId, 0, 5)
-  // console.log('Signing Keys:', signingKeys)
+  // console.log('Querying remove signing keys...')
+  // await nodeOperatorRegistry.removeSigningKeys(
+  //   operatorId, 
+  //   0, 
+  //   5, 
+  //   {
+  //     gasLimit: 1000000,
+  //     gasPrice: 100000,
+  //   }
+  // );
+
+  console.log()
+  console.log('Querying get singing keys...')
+  const signingKeys = await nodeOperatorRegistry.getSigningKeys(operatorId, 0, 5, {
+    gasLimit: 1000000,
+    gasPrice: 100000,
+  })
+  console.log('Signing Keys:', signingKeys)
+
+  // console.log()
+  // console.log('Querying getWithdrawalRequests()...')
+  // const withdrawalRequests = await withdrawalQueueERC721.getWithdrawalRequests(
+  //   '0x26AC28D33EcBf947951d6B7d8a1e6569eE73d076',
+  //   {
+  //     gasLimit: 1000000,
+  //     gasPrice: 100000,
+  //   }
+  // )
+  // console.log('Withdrawal Requests:', withdrawalRequests)
+
+  // console.log()
+  // console.log('Querying getWithdrawalStatus()...')
+  // const withdrawalStatus = await withdrawalQueueERC721.getWithdrawalStatus(
+  //   [1],
+  //   {
+  //     gasLimit: 1000000,
+  //     gasPrice: 100000,
+  //   }
+  // )
+  // console.log('Withdrawal Status:', withdrawalStatus)
 }
 
 main()
