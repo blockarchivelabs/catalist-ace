@@ -20,7 +20,7 @@ if [[ -z "$GATE_SEAL_FACTORY" ]]; then
     exit 1
 fi
 
-export NETWORK="ace_test"
+export NETWORK="ace_devnet"
 export NETWORK_STATE_FILE="deployed-${NETWORK}.json"
 export NETWORK_STATE_DEFAULTS_FILE="deployed-testnet-defaults.json"
 
@@ -34,3 +34,5 @@ export GAS_PRIORITY_FEE="${GAS_PRIORITY_FEE:=1}"
 export GAS_MAX_FEE="${GAS_MAX_FEE:=100}"
 
 bash scripts/scratch/dao-deploy.sh
+
+npx hardhat run scripts/interact/interact-init-devnet.js

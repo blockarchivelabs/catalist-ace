@@ -24,3 +24,5 @@ bash scripts/scratch/dao-deploy.sh
 yarn hardhat --network $NETWORK run ./scripts/scratch/send-hardhat-mine.js --no-compile
 
 NETWORK_STATE_FILE=deployed-local.json HARDHAT_FORKING_URL="${RPC_URL}" yarn hardhat run --no-compile ./scripts/scratch/checks/scratch-acceptance-test.js --network hardhat
+
+npx hardhat run scripts/interact/interact-init-local.js --network local
