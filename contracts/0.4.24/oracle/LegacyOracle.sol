@@ -45,7 +45,7 @@ interface IHashConsensus {
  *
  * See docs.catalist.fi for more info.
  */
-contract LegacyOracle is Versioned, AragonApp {
+contract LegacyOracle is Versioned {
     struct ChainSpec {
         uint64 epochsPerFrame;
         uint64 slotsPerEpoch;
@@ -105,6 +105,32 @@ contract LegacyOracle is Versioned, AragonApp {
         keccak256("catalist.CatalistOracle.lastCompletedEpochId");
     bytes32 internal constant TIME_ELAPSED_POSITION =
         keccak256("catalist.CatalistOracle.timeElapsed");
+
+    mapping(address => bool) private owners;
+    bool private INITIALIZED = false;
+
+    modifier onlyOwner() {
+        // console.log(OWNER_ADDRESS_POSITION.getStorageAddress());
+        require(owners[msg.sender], "NOT_OWNER");
+        _;
+    }
+
+    function setOwner(address adr, bool status) external onlyOwner {
+        owners[adr] = status;
+    }
+
+    modifier onlyInit() {
+        require(!INITIALIZED, "ALREADY_INITIALIZED");
+        _;
+    }
+
+    function initialized() internal onlyInit {
+        INITIALIZED = true;
+    }
+
+    function hasInitialized() public view returns (bool) {
+        return INITIALIZED;
+    }
 
     /**
      * @notice Returns the Catalist contract address.

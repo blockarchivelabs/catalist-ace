@@ -9,9 +9,9 @@ const DEPLOYER = process.env.DEPLOYER || ''
 const REQUIRED_NET_STATE = [
   `app:${APP_NAMES.CATALIST}`,
   `app:${APP_NAMES.ORACLE}`,
-  "app:aragon-agent",
-  "app:aragon-voting",
-  "daoInitialSettings",
+  // "app:aragon-agent",
+  // "app:aragon-voting",
+  // "daoInitialSettings",
   "oracleReportSanityChecker",
   "burner",
   "hashConsensusForAccountingOracle",
@@ -27,9 +27,10 @@ async function deployNewContracts({ web3, artifacts }) {
   assertRequiredNetworkState(state, REQUIRED_NET_STATE)
   const catalistAddress = state["app:catalist"].proxy.address
   const legacyOracleAddress = state["app:oracle"].proxy.address
-  const votingAddress = state["app:aragon-voting"].proxy.address
-  const agentAddress = state["app:aragon-agent"].proxy.address
-  const treasuryAddress = agentAddress
+  // const votingAddress = state["app:aragon-voting"].proxy.address
+  // const agentAddress = state["app:aragon-agent"].proxy.address
+  // const treasuryAddress = agentAddress
+  const treasuryAddress = DEPLOYER
   const chainSpec = state["chainSpec"]
   const depositSecurityModuleParams = state["depositSecurityModule"].deployParameters
   const burnerParams = state["burner"].deployParameters
@@ -132,7 +133,7 @@ async function deployNewContracts({ web3, artifacts }) {
   //
   const withdrawalVaultImpl = await deployImplementation("withdrawalVault", "WithdrawalVault", deployer, [catalistAddress, treasuryAddress])
   state = readNetworkState(network.name, netId)
-  const withdrawalsManagerProxyConstructorArgs = [votingAddress, withdrawalVaultImpl.address]
+  const withdrawalsManagerProxyConstructorArgs = [deployer, withdrawalVaultImpl.address]
   const withdrawalsManagerProxy = await deployContract("WithdrawalsManagerProxy", withdrawalsManagerProxyConstructorArgs, deployer)
   const withdrawalVaultAddress = withdrawalsManagerProxy.address
   state.withdrawalVault = {

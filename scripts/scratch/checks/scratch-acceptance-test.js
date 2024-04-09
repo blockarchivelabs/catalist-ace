@@ -38,15 +38,15 @@ async function loadDeployedProtocol(state) {
   return {
     stakingRouter: await artifacts.require('StakingRouter').at(state.stakingRouter.proxy.address),
     catalist: await artifacts.require('Catalist').at(state['app:catalist'].proxy.address),
-    voting: await artifacts.require('Voting').at(state['app:aragon-voting'].proxy.address),
-    agent: await artifacts.require('Agent').at(state['app:aragon-agent'].proxy.address),
+    // voting: await artifacts.require('Voting').at(state['app:aragon-voting'].proxy.address),
+    // agent: await artifacts.require('Agent').at(state['app:aragon-agent'].proxy.address),
     nodeOperatorsRegistry: await artifacts.require('NodeOperatorsRegistry').at(state['app:node-operators-registry'].proxy.address),
     depositSecurityModule: await artifacts.require('DepositSecurityModule').at(state.depositSecurityModule.address),
     accountingOracle: await artifacts.require('AccountingOracle').at(state.accountingOracle.proxy.address),
     hashConsensusForAO: await artifacts.require('HashConsensus').at(state.hashConsensusForAccountingOracle.address),
     elRewardsVault: await artifacts.require('CatalistExecutionLayerRewardsVault').at(state.executionLayerRewardsVault.address),
     withdrawalQueue: await artifacts.require('WithdrawalQueueERC721').at(state.withdrawalQueueERC721.proxy.address),
-    ldo: await artifacts.require('MiniMeToken').at(state.ldo.address),
+    // ldo: await artifacts.require('MiniMeToken').at(state.ldo.address),
   }
 }
 
@@ -220,7 +220,7 @@ async function checkMainProtocolFlows({ web3 }) {
   const [owner, user1, user2, oracleMember1, oracleMember2] = await ethers.getSigners()
 
   
-  await checkLDOCanBeTransferred(protocol.ldo, state)
+  // await checkLDOCanBeTransferred(protocol.ldo, state)
 
   await prepareProtocolForSubmitDepositReportWithdrawalFlow(protocol, state, owner, oracleMember1, oracleMember2)
   await checkSubmitDepositReportWithdrawal(protocol, state, owner, user1)

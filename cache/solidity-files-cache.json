@@ -1,0 +1,6340 @@
+{
+  "_format": "hh-sol-cache-2",
+  "files": {
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/0.4.24/Catalist.sol": {
+      "lastModificationDate": 1712552326241,
+      "contentHash": "f4420d0a3afb730f554021ace4861934",
+      "sourceName": "contracts/0.4.24/Catalist.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@aragon/os/contracts/apps/AragonApp.sol",
+        "@aragon/os/contracts/lib/math/SafeMath.sol",
+        "../common/interfaces/ICatalistLocator.sol",
+        "../common/interfaces/IBurner.sol",
+        "./lib/StakeLimitUtils.sol",
+        "../common/lib/Math256.sol",
+        "./BACEPermit.sol",
+        "./utils/Versioned.sol",
+        "hardhat/console.sol"
+      ],
+      "versionPragmas": [
+        "0.4.24"
+      ],
+      "artifacts": [
+        "Catalist",
+        "ICatalistExecutionLayerRewardsVault",
+        "IOracleReportSanityChecker",
+        "IPostTokenRebaseReceiver",
+        "IStakingRouter",
+        "IWithdrawalQueue",
+        "IWithdrawalVault"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/0.4.24/utils/Versioned.sol": {
+      "lastModificationDate": 1712537996010,
+      "contentHash": "d84d7b487bdf13899e34614d01e70503",
+      "sourceName": "contracts/0.4.24/utils/Versioned.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@aragon/os/contracts/common/UnstructuredStorage.sol"
+      ],
+      "versionPragmas": [
+        "^0.4.24"
+      ],
+      "artifacts": [
+        "Versioned"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/0.4.24/lib/StakeLimitUtils.sol": {
+      "lastModificationDate": 1712292043254,
+      "contentHash": "5d8c1ddef95e358b00d4099e073100e7",
+      "sourceName": "contracts/0.4.24/lib/StakeLimitUtils.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@aragon/os/contracts/common/UnstructuredStorage.sol"
+      ],
+      "versionPragmas": [
+        "^0.4.24"
+      ],
+      "artifacts": [
+        "StakeLimitState",
+        "StakeLimitUnstructuredStorage",
+        "StakeLimitUtils"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/apps/AragonApp.sol": {
+      "lastModificationDate": 1712538008740,
+      "contentHash": "d1278a5e74267df004a50dc0348b5481",
+      "sourceName": "@aragon/os/contracts/apps/AragonApp.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./AppStorage.sol",
+        "../acl/ACLSyntaxSugar.sol",
+        "../common/Autopetrified.sol",
+        "../common/ConversionHelpers.sol",
+        "../common/ReentrancyGuard.sol",
+        "../common/VaultRecoverable.sol",
+        "../evmscript/EVMScriptRunner.sol"
+      ],
+      "versionPragmas": [
+        "^0.4.24"
+      ],
+      "artifacts": [
+        "AragonApp"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/lib/math/SafeMath.sol": {
+      "lastModificationDate": 1712538008740,
+      "contentHash": "5e1b1ced4561070537e8d85e76784543",
+      "sourceName": "@aragon/os/contracts/lib/math/SafeMath.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.4.24"
+      ],
+      "artifacts": [
+        "SafeMath"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/common/UnstructuredStorage.sol": {
+      "lastModificationDate": 1712538008739,
+      "contentHash": "3bdb3bf82b59d2386cf9d06a0e84a0c4",
+      "sourceName": "@aragon/os/contracts/common/UnstructuredStorage.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.4.24"
+      ],
+      "artifacts": [
+        "UnstructuredStorage"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/0.4.24/utils/Pausable.sol": {
+      "lastModificationDate": 1712537996010,
+      "contentHash": "77a4842b9f092dfc9c614dca88ec32ce",
+      "sourceName": "contracts/0.4.24/utils/Pausable.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@aragon/os/contracts/common/UnstructuredStorage.sol"
+      ],
+      "versionPragmas": [
+        "^0.4.24"
+      ],
+      "artifacts": [
+        "Pausable"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/openzeppelin-solidity/contracts/token/ERC20/IERC20.sol": {
+      "lastModificationDate": 1712286270384,
+      "contentHash": "1e905ffff24c62c1f583723d2fe4aed1",
+      "sourceName": "openzeppelin-solidity/contracts/token/ERC20/IERC20.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.4.24"
+      ],
+      "artifacts": [
+        "IERC20"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/common/ReentrancyGuard.sol": {
+      "lastModificationDate": 1712538008738,
+      "contentHash": "e72cb7cb70fc0c1b7bbc16db414cf402",
+      "sourceName": "@aragon/os/contracts/common/ReentrancyGuard.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../common/UnstructuredStorage.sol"
+      ],
+      "versionPragmas": [
+        "^0.4.24"
+      ],
+      "artifacts": [
+        "ReentrancyGuard"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/acl/ACLSyntaxSugar.sol": {
+      "lastModificationDate": 1712538008741,
+      "contentHash": "cad49eb7c9736676964253ec6d34572a",
+      "sourceName": "@aragon/os/contracts/acl/ACLSyntaxSugar.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.4.24"
+      ],
+      "artifacts": [
+        "ACLHelpers",
+        "ACLSyntaxSugar"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/common/ConversionHelpers.sol": {
+      "lastModificationDate": 1712538008739,
+      "contentHash": "96a17802b60907e01d5b2a3ab0a3603d",
+      "sourceName": "@aragon/os/contracts/common/ConversionHelpers.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.4.24"
+      ],
+      "artifacts": [
+        "ConversionHelpers"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/common/Autopetrified.sol": {
+      "lastModificationDate": 1712538008739,
+      "contentHash": "84efba70d2ecf68f4d63965a0d1ce20d",
+      "sourceName": "@aragon/os/contracts/common/Autopetrified.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./Petrifiable.sol"
+      ],
+      "versionPragmas": [
+        "^0.4.24"
+      ],
+      "artifacts": [
+        "Autopetrified"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/common/VaultRecoverable.sol": {
+      "lastModificationDate": 1712538008739,
+      "contentHash": "91f52d3749c04ad6ba5b0fbe15f9525c",
+      "sourceName": "@aragon/os/contracts/common/VaultRecoverable.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../lib/token/ERC20.sol",
+        "./EtherTokenConstant.sol",
+        "./IsContract.sol",
+        "./IVaultRecoverable.sol",
+        "./SafeERC20.sol"
+      ],
+      "versionPragmas": [
+        "^0.4.24"
+      ],
+      "artifacts": [
+        "VaultRecoverable"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/evmscript/EVMScriptRunner.sol": {
+      "lastModificationDate": 1712292046139,
+      "contentHash": "fe15a638421260c656daa3d47210f821",
+      "sourceName": "@aragon/os/contracts/evmscript/EVMScriptRunner.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./IEVMScriptExecutor.sol",
+        "./IEVMScriptRegistry.sol",
+        "../apps/AppStorage.sol",
+        "../kernel/KernelConstants.sol",
+        "../common/Initializable.sol"
+      ],
+      "versionPragmas": [
+        "^0.4.24"
+      ],
+      "artifacts": [
+        "EVMScriptRunner"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/apps/AppStorage.sol": {
+      "lastModificationDate": 1712538008740,
+      "contentHash": "fa76710705e400925464371e8b7e376d",
+      "sourceName": "@aragon/os/contracts/apps/AppStorage.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../common/UnstructuredStorage.sol",
+        "../kernel/IKernel.sol"
+      ],
+      "versionPragmas": [
+        "^0.4.24"
+      ],
+      "artifacts": [
+        "AppStorage"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/common/Petrifiable.sol": {
+      "lastModificationDate": 1712538008738,
+      "contentHash": "b59af3eedde37a186994d2ab171b651e",
+      "sourceName": "@aragon/os/contracts/common/Petrifiable.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./Initializable.sol"
+      ],
+      "versionPragmas": [
+        "^0.4.24"
+      ],
+      "artifacts": [
+        "Petrifiable"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/common/Initializable.sol": {
+      "lastModificationDate": 1712538008738,
+      "contentHash": "3b7881b9fa121d9495f6f24d8dc009cc",
+      "sourceName": "@aragon/os/contracts/common/Initializable.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./TimeHelpers.sol",
+        "./UnstructuredStorage.sol"
+      ],
+      "versionPragmas": [
+        "^0.4.24"
+      ],
+      "artifacts": [
+        "Initializable"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/common/TimeHelpers.sol": {
+      "lastModificationDate": 1712538008738,
+      "contentHash": "119295acfd13f74b511c408981f1feeb",
+      "sourceName": "@aragon/os/contracts/common/TimeHelpers.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./Uint256Helpers.sol"
+      ],
+      "versionPragmas": [
+        "^0.4.24"
+      ],
+      "artifacts": [
+        "TimeHelpers"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/common/Uint256Helpers.sol": {
+      "lastModificationDate": 1712538008739,
+      "contentHash": "290b278b237e0e30441077b05bad4c67",
+      "sourceName": "@aragon/os/contracts/common/Uint256Helpers.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.4.24"
+      ],
+      "artifacts": [
+        "Uint256Helpers"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/common/EtherTokenConstant.sol": {
+      "lastModificationDate": 1712538008739,
+      "contentHash": "7206532eba23e532bc4ae5d1249cbb7f",
+      "sourceName": "@aragon/os/contracts/common/EtherTokenConstant.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.4.24"
+      ],
+      "artifacts": [
+        "EtherTokenConstant"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/common/IsContract.sol": {
+      "lastModificationDate": 1712538008739,
+      "contentHash": "1a194f66a6c19cb10ad6d29e4014280c",
+      "sourceName": "@aragon/os/contracts/common/IsContract.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.4.24"
+      ],
+      "artifacts": [
+        "IsContract"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/common/SafeERC20.sol": {
+      "lastModificationDate": 1712292046140,
+      "contentHash": "8f005a4e8f904a725558b5a155a24c54",
+      "sourceName": "@aragon/os/contracts/common/SafeERC20.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../lib/token/ERC20.sol"
+      ],
+      "versionPragmas": [
+        "^0.4.24"
+      ],
+      "artifacts": [
+        "SafeERC20"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/lib/token/ERC20.sol": {
+      "lastModificationDate": 1712538008739,
+      "contentHash": "5f0493b74b5c23e0dde8b5504535bdb1",
+      "sourceName": "@aragon/os/contracts/lib/token/ERC20.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.4.24"
+      ],
+      "artifacts": [
+        "ERC20"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/common/IVaultRecoverable.sol": {
+      "lastModificationDate": 1712538008738,
+      "contentHash": "3bf05069b1a3c8d18a09aa518261b16a",
+      "sourceName": "@aragon/os/contracts/common/IVaultRecoverable.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.4.24"
+      ],
+      "artifacts": [
+        "IVaultRecoverable"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/kernel/KernelConstants.sol": {
+      "lastModificationDate": 1712538008742,
+      "contentHash": "b68e404db3dfca10c2274231752e8940",
+      "sourceName": "@aragon/os/contracts/kernel/KernelConstants.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.4.24"
+      ],
+      "artifacts": [
+        "KernelAppIds",
+        "KernelNamespaceConstants"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/evmscript/IEVMScriptExecutor.sol": {
+      "lastModificationDate": 1712538008737,
+      "contentHash": "fe384fdf21625bbbe5c9329c01b36dc2",
+      "sourceName": "@aragon/os/contracts/evmscript/IEVMScriptExecutor.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.4.24"
+      ],
+      "artifacts": [
+        "IEVMScriptExecutor"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/evmscript/IEVMScriptRegistry.sol": {
+      "lastModificationDate": 1712538008737,
+      "contentHash": "3ad1781129290faf91e80b09e043490e",
+      "sourceName": "@aragon/os/contracts/evmscript/IEVMScriptRegistry.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./IEVMScriptExecutor.sol"
+      ],
+      "versionPragmas": [
+        "^0.4.24"
+      ],
+      "artifacts": [
+        "EVMScriptRegistryConstants",
+        "IEVMScriptRegistry"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/kernel/IKernel.sol": {
+      "lastModificationDate": 1712538008742,
+      "contentHash": "f9d712a0497fc8036308476ed03d641f",
+      "sourceName": "@aragon/os/contracts/kernel/IKernel.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../acl/IACL.sol",
+        "../common/IVaultRecoverable.sol"
+      ],
+      "versionPragmas": [
+        "^0.4.24"
+      ],
+      "artifacts": [
+        "IKernel",
+        "IKernelEvents"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/acl/IACL.sol": {
+      "lastModificationDate": 1712538008741,
+      "contentHash": "c2b6838c34bc3ae49c230669ddb24619",
+      "sourceName": "@aragon/os/contracts/acl/IACL.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.4.24"
+      ],
+      "artifacts": [
+        "IACL"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/0.4.24/template/CatalistTemplate.sol": {
+      "lastModificationDate": 1712632444799,
+      "contentHash": "bb2a275f8915820d9f6a411ac97f4432",
+      "sourceName": "contracts/0.4.24/template/CatalistTemplate.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@aragon/os/contracts/factory/APMRegistryFactory.sol",
+        "@aragon/os/contracts/acl/ACL.sol",
+        "@aragon/os/contracts/apm/Repo.sol",
+        "@aragon/os/contracts/apm/APMRegistry.sol",
+        "@aragon/os/contracts/ens/ENSSubdomainRegistrar.sol",
+        "@aragon/os/contracts/kernel/Kernel.sol",
+        "@aragon/os/contracts/lib/ens/ENS.sol",
+        "@aragon/os/contracts/lib/ens/PublicResolver.sol",
+        "@aragon/os/contracts/factory/DAOFactory.sol",
+        "@aragon/os/contracts/common/IsContract.sol",
+        "@aragon/apps-agent/contracts/Agent.sol",
+        "@aragon/apps-vault/contracts/Vault.sol",
+        "@aragon/apps-lido/apps/voting/contracts/Voting.sol",
+        "@aragon/apps-finance/contracts/Finance.sol",
+        "@aragon/apps-lido/apps/token-manager/contracts/TokenManager.sol",
+        "@aragon/id/contracts/IFIFSResolvingRegistrar.sol",
+        "../Catalist.sol",
+        "../oracle/LegacyOracle.sol",
+        "../nos/NodeOperatorsRegistry.sol"
+      ],
+      "versionPragmas": [
+        "^0.4.24"
+      ],
+      "artifacts": [
+        "CatalistTemplate"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/0.4.24/oracle/LegacyOracle.sol": {
+      "lastModificationDate": 1712552326247,
+      "contentHash": "ad96f4da053e4ab0aef284469c020496",
+      "sourceName": "contracts/0.4.24/oracle/LegacyOracle.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@aragon/os/contracts/apps/AragonApp.sol",
+        "../../common/interfaces/ICatalistLocator.sol",
+        "../utils/Versioned.sol"
+      ],
+      "versionPragmas": [
+        "0.4.24"
+      ],
+      "artifacts": [
+        "IAccountingOracle",
+        "IHashConsensus",
+        "LegacyOracle"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/0.4.24/nos/NodeOperatorsRegistry.sol": {
+      "lastModificationDate": 1712552378893,
+      "contentHash": "31a6c083a5663a7844db34c5fe3f17e6",
+      "sourceName": "contracts/0.4.24/nos/NodeOperatorsRegistry.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@aragon/os/contracts/apps/AragonApp.sol",
+        "@aragon/os/contracts/lib/math/SafeMath.sol",
+        "@aragon/os/contracts/common/UnstructuredStorage.sol",
+        "../../common/lib/Math256.sol",
+        "../../common/lib/MinFirstAllocationStrategy.sol",
+        "../../common/interfaces/ICatalistLocator.sol",
+        "../../common/interfaces/IBurner.sol",
+        "../lib/SigningKeys.sol",
+        "../lib/Packed64x4.sol",
+        "../utils/Versioned.sol"
+      ],
+      "versionPragmas": [
+        "^0.4.24"
+      ],
+      "artifacts": [
+        "IBACE",
+        "NodeOperatorsRegistry"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/apps-finance/contracts/Finance.sol": {
+      "lastModificationDate": 1712286296713,
+      "contentHash": "8bfe112f90a29ff25ecdc442f0cb83ae",
+      "sourceName": "@aragon/apps-finance/contracts/Finance.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@aragon/os/contracts/apps/AragonApp.sol",
+        "@aragon/os/contracts/common/EtherTokenConstant.sol",
+        "@aragon/os/contracts/common/IsContract.sol",
+        "@aragon/os/contracts/common/SafeERC20.sol",
+        "@aragon/os/contracts/lib/token/ERC20.sol",
+        "@aragon/os/contracts/lib/math/SafeMath.sol",
+        "@aragon/os/contracts/lib/math/SafeMath64.sol",
+        "@aragon/apps-vault/contracts/Vault.sol"
+      ],
+      "versionPragmas": [
+        "0.4.24"
+      ],
+      "artifacts": [
+        "Finance"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/apps-vault/contracts/Vault.sol": {
+      "lastModificationDate": 1712286296620,
+      "contentHash": "4e5bba9877290a8c190e16b662737de0",
+      "sourceName": "@aragon/apps-vault/contracts/Vault.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@aragon/os/contracts/apps/AragonApp.sol",
+        "@aragon/os/contracts/common/DepositableStorage.sol",
+        "@aragon/os/contracts/common/EtherTokenConstant.sol",
+        "@aragon/os/contracts/common/SafeERC20.sol",
+        "@aragon/os/contracts/lib/token/ERC20.sol"
+      ],
+      "versionPragmas": [
+        "0.4.24"
+      ],
+      "artifacts": [
+        "Vault"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/id/contracts/IFIFSResolvingRegistrar.sol": {
+      "lastModificationDate": 1712286296978,
+      "contentHash": "869c1549675d0cd905560f172052bd74",
+      "sourceName": "@aragon/id/contracts/IFIFSResolvingRegistrar.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./ens/IPublicResolver.sol"
+      ],
+      "versionPragmas": [
+        "0.4.24"
+      ],
+      "artifacts": [
+        "IFIFSResolvingRegistrar"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/apps-agent/contracts/Agent.sol": {
+      "lastModificationDate": 1712286297070,
+      "contentHash": "771d0a5ee9c0c768f9b0f89db7b6d72a",
+      "sourceName": "@aragon/apps-agent/contracts/Agent.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./SignatureValidator.sol",
+        "./standards/IERC165.sol",
+        "./standards/ERC1271.sol",
+        "./standards/IERC721Receiver.sol",
+        "@aragon/apps-vault/contracts/Vault.sol",
+        "@aragon/os/contracts/common/IForwarder.sol"
+      ],
+      "versionPragmas": [
+        "0.4.24"
+      ],
+      "artifacts": [
+        "Agent"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/apm/APMRegistry.sol": {
+      "lastModificationDate": 1712292046138,
+      "contentHash": "5821766fb73b3137d620c9aff824707e",
+      "sourceName": "@aragon/os/contracts/apm/APMRegistry.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../lib/ens/AbstractENS.sol",
+        "../ens/ENSSubdomainRegistrar.sol",
+        "../factory/AppProxyFactory.sol",
+        "../apps/AragonApp.sol",
+        "../acl/ACL.sol",
+        "./Repo.sol"
+      ],
+      "versionPragmas": [
+        "0.4.24"
+      ],
+      "artifacts": [
+        "APMInternalAppNames",
+        "APMRegistry"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/factory/APMRegistryFactory.sol": {
+      "lastModificationDate": 1712292046143,
+      "contentHash": "6fe0986e0c3305cb327c399ddc23ce10",
+      "sourceName": "@aragon/os/contracts/factory/APMRegistryFactory.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../apm/APMRegistry.sol",
+        "../apm/Repo.sol",
+        "../ens/ENSSubdomainRegistrar.sol",
+        "./DAOFactory.sol",
+        "./ENSFactory.sol",
+        "./AppProxyFactory.sol"
+      ],
+      "versionPragmas": [
+        "0.4.24"
+      ],
+      "artifacts": [
+        "APMRegistryFactory"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/ens/ENSSubdomainRegistrar.sol": {
+      "lastModificationDate": 1712292046137,
+      "contentHash": "d013c9366596314c43aa3ffc9562d698",
+      "sourceName": "@aragon/os/contracts/ens/ENSSubdomainRegistrar.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../lib/ens/AbstractENS.sol",
+        "../lib/ens/PublicResolver.sol",
+        "./ENSConstants.sol",
+        "../apps/AragonApp.sol"
+      ],
+      "versionPragmas": [
+        "0.4.24"
+      ],
+      "artifacts": [
+        "ENSSubdomainRegistrar"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/apm/Repo.sol": {
+      "lastModificationDate": 1712292046138,
+      "contentHash": "d675d541e1a9a7800bbbfa097aebcf47",
+      "sourceName": "@aragon/os/contracts/apm/Repo.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../apps/AragonApp.sol"
+      ],
+      "versionPragmas": [
+        "0.4.24"
+      ],
+      "artifacts": [
+        "Repo"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/kernel/Kernel.sol": {
+      "lastModificationDate": 1712292046143,
+      "contentHash": "01fed1833ce3be5426209fdba147b61c",
+      "sourceName": "@aragon/os/contracts/kernel/Kernel.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./IKernel.sol",
+        "./KernelConstants.sol",
+        "./KernelStorage.sol",
+        "../acl/IACL.sol",
+        "../acl/ACLSyntaxSugar.sol",
+        "../common/ConversionHelpers.sol",
+        "../common/IsContract.sol",
+        "../common/Petrifiable.sol",
+        "../common/VaultRecoverable.sol",
+        "../factory/AppProxyFactory.sol",
+        "../lib/misc/ERCProxy.sol"
+      ],
+      "versionPragmas": [
+        "0.4.24"
+      ],
+      "artifacts": [
+        "Kernel"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/acl/ACL.sol": {
+      "lastModificationDate": 1712292046142,
+      "contentHash": "6b3fa053630ff41b06bbf36a1dd53496",
+      "sourceName": "@aragon/os/contracts/acl/ACL.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../apps/AragonApp.sol",
+        "../common/ConversionHelpers.sol",
+        "../common/TimeHelpers.sol",
+        "./ACLSyntaxSugar.sol",
+        "./IACL.sol",
+        "./IACLOracle.sol"
+      ],
+      "versionPragmas": [
+        "0.4.24"
+      ],
+      "artifacts": [
+        "ACL"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/factory/DAOFactory.sol": {
+      "lastModificationDate": 1712538008741,
+      "contentHash": "bc2a0a22651da25c42d27d135cd3f599",
+      "sourceName": "@aragon/os/contracts/factory/DAOFactory.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../kernel/IKernel.sol",
+        "../kernel/Kernel.sol",
+        "../kernel/KernelProxy.sol",
+        "../acl/IACL.sol",
+        "../acl/ACL.sol",
+        "./EVMScriptRegistryFactory.sol"
+      ],
+      "versionPragmas": [
+        "0.4.24"
+      ],
+      "artifacts": [
+        "DAOFactory"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/lib/ens/ENS.sol": {
+      "lastModificationDate": 1712538008740,
+      "contentHash": "2f0931276f280a0f6b662bc35503d763",
+      "sourceName": "@aragon/os/contracts/lib/ens/ENS.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./AbstractENS.sol"
+      ],
+      "versionPragmas": [
+        "^0.4.0"
+      ],
+      "artifacts": [
+        "ENS"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/lib/ens/PublicResolver.sol": {
+      "lastModificationDate": 1712292046141,
+      "contentHash": "67bb4fca2f69c36d522c5dcf1105bce5",
+      "sourceName": "@aragon/os/contracts/lib/ens/PublicResolver.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./AbstractENS.sol"
+      ],
+      "versionPragmas": [
+        "^0.4.0"
+      ],
+      "artifacts": [
+        "PublicResolver"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/apps-lido/apps/token-manager/contracts/TokenManager.sol": {
+      "lastModificationDate": 1712292046044,
+      "contentHash": "6b6f23d0ba5754d72a7854d8e258b216",
+      "sourceName": "@aragon/apps-lido/apps/token-manager/contracts/TokenManager.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@aragon/os/contracts/apps/AragonApp.sol",
+        "@aragon/os/contracts/common/IForwarder.sol",
+        "@aragon/os/contracts/lib/math/SafeMath.sol",
+        "@aragon/minime/contracts/MiniMeToken.sol",
+        "@aragon/minime/contracts/ITokenController.sol"
+      ],
+      "versionPragmas": [
+        "0.4.24"
+      ],
+      "artifacts": [
+        "TokenManager"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/apps-lido/apps/voting/contracts/Voting.sol": {
+      "lastModificationDate": 1712292046086,
+      "contentHash": "2c7b1ca56af1d795cb04f6cdfc6030b0",
+      "sourceName": "@aragon/apps-lido/apps/voting/contracts/Voting.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@aragon/os/contracts/apps/AragonApp.sol",
+        "@aragon/os/contracts/common/IForwarder.sol",
+        "@aragon/os/contracts/lib/math/SafeMath.sol",
+        "@aragon/os/contracts/lib/math/SafeMath64.sol",
+        "@aragon/minime/contracts/MiniMeToken.sol"
+      ],
+      "versionPragmas": [
+        "0.4.24"
+      ],
+      "artifacts": [
+        "Voting"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/0.4.24/lib/SigningKeys.sol": {
+      "lastModificationDate": 1712292043254,
+      "contentHash": "a9567c4c499db22e399e386417c4e46f",
+      "sourceName": "contracts/0.4.24/lib/SigningKeys.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@aragon/os/contracts/lib/math/SafeMath.sol",
+        "@aragon/os/contracts/lib/math/SafeMath64.sol"
+      ],
+      "versionPragmas": [
+        "^0.4.24"
+      ],
+      "artifacts": [
+        "SigningKeys"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/0.4.24/lib/Packed64x4.sol": {
+      "lastModificationDate": 1712537996010,
+      "contentHash": "fa076d25cd1ee0889c5f08bae24a9d59",
+      "sourceName": "contracts/0.4.24/lib/Packed64x4.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@aragon/os/contracts/lib/math/SafeMath.sol"
+      ],
+      "versionPragmas": [
+        "^0.4.24"
+      ],
+      "artifacts": [
+        "Packed64x4"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/lib/math/SafeMath64.sol": {
+      "lastModificationDate": 1712538008740,
+      "contentHash": "04f69f8d70bf631349e1181b8361ab21",
+      "sourceName": "@aragon/os/contracts/lib/math/SafeMath64.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.4.24"
+      ],
+      "artifacts": [
+        "SafeMath64"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/common/DepositableStorage.sol": {
+      "lastModificationDate": 1712538008739,
+      "contentHash": "919c48244ac5b2e09ae26524e38fb4aa",
+      "sourceName": "@aragon/os/contracts/common/DepositableStorage.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./UnstructuredStorage.sol"
+      ],
+      "versionPragmas": [
+        "0.4.24"
+      ],
+      "artifacts": [
+        "DepositableStorage"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/id/contracts/ens/IPublicResolver.sol": {
+      "lastModificationDate": 1712286296977,
+      "contentHash": "06b335e126997f3d99d4d7416fbdca04",
+      "sourceName": "@aragon/id/contracts/ens/IPublicResolver.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.4.0"
+      ],
+      "artifacts": [
+        "IPublicResolver"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/apps-agent/contracts/SignatureValidator.sol": {
+      "lastModificationDate": 1712286297070,
+      "contentHash": "4d0533633f00c9c59171e08351f7b4d9",
+      "sourceName": "@aragon/apps-agent/contracts/SignatureValidator.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./standards/ERC1271.sol"
+      ],
+      "versionPragmas": [
+        "0.4.24"
+      ],
+      "artifacts": [
+        "SignatureValidator"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/common/IForwarder.sol": {
+      "lastModificationDate": 1712538008738,
+      "contentHash": "2a4ad883a1895ec2f50267c4aba3cb6e",
+      "sourceName": "@aragon/os/contracts/common/IForwarder.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.4.24"
+      ],
+      "artifacts": [
+        "IForwarder"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/apps-agent/contracts/standards/IERC165.sol": {
+      "lastModificationDate": 1712286297070,
+      "contentHash": "1155984989280d9bb1917d1022e3fed2",
+      "sourceName": "@aragon/apps-agent/contracts/standards/IERC165.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.4.24"
+      ],
+      "artifacts": [
+        "IERC165"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/apps-agent/contracts/standards/ERC1271.sol": {
+      "lastModificationDate": 1712286297070,
+      "contentHash": "87739c0508b61490f67499b75219ff20",
+      "sourceName": "@aragon/apps-agent/contracts/standards/ERC1271.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.4.24"
+      ],
+      "artifacts": [
+        "ERC1271",
+        "ERC1271Bytes"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/apps-agent/contracts/standards/IERC721Receiver.sol": {
+      "lastModificationDate": 1712286297070,
+      "contentHash": "4fff9cfdd74a7afb144b9eec3e6d2a71",
+      "sourceName": "@aragon/apps-agent/contracts/standards/IERC721Receiver.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.4.24"
+      ],
+      "artifacts": [
+        "IERC721Receiver"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/factory/AppProxyFactory.sol": {
+      "lastModificationDate": 1712538008741,
+      "contentHash": "35482cfce3f6e5a3a153cf99b8489a2a",
+      "sourceName": "@aragon/os/contracts/factory/AppProxyFactory.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../apps/AppProxyUpgradeable.sol",
+        "../apps/AppProxyPinned.sol"
+      ],
+      "versionPragmas": [
+        "0.4.24"
+      ],
+      "artifacts": [
+        "AppProxyFactory"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/lib/ens/AbstractENS.sol": {
+      "lastModificationDate": 1712538008740,
+      "contentHash": "c2fbeed800e42c3343c1df5699821dbf",
+      "sourceName": "@aragon/os/contracts/lib/ens/AbstractENS.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.4.15"
+      ],
+      "artifacts": [
+        "AbstractENS"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/ens/ENSConstants.sol": {
+      "lastModificationDate": 1712538008736,
+      "contentHash": "ca88941a3e3ca92299d6379935d606a7",
+      "sourceName": "@aragon/os/contracts/ens/ENSConstants.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.4.24"
+      ],
+      "artifacts": [
+        "ENSConstants"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/acl/IACLOracle.sol": {
+      "lastModificationDate": 1712538008741,
+      "contentHash": "bc97fb95e9dbff59cf1d4dc14a84933f",
+      "sourceName": "@aragon/os/contracts/acl/IACLOracle.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.4.24"
+      ],
+      "artifacts": [
+        "IACLOracle"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/apps/AppProxyUpgradeable.sol": {
+      "lastModificationDate": 1712538008740,
+      "contentHash": "fbe1e763fcd3ad85fc9acf8da9d5c73a",
+      "sourceName": "@aragon/os/contracts/apps/AppProxyUpgradeable.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./AppProxyBase.sol"
+      ],
+      "versionPragmas": [
+        "0.4.24"
+      ],
+      "artifacts": [
+        "AppProxyUpgradeable"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/apps/AppProxyPinned.sol": {
+      "lastModificationDate": 1712538008740,
+      "contentHash": "652199cb4f381d883e89368c3ea0bd3e",
+      "sourceName": "@aragon/os/contracts/apps/AppProxyPinned.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../common/UnstructuredStorage.sol",
+        "../common/IsContract.sol",
+        "./AppProxyBase.sol"
+      ],
+      "versionPragmas": [
+        "0.4.24"
+      ],
+      "artifacts": [
+        "AppProxyPinned"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/apps/AppProxyBase.sol": {
+      "lastModificationDate": 1712538008740,
+      "contentHash": "27597a658eb38248fa0a8017f974807e",
+      "sourceName": "@aragon/os/contracts/apps/AppProxyBase.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./AppStorage.sol",
+        "../common/DepositableDelegateProxy.sol",
+        "../kernel/KernelConstants.sol",
+        "../kernel/IKernel.sol"
+      ],
+      "versionPragmas": [
+        "0.4.24"
+      ],
+      "artifacts": [
+        "AppProxyBase"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/common/DepositableDelegateProxy.sol": {
+      "lastModificationDate": 1712538008739,
+      "contentHash": "c9922101aca522d6c152b29bfae8b9ee",
+      "sourceName": "@aragon/os/contracts/common/DepositableDelegateProxy.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./DelegateProxy.sol",
+        "./DepositableStorage.sol"
+      ],
+      "versionPragmas": [
+        "0.4.24"
+      ],
+      "artifacts": [
+        "DepositableDelegateProxy"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/common/DelegateProxy.sol": {
+      "lastModificationDate": 1712538008739,
+      "contentHash": "54e119bd76180dd6bcb37fbedc758f69",
+      "sourceName": "@aragon/os/contracts/common/DelegateProxy.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../common/IsContract.sol",
+        "../lib/misc/ERCProxy.sol"
+      ],
+      "versionPragmas": [
+        "0.4.24"
+      ],
+      "artifacts": [
+        "DelegateProxy"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/lib/misc/ERCProxy.sol": {
+      "lastModificationDate": 1712538008739,
+      "contentHash": "94117f023171745a3ea338c768ecbaed",
+      "sourceName": "@aragon/os/contracts/lib/misc/ERCProxy.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.4.24"
+      ],
+      "artifacts": [
+        "ERCProxy"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/factory/ENSFactory.sol": {
+      "lastModificationDate": 1712538008741,
+      "contentHash": "c481e77f5e1caae7240a5331d676d7f9",
+      "sourceName": "@aragon/os/contracts/factory/ENSFactory.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../lib/ens/ENS.sol",
+        "../lib/ens/PublicResolver.sol",
+        "../ens/ENSConstants.sol"
+      ],
+      "versionPragmas": [
+        "0.4.24"
+      ],
+      "artifacts": [
+        "ENSFactory"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/kernel/KernelProxy.sol": {
+      "lastModificationDate": 1712538008742,
+      "contentHash": "33d81a2e16527410cb6c5157813928b3",
+      "sourceName": "@aragon/os/contracts/kernel/KernelProxy.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./IKernel.sol",
+        "./KernelConstants.sol",
+        "./KernelStorage.sol",
+        "../common/DepositableDelegateProxy.sol",
+        "../common/IsContract.sol"
+      ],
+      "versionPragmas": [
+        "0.4.24"
+      ],
+      "artifacts": [
+        "KernelProxy"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/factory/EVMScriptRegistryFactory.sol": {
+      "lastModificationDate": 1712538008741,
+      "contentHash": "c3b400fcf5dea0f55422588c5cd0716f",
+      "sourceName": "@aragon/os/contracts/factory/EVMScriptRegistryFactory.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../evmscript/IEVMScriptExecutor.sol",
+        "../evmscript/EVMScriptRegistry.sol",
+        "../evmscript/executors/CallsScript.sol",
+        "../kernel/Kernel.sol",
+        "../acl/ACL.sol"
+      ],
+      "versionPragmas": [
+        "0.4.24"
+      ],
+      "artifacts": [
+        "EVMScriptRegistryFactory"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/kernel/KernelStorage.sol": {
+      "lastModificationDate": 1712538008742,
+      "contentHash": "901adeee9b6c1d571263c649bd78d6bd",
+      "sourceName": "@aragon/os/contracts/kernel/KernelStorage.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.4.24"
+      ],
+      "artifacts": [
+        "KernelStorage"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/evmscript/EVMScriptRegistry.sol": {
+      "lastModificationDate": 1712292046139,
+      "contentHash": "2ba5bbaa635de4b8a1af0b02847951bf",
+      "sourceName": "@aragon/os/contracts/evmscript/EVMScriptRegistry.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../apps/AragonApp.sol",
+        "./ScriptHelpers.sol",
+        "./IEVMScriptExecutor.sol",
+        "./IEVMScriptRegistry.sol"
+      ],
+      "versionPragmas": [
+        "0.4.24"
+      ],
+      "artifacts": [
+        "EVMScriptRegistry"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/evmscript/executors/CallsScript.sol": {
+      "lastModificationDate": 1712292046139,
+      "contentHash": "3c65b631dbdbbb2c26a55bc070e48ea1",
+      "sourceName": "@aragon/os/contracts/evmscript/executors/CallsScript.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../ScriptHelpers.sol",
+        "./BaseEVMScriptExecutor.sol"
+      ],
+      "versionPragmas": [
+        "0.4.24"
+      ],
+      "artifacts": [
+        "CallsScript"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/evmscript/ScriptHelpers.sol": {
+      "lastModificationDate": 1712538008737,
+      "contentHash": "442689deef89305466c5c24d29d7d631",
+      "sourceName": "@aragon/os/contracts/evmscript/ScriptHelpers.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.4.24"
+      ],
+      "artifacts": [
+        "ScriptHelpers"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/os/contracts/evmscript/executors/BaseEVMScriptExecutor.sol": {
+      "lastModificationDate": 1712538008737,
+      "contentHash": "8edbb15a51ca4024ee01c1a5d0423520",
+      "sourceName": "@aragon/os/contracts/evmscript/executors/BaseEVMScriptExecutor.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../../common/Autopetrified.sol",
+        "../IEVMScriptExecutor.sol"
+      ],
+      "versionPragmas": [
+        "^0.4.24"
+      ],
+      "artifacts": [
+        "BaseEVMScriptExecutor"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/minime/contracts/MiniMeToken.sol": {
+      "lastModificationDate": 1712286297148,
+      "contentHash": "1efec266c720a90319a9f24fda4a156d",
+      "sourceName": "@aragon/minime/contracts/MiniMeToken.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./ITokenController.sol"
+      ],
+      "versionPragmas": [
+        "^0.4.24"
+      ],
+      "artifacts": [
+        "ApproveAndCallFallBack",
+        "Controlled",
+        "MiniMeToken",
+        "MiniMeTokenFactory"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/minime/contracts/ITokenController.sol": {
+      "lastModificationDate": 1712286297148,
+      "contentHash": "0091230d18a6e9bc1fb81160094458a4",
+      "sourceName": "@aragon/minime/contracts/ITokenController.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.4.24"
+      ],
+      "artifacts": [
+        "ITokenController"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@aragon/id/contracts/FIFSResolvingRegistrar.sol": {
+      "lastModificationDate": 1712286296976,
+      "contentHash": "aab2531aa653a1f92a86046339422974",
+      "sourceName": "@aragon/id/contracts/FIFSResolvingRegistrar.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@aragon/os/contracts/lib/ens/AbstractENS.sol",
+        "./ens/IPublicResolver.sol",
+        "./IFIFSResolvingRegistrar.sol"
+      ],
+      "versionPragmas": [
+        "0.4.24"
+      ],
+      "artifacts": [
+        "FIFSResolvingRegistrar"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/0.4.24/template/Imports.sol": {
+      "lastModificationDate": 1712537996009,
+      "contentHash": "6cbde2f9a1e795871191cb3cf65eb7ce",
+      "sourceName": "contracts/0.4.24/template/Imports.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@aragon/id/contracts/FIFSResolvingRegistrar.sol"
+      ],
+      "versionPragmas": [
+        "^0.4.24"
+      ],
+      "artifacts": [
+        "Imports"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/0.4.24/template/IACERegistrarController.sol": {
+      "lastModificationDate": 1712130644427,
+      "contentHash": "fe55421fd5c5421134647324bc08ad79",
+      "sourceName": "contracts/0.4.24/template/IACERegistrarController.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.4.24"
+      ],
+      "artifacts": [
+        "IACERegistrarController"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/0.4.24/template/IInterfaceResolver.sol": {
+      "lastModificationDate": 1712130644428,
+      "contentHash": "e320a2b74da6fb3c68e9463e71bfa9df",
+      "sourceName": "contracts/0.4.24/template/IInterfaceResolver.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.4.24"
+      ],
+      "artifacts": [
+        "IInterfaceResolver"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/common/interfaces/IBurner.sol": {
+      "lastModificationDate": 1712293757238,
+      "contentHash": "44e0d942f0b267e40983b7a487e39d2e",
+      "sourceName": "contracts/common/interfaces/IBurner.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.4.24 <0.9.0"
+      ],
+      "artifacts": [
+        "IBurner"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/0.8.9/sanity_checks/OracleReportSanityChecker.sol": {
+      "lastModificationDate": 1712293755839,
+      "contentHash": "06f836b7c527d1608a95846c07aca973",
+      "sourceName": "contracts/0.8.9/sanity_checks/OracleReportSanityChecker.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts-v4.4/utils/math/SafeCast.sol",
+        "../../common/lib/Math256.sol",
+        "../utils/access/AccessControlEnumerable.sol",
+        "../lib/PositiveTokenRebaseLimiter.sol",
+        "../../common/interfaces/ICatalistLocator.sol",
+        "../../common/interfaces/IBurner.sol"
+      ],
+      "versionPragmas": [
+        "0.8.9"
+      ],
+      "artifacts": [
+        "IWithdrawalQueue",
+        "LimitsListPacker",
+        "LimitsListUnpacker",
+        "OracleReportSanityChecker"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/common/lib/Math256.sol": {
+      "lastModificationDate": 1712130644510,
+      "contentHash": "ffab009df4d79f4b7e88f0a74c64f919",
+      "sourceName": "contracts/common/lib/Math256.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.4.24 <0.9.0"
+      ],
+      "artifacts": [
+        "Math256"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/0.8.9/utils/access/AccessControlEnumerable.sol": {
+      "lastModificationDate": 1712130644499,
+      "contentHash": "628ed27edc7fdb34fa9307b63e538187",
+      "sourceName": "contracts/0.8.9/utils/access/AccessControlEnumerable.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts-v4.4/access/IAccessControlEnumerable.sol",
+        "@openzeppelin/contracts-v4.4/utils/structs/EnumerableSet.sol",
+        "./AccessControl.sol"
+      ],
+      "versionPragmas": [
+        "0.8.9"
+      ],
+      "artifacts": [
+        "AccessControlEnumerable"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/0.8.9/lib/PositiveTokenRebaseLimiter.sol": {
+      "lastModificationDate": 1712293753195,
+      "contentHash": "795e32a7e89895860b94c099e7db404a",
+      "sourceName": "contracts/0.8.9/lib/PositiveTokenRebaseLimiter.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../../common/lib/Math256.sol"
+      ],
+      "versionPragmas": [
+        "0.8.9"
+      ],
+      "artifacts": [
+        "PositiveTokenRebaseLimiter"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/common/interfaces/ICatalistLocator.sol": {
+      "lastModificationDate": 1712130644504,
+      "contentHash": "1f8f86c6efa3115b32d3469fc1ad37e9",
+      "sourceName": "contracts/common/interfaces/ICatalistLocator.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.4.24 <0.9.0"
+      ],
+      "artifacts": [
+        "ICatalistLocator"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@openzeppelin/contracts-v4.4/utils/math/SafeCast.sol": {
+      "lastModificationDate": 1712149823344,
+      "contentHash": "cd91252bfcbee6eaba8f5144f504583c",
+      "sourceName": "@openzeppelin/contracts-v4.4/utils/math/SafeCast.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "SafeCast"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/0.8.9/utils/access/AccessControl.sol": {
+      "lastModificationDate": 1712130644497,
+      "contentHash": "e868a79ff1bbadd9b232461fbc5de50a",
+      "sourceName": "contracts/0.8.9/utils/access/AccessControl.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts-v4.4/access/IAccessControl.sol",
+        "@openzeppelin/contracts-v4.4/utils/Context.sol",
+        "@openzeppelin/contracts-v4.4/utils/Strings.sol",
+        "@openzeppelin/contracts-v4.4/utils/introspection/ERC165.sol"
+      ],
+      "versionPragmas": [
+        "0.8.9"
+      ],
+      "artifacts": [
+        "AccessControl"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@openzeppelin/contracts-v4.4/access/IAccessControlEnumerable.sol": {
+      "lastModificationDate": 1712149822404,
+      "contentHash": "4e71cc90682e109e999ce2bd329f6572",
+      "sourceName": "@openzeppelin/contracts-v4.4/access/IAccessControlEnumerable.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./IAccessControl.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IAccessControlEnumerable"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@openzeppelin/contracts-v4.4/utils/structs/EnumerableSet.sol": {
+      "lastModificationDate": 1712149823348,
+      "contentHash": "b8070bbbb327a49a4d37f5c590b38238",
+      "sourceName": "@openzeppelin/contracts-v4.4/utils/structs/EnumerableSet.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "EnumerableSet"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@openzeppelin/contracts-v4.4/utils/Strings.sol": {
+      "lastModificationDate": 1712149822403,
+      "contentHash": "9c54c6c065d9e590fdcdd72c451425b9",
+      "sourceName": "@openzeppelin/contracts-v4.4/utils/Strings.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "Strings"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@openzeppelin/contracts-v4.4/utils/Context.sol": {
+      "lastModificationDate": 1712149822402,
+      "contentHash": "5f2c5c4b6af2dd4551027144797bc8be",
+      "sourceName": "@openzeppelin/contracts-v4.4/utils/Context.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "Context"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@openzeppelin/contracts-v4.4/access/IAccessControl.sol": {
+      "lastModificationDate": 1712149822406,
+      "contentHash": "57c84298234411cea19c7c284d86be8b",
+      "sourceName": "@openzeppelin/contracts-v4.4/access/IAccessControl.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IAccessControl"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@openzeppelin/contracts-v4.4/utils/introspection/ERC165.sol": {
+      "lastModificationDate": 1712149823341,
+      "contentHash": "0e7db055ce108f9da7bb6686a00287c0",
+      "sourceName": "@openzeppelin/contracts-v4.4/utils/introspection/ERC165.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./IERC165.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "ERC165"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@openzeppelin/contracts-v4.4/utils/introspection/IERC165.sol": {
+      "lastModificationDate": 1712149823341,
+      "contentHash": "03e6768535ac4da0e9756f1d8a4a018a",
+      "sourceName": "@openzeppelin/contracts-v4.4/utils/introspection/IERC165.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IERC165"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/0.8.9/oracle/ValidatorsExitBusOracle.sol": {
+      "lastModificationDate": 1712130644482,
+      "contentHash": "c76865bf4265c80375efa5d695510d1e",
+      "sourceName": "contracts/0.8.9/oracle/ValidatorsExitBusOracle.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts-v4.4/utils/math/SafeCast.sol",
+        "../../common/interfaces/ICatalistLocator.sol",
+        "../../common/lib/Math256.sol",
+        "../utils/PausableUntil.sol",
+        "../lib/UnstructuredStorage.sol",
+        "./BaseOracle.sol"
+      ],
+      "versionPragmas": [
+        "0.8.9"
+      ],
+      "artifacts": [
+        "IOracleReportSanityChecker",
+        "ValidatorsExitBusOracle"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/0.8.9/utils/PausableUntil.sol": {
+      "lastModificationDate": 1712130644492,
+      "contentHash": "f8b1e1a5d3ad9ba5ec1e7467629dc055",
+      "sourceName": "contracts/0.8.9/utils/PausableUntil.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../lib/UnstructuredStorage.sol"
+      ],
+      "versionPragmas": [
+        "0.8.9"
+      ],
+      "artifacts": [
+        "PausableUntil"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/0.8.9/lib/UnstructuredStorage.sol": {
+      "lastModificationDate": 1712130644477,
+      "contentHash": "0b7ef806fb11b5d0b528bac2479e5656",
+      "sourceName": "contracts/0.8.9/lib/UnstructuredStorage.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.9"
+      ],
+      "artifacts": [
+        "UnstructuredStorage"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/0.8.9/oracle/BaseOracle.sol": {
+      "lastModificationDate": 1712130644480,
+      "contentHash": "970a43ede96d4df915ce75e2b63419d0",
+      "sourceName": "contracts/0.8.9/oracle/BaseOracle.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts-v4.4/utils/math/SafeCast.sol",
+        "../lib/UnstructuredStorage.sol",
+        "../utils/Versioned.sol",
+        "../utils/access/AccessControlEnumerable.sol",
+        "./HashConsensus.sol"
+      ],
+      "versionPragmas": [
+        "0.8.9"
+      ],
+      "artifacts": [
+        "BaseOracle",
+        "IConsensusContract"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/0.8.9/utils/Versioned.sol": {
+      "lastModificationDate": 1712130644494,
+      "contentHash": "b799f6396cba6bd0d8b640d2daed30f7",
+      "sourceName": "contracts/0.8.9/utils/Versioned.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../lib/UnstructuredStorage.sol"
+      ],
+      "versionPragmas": [
+        "0.8.9"
+      ],
+      "artifacts": [
+        "Versioned"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/0.8.9/oracle/HashConsensus.sol": {
+      "lastModificationDate": 1712130644481,
+      "contentHash": "5a51e39cfed9e0282bd40bb780d26a9f",
+      "sourceName": "contracts/0.8.9/oracle/HashConsensus.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts-v4.4/utils/math/SafeCast.sol",
+        "../lib/Math.sol",
+        "../utils/access/AccessControlEnumerable.sol"
+      ],
+      "versionPragmas": [
+        "0.8.9"
+      ],
+      "artifacts": [
+        "HashConsensus",
+        "IReportAsyncProcessor"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/0.8.9/lib/Math.sol": {
+      "lastModificationDate": 1712130644472,
+      "contentHash": "d4f9a33e24b69e45269f71313611a558",
+      "sourceName": "contracts/0.8.9/lib/Math.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.9"
+      ],
+      "artifacts": [
+        "Math"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/0.8.9/WithdrawalQueueERC721.sol": {
+      "lastModificationDate": 1712293741413,
+      "contentHash": "d1627f6c3ae14e16fb3d8feae57c1a90",
+      "sourceName": "contracts/0.8.9/WithdrawalQueueERC721.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts-v4.4/token/ERC721/IERC721.sol",
+        "@openzeppelin/contracts-v4.4/token/ERC721/IERC721Receiver.sol",
+        "@openzeppelin/contracts-v4.4/token/ERC721/extensions/IERC721Metadata.sol",
+        "@openzeppelin/contracts-v4.4/utils/introspection/IERC165.sol",
+        "./interfaces/IERC4906.sol",
+        "@openzeppelin/contracts-v4.4/utils/structs/EnumerableSet.sol",
+        "@openzeppelin/contracts-v4.4/utils/Address.sol",
+        "@openzeppelin/contracts-v4.4/utils/Strings.sol",
+        "./WithdrawalQueue.sol",
+        "./utils/access/AccessControlEnumerable.sol",
+        "./lib/UnstructuredRefStorage.sol",
+        "./lib/UnstructuredStorage.sol"
+      ],
+      "versionPragmas": [
+        "0.8.9"
+      ],
+      "artifacts": [
+        "INFTDescriptor",
+        "WithdrawalQueueERC721"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/0.8.9/interfaces/IERC4906.sol": {
+      "lastModificationDate": 1712130644469,
+      "contentHash": "8616809ec95a088efe77f9b463078f71",
+      "sourceName": "contracts/0.8.9/interfaces/IERC4906.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts-v4.4/utils/introspection/IERC165.sol",
+        "@openzeppelin/contracts-v4.4/token/ERC721/IERC721.sol"
+      ],
+      "versionPragmas": [
+        "0.8.9"
+      ],
+      "artifacts": [
+        "IERC4906"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/0.8.9/WithdrawalQueue.sol": {
+      "lastModificationDate": 1712293783718,
+      "contentHash": "cf8700e693fb2869993ab2fda888afdd",
+      "sourceName": "contracts/0.8.9/WithdrawalQueue.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./WithdrawalQueueBase.sol",
+        "@openzeppelin/contracts-v4.4/token/ERC20/IERC20.sol",
+        "@openzeppelin/contracts-v4.4/token/ERC20/extensions/draft-IERC20Permit.sol",
+        "@openzeppelin/contracts-v4.4/utils/structs/EnumerableSet.sol",
+        "./utils/access/AccessControlEnumerable.sol",
+        "./lib/UnstructuredStorage.sol",
+        "./utils/PausableUntil.sol",
+        "./utils/Versioned.sol"
+      ],
+      "versionPragmas": [
+        "0.8.9"
+      ],
+      "artifacts": [
+        "IBACE",
+        "IWbACE",
+        "WithdrawalQueue"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/0.8.9/lib/UnstructuredRefStorage.sol": {
+      "lastModificationDate": 1712130644476,
+      "contentHash": "0550508469adadbe90cedae123313ba3",
+      "sourceName": "contracts/0.8.9/lib/UnstructuredRefStorage.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.9"
+      ],
+      "artifacts": [
+        "UnstructuredRefStorage"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@openzeppelin/contracts-v4.4/utils/Address.sol": {
+      "lastModificationDate": 1712149822400,
+      "contentHash": "4cff8b2ea0d958750786b4e3ca308445",
+      "sourceName": "@openzeppelin/contracts-v4.4/utils/Address.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "Address"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@openzeppelin/contracts-v4.4/token/ERC721/IERC721.sol": {
+      "lastModificationDate": 1712149823349,
+      "contentHash": "27d219ec6f69478d065fdbfa7931da68",
+      "sourceName": "@openzeppelin/contracts-v4.4/token/ERC721/IERC721.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../../utils/introspection/IERC165.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IERC721"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@openzeppelin/contracts-v4.4/token/ERC721/IERC721Receiver.sol": {
+      "lastModificationDate": 1712149823348,
+      "contentHash": "592df588492d45fdcf46b3cb608c0fbf",
+      "sourceName": "@openzeppelin/contracts-v4.4/token/ERC721/IERC721Receiver.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IERC721Receiver"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@openzeppelin/contracts-v4.4/token/ERC721/extensions/IERC721Metadata.sol": {
+      "lastModificationDate": 1712149824193,
+      "contentHash": "efbc0d15b80a74e34dbe8da0f3e879bb",
+      "sourceName": "@openzeppelin/contracts-v4.4/token/ERC721/extensions/IERC721Metadata.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../IERC721.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IERC721Metadata"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/0.8.9/WithdrawalQueueBase.sol": {
+      "lastModificationDate": 1712293765899,
+      "contentHash": "d8a3a6e58e9f8a0d6ce43c65a9835aa2",
+      "sourceName": "contracts/0.8.9/WithdrawalQueueBase.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts-v4.4/utils/structs/EnumerableSet.sol",
+        "./lib/UnstructuredStorage.sol"
+      ],
+      "versionPragmas": [
+        "0.8.9"
+      ],
+      "artifacts": [
+        "WithdrawalQueueBase"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@openzeppelin/contracts-v4.4/token/ERC20/IERC20.sol": {
+      "lastModificationDate": 1712149823352,
+      "contentHash": "302d9755e46bc69d7058b0cbe7185e37",
+      "sourceName": "@openzeppelin/contracts-v4.4/token/ERC20/IERC20.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IERC20"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@openzeppelin/contracts-v4.4/token/ERC20/extensions/draft-IERC20Permit.sol": {
+      "lastModificationDate": 1712149824198,
+      "contentHash": "fb77f144244b9ab12533aa6ce85ef8c5",
+      "sourceName": "@openzeppelin/contracts-v4.4/token/ERC20/extensions/draft-IERC20Permit.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IERC20Permit"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@openzeppelin/contracts-v4.4/utils/cryptography/ECDSA.sol": {
+      "lastModificationDate": 1712149823342,
+      "contentHash": "395edffd6bb2b3ba29970d5814039654",
+      "sourceName": "@openzeppelin/contracts-v4.4/utils/cryptography/ECDSA.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../Strings.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "ECDSA"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/0.8.9/EIP712StACE.sol": {
+      "lastModificationDate": 1712293782641,
+      "contentHash": "08bf8dd12dcdb5064a1739a5cd8fe841",
+      "sourceName": "contracts/0.8.9/EIP712StACE.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts-v4.4/utils/cryptography/ECDSA.sol",
+        "../common/interfaces/IEIP712BACE.sol"
+      ],
+      "versionPragmas": [
+        "0.8.9"
+      ],
+      "artifacts": [
+        "EIP712BACE"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/hardhat/console.sol": {
+      "lastModificationDate": 1712149978165,
+      "contentHash": "4ff3cd2f6272c9a6516e9ee4f2b967d3",
+      "sourceName": "hardhat/console.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">= 0.4.22 <0.9.0"
+      ],
+      "artifacts": [
+        "console"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/common/lib/SignatureUtils.sol": {
+      "lastModificationDate": 1712130644513,
+      "contentHash": "1a1770faf8bd125857a589fa43faf57f",
+      "sourceName": "contracts/common/lib/SignatureUtils.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./ECDSA.sol"
+      ],
+      "versionPragmas": [
+        ">=0.4.24 <0.9.0"
+      ],
+      "artifacts": [
+        "SignatureUtils"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/common/lib/ECDSA.sol": {
+      "lastModificationDate": 1712130644508,
+      "contentHash": "3ec15806ce7aaedc75266d17e7a1f698",
+      "sourceName": "contracts/common/lib/ECDSA.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.4.24 <0.9.0"
+      ],
+      "artifacts": [
+        "ECDSA"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/0.8.9/DepositSecurityModule.sol": {
+      "lastModificationDate": 1712130644460,
+      "contentHash": "f75a8b60581371bd0b2c3c94831320ae",
+      "sourceName": "contracts/0.8.9/DepositSecurityModule.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../common/lib/ECDSA.sol"
+      ],
+      "versionPragmas": [
+        "0.8.9"
+      ],
+      "artifacts": [
+        "DepositSecurityModule",
+        "ICatalist",
+        "IDepositContract",
+        "IStakingRouter"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/0.8.9/WithdrawalVault.sol": {
+      "lastModificationDate": 1712293768027,
+      "contentHash": "f5ab0548b3e94caa470a1a94cf24b5d2",
+      "sourceName": "contracts/0.8.9/WithdrawalVault.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts-v4.4/token/ERC20/IERC20.sol",
+        "@openzeppelin/contracts-v4.4/token/ERC721/IERC721.sol",
+        "@openzeppelin/contracts-v4.4/token/ERC20/utils/SafeERC20.sol",
+        "./utils/Versioned.sol"
+      ],
+      "versionPragmas": [
+        "0.8.9"
+      ],
+      "artifacts": [
+        "ICatalist",
+        "WithdrawalVault"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@openzeppelin/contracts-v4.4/token/ERC20/utils/SafeERC20.sol": {
+      "lastModificationDate": 1712149824196,
+      "contentHash": "76814c83c32552ed2b521c816b4d801a",
+      "sourceName": "@openzeppelin/contracts-v4.4/token/ERC20/utils/SafeERC20.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../IERC20.sol",
+        "../../../utils/Address.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "SafeERC20"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@openzeppelin/contracts-v4.4/proxy/ERC1967/ERC1967Upgrade.sol": {
+      "lastModificationDate": 1712149823336,
+      "contentHash": "ceadc1585c7916aea8d2f4c04c82c462",
+      "sourceName": "@openzeppelin/contracts-v4.4/proxy/ERC1967/ERC1967Upgrade.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../beacon/IBeacon.sol",
+        "../../utils/Address.sol",
+        "../../utils/StorageSlot.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.2"
+      ],
+      "artifacts": [
+        "ERC1967Upgrade"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@openzeppelin/contracts-v4.4/utils/StorageSlot.sol": {
+      "lastModificationDate": 1712149822400,
+      "contentHash": "187a01c1e4e638014509dfee3ac6faa9",
+      "sourceName": "@openzeppelin/contracts-v4.4/utils/StorageSlot.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "StorageSlot"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@openzeppelin/contracts-v4.4/proxy/beacon/IBeacon.sol": {
+      "lastModificationDate": 1712149823337,
+      "contentHash": "b6bd23bf19e90b771337037706470933",
+      "sourceName": "@openzeppelin/contracts-v4.4/proxy/beacon/IBeacon.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IBeacon"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/0.8.9/proxy/OssifiableProxy.sol": {
+      "lastModificationDate": 1712130644484,
+      "contentHash": "7fed80cc97ffaf55996c1b9b2659e82c",
+      "sourceName": "contracts/0.8.9/proxy/OssifiableProxy.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts-v4.4/utils/Address.sol",
+        "@openzeppelin/contracts-v4.4/utils/StorageSlot.sol",
+        "@openzeppelin/contracts-v4.4/proxy/ERC1967/ERC1967Proxy.sol"
+      ],
+      "versionPragmas": [
+        "0.8.9"
+      ],
+      "artifacts": [
+        "OssifiableProxy"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@openzeppelin/contracts-v4.4/proxy/ERC1967/ERC1967Proxy.sol": {
+      "lastModificationDate": 1712149823335,
+      "contentHash": "524a6c6f00b809b1184050dcc9e131d8",
+      "sourceName": "@openzeppelin/contracts-v4.4/proxy/ERC1967/ERC1967Proxy.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../Proxy.sol",
+        "./ERC1967Upgrade.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "ERC1967Proxy"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@openzeppelin/contracts-v4.4/proxy/Proxy.sol": {
+      "lastModificationDate": 1712149822394,
+      "contentHash": "0ce1b80a6e3f466bd652ca52bb406173",
+      "sourceName": "@openzeppelin/contracts-v4.4/proxy/Proxy.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "Proxy"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/0.8.9/StakingRouter.sol": {
+      "lastModificationDate": 1712216365470,
+      "contentHash": "67d09eecc7c51ba024faa2b998d14362",
+      "sourceName": "contracts/0.8.9/StakingRouter.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./utils/access/AccessControlEnumerable.sol",
+        "./interfaces/IStakingModule.sol",
+        "../common/lib/Math256.sol",
+        "./lib/UnstructuredStorage.sol",
+        "../common/lib/MinFirstAllocationStrategy.sol",
+        "./BeaconChainDepositor.sol",
+        "./utils/Versioned.sol"
+      ],
+      "versionPragmas": [
+        "0.8.9"
+      ],
+      "artifacts": [
+        "StakingRouter"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/common/lib/MinFirstAllocationStrategy.sol": {
+      "lastModificationDate": 1712130644512,
+      "contentHash": "73455092f7ada9fe63ef32703c3a7fcc",
+      "sourceName": "contracts/common/lib/MinFirstAllocationStrategy.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./Math256.sol"
+      ],
+      "versionPragmas": [
+        ">=0.4.24 <0.9.0"
+      ],
+      "artifacts": [
+        "MinFirstAllocationStrategy"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/0.8.9/interfaces/IStakingModule.sol": {
+      "lastModificationDate": 1712293769096,
+      "contentHash": "020ae699d6b17598f94efb88deceb839",
+      "sourceName": "contracts/0.8.9/interfaces/IStakingModule.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.9"
+      ],
+      "artifacts": [
+        "IStakingModule"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/0.8.9/BeaconChainDepositor.sol": {
+      "lastModificationDate": 1712130644454,
+      "contentHash": "18848cf0009e547bb9eec0811b79128e",
+      "sourceName": "contracts/0.8.9/BeaconChainDepositor.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../common/lib/MemUtils.sol"
+      ],
+      "versionPragmas": [
+        "0.8.9"
+      ],
+      "artifacts": [
+        "BeaconChainDepositor",
+        "IDepositContract"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/common/lib/MemUtils.sol": {
+      "lastModificationDate": 1712130644511,
+      "contentHash": "7c63b56ec6c24a9b5c15342c30313de7",
+      "sourceName": "contracts/common/lib/MemUtils.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.4.24 <0.9.0"
+      ],
+      "artifacts": [
+        "MemUtils"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/0.8.9/oracle/AccountingOracle.sol": {
+      "lastModificationDate": 1712293754392,
+      "contentHash": "706f33aeec8790638bc90866a6ed5e5f",
+      "sourceName": "contracts/0.8.9/oracle/AccountingOracle.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts-v4.4/utils/math/SafeCast.sol",
+        "../../common/interfaces/ICatalistLocator.sol",
+        "../lib/UnstructuredStorage.sol",
+        "./BaseOracle.sol"
+      ],
+      "versionPragmas": [
+        "0.8.9"
+      ],
+      "artifacts": [
+        "AccountingOracle",
+        "ICatalist",
+        "ILegacyOracle",
+        "IOracleReportSanityChecker",
+        "IStakingRouter",
+        "IWithdrawalQueue"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/0.8.9/CatalistLocator.sol": {
+      "lastModificationDate": 1712130644459,
+      "contentHash": "1d636f245808004fc93733d0c74f5bd5",
+      "sourceName": "contracts/0.8.9/CatalistLocator.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../common/interfaces/ICatalistLocator.sol"
+      ],
+      "versionPragmas": [
+        "0.8.9"
+      ],
+      "artifacts": [
+        "CatalistLocator"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/0.8.9/CatalistExecutionLayerRewardsVault.sol": {
+      "lastModificationDate": 1712293762376,
+      "contentHash": "1928f324675b10ccdde776e56b380c2c",
+      "sourceName": "contracts/0.8.9/CatalistExecutionLayerRewardsVault.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts-v4.4/token/ERC20/IERC20.sol",
+        "@openzeppelin/contracts-v4.4/token/ERC721/IERC721.sol",
+        "@openzeppelin/contracts-v4.4/token/ERC20/utils/SafeERC20.sol"
+      ],
+      "versionPragmas": [
+        "0.8.9"
+      ],
+      "artifacts": [
+        "CatalistExecutionLayerRewardsVault",
+        "ICatalist"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/0.8.9/Burner.sol": {
+      "lastModificationDate": 1712293781581,
+      "contentHash": "0854d2983c072b8540d30366ae50333a",
+      "sourceName": "contracts/0.8.9/Burner.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts-v4.4/token/ERC20/IERC20.sol",
+        "@openzeppelin/contracts-v4.4/token/ERC721/IERC721.sol",
+        "@openzeppelin/contracts-v4.4/token/ERC20/utils/SafeERC20.sol",
+        "@openzeppelin/contracts-v4.4/utils/math/Math.sol",
+        "./utils/access/AccessControlEnumerable.sol",
+        "../common/interfaces/IBurner.sol"
+      ],
+      "versionPragmas": [
+        "0.8.9"
+      ],
+      "artifacts": [
+        "Burner",
+        "IBACE"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@openzeppelin/contracts-v4.4/utils/math/Math.sol": {
+      "lastModificationDate": 1712149823344,
+      "contentHash": "1cd7f39e8c48981ae093d9e696c066d8",
+      "sourceName": "@openzeppelin/contracts-v4.4/utils/math/Math.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "Math"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/0.8.9/OracleDaemonConfig.sol": {
+      "lastModificationDate": 1712130644462,
+      "contentHash": "9604e5a394e17c7cf5f6740d4ad8d40e",
+      "sourceName": "contracts/0.8.9/OracleDaemonConfig.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./utils/access/AccessControlEnumerable.sol"
+      ],
+      "versionPragmas": [
+        "0.8.9"
+      ],
+      "artifacts": [
+        "OracleDaemonConfig"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/0.8.9/test_helpers/DummyEmptyContract.sol": {
+      "lastModificationDate": 1712130644490,
+      "contentHash": "28119e74a30e0c83bec0ca65f73998ca",
+      "sourceName": "contracts/0.8.9/test_helpers/DummyEmptyContract.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.9"
+      ],
+      "artifacts": [
+        "DummyEmptyContract"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/common/interfaces/IGateSealFactory.sol": {
+      "lastModificationDate": 1712130644506,
+      "contentHash": "cf9099276c12e49533c2046cad5ea91a",
+      "sourceName": "contracts/common/interfaces/IGateSealFactory.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.4.24 <0.9.0"
+      ],
+      "artifacts": [
+        "IGateSealFactory"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/0.6.11/deposit_contract.sol": {
+      "lastModificationDate": 1712130644435,
+      "contentHash": "cdb0c254e92d37171c2f1ed1ec9406a5",
+      "sourceName": "contracts/0.6.11/deposit_contract.sol",
+      "solcConfig": {
+        "version": "0.6.11",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 5000000
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.6.11"
+      ],
+      "artifacts": [
+        "DepositContract",
+        "ERC165",
+        "IDepositContract"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@openzeppelin/contracts/drafts/ERC20Permit.sol": {
+      "lastModificationDate": 1712286286975,
+      "contentHash": "2fe7726fa4d3761f947524c4a1e3c90e",
+      "sourceName": "@openzeppelin/contracts/drafts/ERC20Permit.sol",
+      "solcConfig": {
+        "version": "0.6.12",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../token/ERC20/ERC20.sol",
+        "./IERC20Permit.sol",
+        "../cryptography/ECDSA.sol",
+        "../utils/Counters.sol",
+        "./EIP712.sol"
+      ],
+      "versionPragmas": [
+        ">=0.6.5 <0.8.0"
+      ],
+      "artifacts": [
+        "ERC20Permit"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@openzeppelin/contracts/token/ERC20/IERC20.sol": {
+      "lastModificationDate": 1712286286966,
+      "contentHash": "e0a41531d159d3a32f84b7a3ecf9fabb",
+      "sourceName": "@openzeppelin/contracts/token/ERC20/IERC20.sol",
+      "solcConfig": {
+        "version": "0.6.12",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.6.0 <0.8.0"
+      ],
+      "artifacts": [
+        "IERC20"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@openzeppelin/contracts/cryptography/ECDSA.sol": {
+      "lastModificationDate": 1712286286973,
+      "contentHash": "373a483bb0a88668c0735924d84f50f1",
+      "sourceName": "@openzeppelin/contracts/cryptography/ECDSA.sol",
+      "solcConfig": {
+        "version": "0.6.12",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.6.0 <0.8.0"
+      ],
+      "artifacts": [
+        "ECDSA"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@openzeppelin/contracts/utils/Counters.sol": {
+      "lastModificationDate": 1712286286975,
+      "contentHash": "304a56eb1322144704fb39f8c7e6d722",
+      "sourceName": "@openzeppelin/contracts/utils/Counters.sol",
+      "solcConfig": {
+        "version": "0.6.12",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../math/SafeMath.sol"
+      ],
+      "versionPragmas": [
+        ">=0.6.0 <0.8.0"
+      ],
+      "artifacts": [
+        "Counters"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@openzeppelin/contracts/token/ERC20/ERC20.sol": {
+      "lastModificationDate": 1712286286966,
+      "contentHash": "8065b340476f61365c076897199425f1",
+      "sourceName": "@openzeppelin/contracts/token/ERC20/ERC20.sol",
+      "solcConfig": {
+        "version": "0.6.12",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../../utils/Context.sol",
+        "./IERC20.sol",
+        "../../math/SafeMath.sol"
+      ],
+      "versionPragmas": [
+        ">=0.6.0 <0.8.0"
+      ],
+      "artifacts": [
+        "ERC20"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@openzeppelin/contracts/drafts/IERC20Permit.sol": {
+      "lastModificationDate": 1712286286975,
+      "contentHash": "554ef6825dd2112860a7f82be25dab45",
+      "sourceName": "@openzeppelin/contracts/drafts/IERC20Permit.sol",
+      "solcConfig": {
+        "version": "0.6.12",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.6.0 <0.8.0"
+      ],
+      "artifacts": [
+        "IERC20Permit"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@openzeppelin/contracts/drafts/EIP712.sol": {
+      "lastModificationDate": 1712286286975,
+      "contentHash": "fc999322255c14bf39f2047b1b27eefa",
+      "sourceName": "@openzeppelin/contracts/drafts/EIP712.sol",
+      "solcConfig": {
+        "version": "0.6.12",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.6.0 <0.8.0"
+      ],
+      "artifacts": [
+        "EIP712"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@openzeppelin/contracts/math/SafeMath.sol": {
+      "lastModificationDate": 1712286286976,
+      "contentHash": "e03e12206057e809eb76c5f681170c32",
+      "sourceName": "@openzeppelin/contracts/math/SafeMath.sol",
+      "solcConfig": {
+        "version": "0.6.12",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.6.0 <0.8.0"
+      ],
+      "artifacts": [
+        "SafeMath"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/node_modules/@openzeppelin/contracts/utils/Context.sol": {
+      "lastModificationDate": 1712286286975,
+      "contentHash": "2adbd82f6d055a4751566d4671512b03",
+      "sourceName": "@openzeppelin/contracts/utils/Context.sol",
+      "solcConfig": {
+        "version": "0.6.12",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.6.0 <0.8.0"
+      ],
+      "artifacts": [
+        "Context"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/0.8.4/WithdrawalsManagerProxy.sol": {
+      "lastModificationDate": 1712130644451,
+      "contentHash": "6e283cb627960ada60fbb6b22b8229e0",
+      "sourceName": "contracts/0.8.4/WithdrawalsManagerProxy.sol",
+      "solcConfig": {
+        "version": "0.8.4",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.4"
+      ],
+      "artifacts": [
+        "Address",
+        "ERC1967Proxy",
+        "Proxy",
+        "StorageSlot",
+        "WithdrawalsManagerProxy",
+        "WithdrawalsManagerStub"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/0.4.24/BACE.sol": {
+      "lastModificationDate": 1712537996008,
+      "contentHash": "d9bf2cfa5e44ecaf6322a5a09bdc347f",
+      "sourceName": "contracts/0.4.24/BACE.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "openzeppelin-solidity/contracts/token/ERC20/IERC20.sol",
+        "@aragon/os/contracts/common/UnstructuredStorage.sol",
+        "@aragon/os/contracts/lib/math/SafeMath.sol",
+        "./utils/Pausable.sol",
+        "hardhat/console.sol"
+      ],
+      "versionPragmas": [
+        "0.4.24"
+      ],
+      "artifacts": [
+        "BACE"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/0.4.24/BACEPermit.sol": {
+      "lastModificationDate": 1712537996010,
+      "contentHash": "184e7be9f6b6787894ad1ca0e2e2bea3",
+      "sourceName": "contracts/0.4.24/BACEPermit.sol",
+      "solcConfig": {
+        "version": "0.4.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "constantinople",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@aragon/os/contracts/common/UnstructuredStorage.sol",
+        "../common/lib/SignatureUtils.sol",
+        "../common/interfaces/IEIP712BACE.sol",
+        "./BACE.sol"
+      ],
+      "versionPragmas": [
+        "0.4.24"
+      ],
+      "artifacts": [
+        "BACEPermit",
+        "IERC2612"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/common/interfaces/IEIP712BACE.sol": {
+      "lastModificationDate": 1712293464547,
+      "contentHash": "ee130e25b6f5b45a3126c8695b3b7822",
+      "sourceName": "contracts/common/interfaces/IEIP712BACE.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.4.24 <0.9.0"
+      ],
+      "artifacts": [
+        "IEIP712BACE"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/0.6.12/WbACE.sol": {
+      "lastModificationDate": 1712298335635,
+      "contentHash": "c1151396042b22e382f51be9204aedb3",
+      "sourceName": "contracts/0.6.12/WbACE.sol",
+      "solcConfig": {
+        "version": "0.6.12",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/drafts/ERC20Permit.sol",
+        "./interfaces/IBACE.sol"
+      ],
+      "versionPragmas": [
+        "^0.6.12"
+      ],
+      "artifacts": [
+        "WbACE"
+      ]
+    },
+    "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/0.6.12/interfaces/IBACE.sol": {
+      "lastModificationDate": 1712298329667,
+      "contentHash": "8236c43250dbf99037bf94865f790d7a",
+      "sourceName": "contracts/0.6.12/interfaces/IBACE.sol",
+      "solcConfig": {
+        "version": "0.6.12",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "istanbul",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "userdoc",
+                "userdoc"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/token/ERC20/IERC20.sol"
+      ],
+      "versionPragmas": [
+        "^0.6.12"
+      ],
+      "artifacts": [
+        "IBACE"
+      ]
+    }
+  }
+}

@@ -62,8 +62,8 @@ async function deployDAO({ web3, artifacts }) {
     daoInitialSettings.voting.objectionPhaseDuration,
   ]
 
-  log(`Using DAO token settings:`, daoInitialSettings.token)
-  log(`Using DAO voting settings:`, daoInitialSettings.voting)
+  // log(`Using DAO token settings:`, daoInitialSettings.token)
+  // log(`Using DAO voting settings:`, daoInitialSettings.voting)
   const receipt = await makeTx(template, 'newDAO', [
     daoInitialSettings.token.name,
     daoInitialSettings.token.symbol,
@@ -105,7 +105,7 @@ async function checkAppRepos(state) {
     })
   )
 
-  const aragonApps = appsInfo.filter((info) => info.appName.startsWith('aragon-'))
+  // const aragonApps = appsInfo.filter((info) => info.appName.startsWith('aragon-'))
   const catalistApps = appsInfo.filter((info) => !info.appName.startsWith('aragon-'))
 
   for (const app of catalistApps) {
@@ -121,22 +121,22 @@ async function checkAppRepos(state) {
     log.success(contentCheckDesc)
   }
 
-  const ens = await artifacts.require('ENS').at(state.ens.address)
+  // const ens = await artifacts.require('ENS').at(state.ens.address)
 
-  for (const app of aragonApps) {
-    const upstreamRepoName = `${app.appName.substring(7)}.${ARAGON_APM_ENS_DOMAIN}`
-    const latestAragonVersion = await apmResolveLatest(namehash(upstreamRepoName), ens, artifacts)
+  // for (const app of aragonApps) {
+  //   const upstreamRepoName = `${app.appName.substring(7)}.${ARAGON_APM_ENS_DOMAIN}`
+  //   const latestAragonVersion = await apmResolveLatest(namehash(upstreamRepoName), ens, artifacts)
 
-    const appDesc = `repo ${chalk.yellow(app.appName + '.' + state.catalistApmEnsName)}`
+  //   const appDesc = `repo ${chalk.yellow(app.appName + '.' + state.catalistApmEnsName)}`
 
-    const addrCheckDesc = `${appDesc}: latest version contract address is the same as in repo ${chalk.yellow(upstreamRepoName)}`
-    assert.equal(app.contractAddress, latestAragonVersion.contractAddress, addrCheckDesc)
-    log.success(addrCheckDesc)
+  //   const addrCheckDesc = `${appDesc}: latest version contract address is the same as in repo ${chalk.yellow(upstreamRepoName)}`
+  //   assert.equal(app.contractAddress, latestAragonVersion.contractAddress, addrCheckDesc)
+  //   log.success(addrCheckDesc)
 
-    const contentCheckDesc = `${appDesc}: latest version content URI is the same as in repo ${chalk.yellow(upstreamRepoName)}`
-    assert.equal(app.contentURI, latestAragonVersion.contentURI, contentCheckDesc)
-    log.success(contentCheckDesc)
-  }
+  //   const contentCheckDesc = `${appDesc}: latest version content URI is the same as in repo ${chalk.yellow(upstreamRepoName)}`
+  //   assert.equal(app.contentURI, latestAragonVersion.contentURI, contentCheckDesc)
+  //   log.success(contentCheckDesc)
+  // }
 }
 
 module.exports = runOrWrapScript(deployDAO, module)

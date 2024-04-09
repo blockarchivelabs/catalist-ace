@@ -30,7 +30,7 @@ interface IBACE {
 /// @dev Must implement the full version of IStakingModule interface, not only the one declared locally.
 ///      It's also responsible for distributing rewards to node operators.
 /// NOTE: the code below assumes moderate amount of node operators, i.e. up to `MAX_NODE_OPERATORS_COUNT`.
-contract NodeOperatorsRegistry is AragonApp, Versioned {
+contract NodeOperatorsRegistry is Versioned {
     using SafeMath for uint256;
     using UnstructuredStorage for bytes32;
     using SigningKeys for bytes32;
@@ -199,6 +199,7 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
 
     mapping(address => bool) private owners;
     mapping(address => bool) private nodeOperatorAddress;
+    bool private INITIALIZED = false;
 
     modifier onlyOwner() {
         // console.log(OWNER_ADDRESS_POSITION.getStorageAddress());
@@ -217,6 +218,19 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
 
     function addNodeOperatorAddress(address adr, bool status) public onlyOwner {
         nodeOperatorAddress[adr] = status;
+    }
+
+    modifier onlyInit() {
+        require(!INITIALIZED, "ALREADY_INITIALIZED");
+        _;
+    }
+
+    function initialized() internal onlyInit {
+        INITIALIZED = true;
+    }
+
+    function hasInitialized() public view returns (bool) {
+        return INITIALIZED;
     }
 
     //
@@ -287,7 +301,7 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
         bytes32 _type,
         uint256 _stuckPenaltyDelay
     ) external {
-        require(hasInitialized(), "CONTRACT_NOT_INITIALIZED");
+        require(INITIALIZED, "CONTRACT_NOT_INITIALIZED");
         _checkContractVersion(0);
         _initialize_v2(_locator, _type, _stuckPenaltyDelay);
 
@@ -594,7 +608,9 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
 
     /// @notice Called by StakingRouter to signal that bACE rewards were minted for this module.
     function onRewardsMinted(uint256 /* _totalShares */) external view {
-        _auth(STAKING_ROUTER_ROLE);
+        address STAKING_ROUTER_ADDRESS = getLocator().stakingRouter();
+        require(msg.sender == STAKING_ROUTER_ADDRESS, "NOT_STAKING_ROUTER");
+        // _auth(STAKING_ROUTER_ROLE);
         // since we're pushing rewards to operators after exited validators counts are
         // updated (as opposed to pulling by node ops), we don't need any handling here
         // see `onExitedAndStuckValidatorsCountsUpdated()`
@@ -622,7 +638,9 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
         bytes _nodeOperatorIds,
         bytes _stuckValidatorsCounts
     ) external {
-        _auth(STAKING_ROUTER_ROLE);
+        address STAKING_ROUTER_ADDRESS = getLocator().stakingRouter();
+        require(msg.sender == STAKING_ROUTER_ADDRESS, "NOT_STAKING_ROUTER");
+        // _auth(STAKING_ROUTER_ROLE);
         uint256 nodeOperatorsCount = _checkReportPayload(
             _nodeOperatorIds.length,
             _stuckValidatorsCounts.length
@@ -673,7 +691,9 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
         bytes _nodeOperatorIds,
         bytes _exitedValidatorsCounts
     ) external {
-        _auth(STAKING_ROUTER_ROLE);
+        address STAKING_ROUTER_ADDRESS = getLocator().stakingRouter();
+        require(msg.sender == STAKING_ROUTER_ADDRESS, "NOT_STAKING_ROUTER");
+        // _auth(STAKING_ROUTER_ROLE);
         uint256 nodeOperatorsCount = _checkReportPayload(
             _nodeOperatorIds.length,
             _exitedValidatorsCounts.length
@@ -720,7 +740,9 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
         uint256 _refundedValidatorsCount
     ) external {
         _onlyExistedNodeOperator(_nodeOperatorId);
-        _auth(STAKING_ROUTER_ROLE);
+        address STAKING_ROUTER_ADDRESS = getLocator().stakingRouter();
+        require(msg.sender == STAKING_ROUTER_ADDRESS, "NOT_STAKING_ROUTER");
+        // _auth(STAKING_ROUTER_ROLE);
 
         _updateRefundValidatorsKeysCount(
             _nodeOperatorId,
@@ -736,7 +758,9 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
     /// but given that the total number of exited validators returned from getStakingModuleSummary
     /// is the same as StakingRouter expects based on the total count received from the oracle.
     function onExitedAndStuckValidatorsCountsUpdated() external {
-        _auth(STAKING_ROUTER_ROLE);
+        address STAKING_ROUTER_ADDRESS = getLocator().stakingRouter();
+        require(msg.sender == STAKING_ROUTER_ADDRESS, "NOT_STAKING_ROUTER");
+        // _auth(STAKING_ROUTER_ROLE);
         // for the permissioned module, we're distributing rewards within oracle operation
         // since the number of node ops won't be high and thus gas costs are limited
         _distributeRewards();
@@ -753,7 +777,9 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
         uint256 _stuckValidatorsCount
     ) external {
         _onlyExistedNodeOperator(_nodeOperatorId);
-        _auth(STAKING_ROUTER_ROLE);
+        address STAKING_ROUTER_ADDRESS = getLocator().stakingRouter();
+        require(msg.sender == STAKING_ROUTER_ADDRESS, "NOT_STAKING_ROUTER");
+        // _auth(STAKING_ROUTER_ROLE);
 
         _updateStuckValidatorsCount(_nodeOperatorId, _stuckValidatorsCount);
         _updateExitedValidatorsCount(
@@ -837,7 +863,9 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
         uint256 _targetLimit
     ) external {
         _onlyExistedNodeOperator(_nodeOperatorId);
-        _auth(STAKING_ROUTER_ROLE);
+        address STAKING_ROUTER_ADDRESS = getLocator().stakingRouter();
+        require(msg.sender == STAKING_ROUTER_ADDRESS, "NOT_STAKING_ROUTER");
+        // _auth(STAKING_ROUTER_ROLE);
         _requireValidRange(_targetLimit <= UINT64_MAX);
 
         Packed64x4.Packed
@@ -1008,7 +1036,9 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
 
     /// @notice Invalidates all unused deposit data for all node operators
     function onWithdrawalCredentialsChanged() external {
-        _auth(STAKING_ROUTER_ROLE);
+        address STAKING_ROUTER_ADDRESS = getLocator().stakingRouter();
+        require(msg.sender == STAKING_ROUTER_ADDRESS, "NOT_STAKING_ROUTER");
+        // _auth(STAKING_ROUTER_ROLE);
         uint256 operatorsCount = getNodeOperatorsCount();
         if (operatorsCount > 0) {
             _invalidateReadyToDepositKeysRange(0, operatorsCount - 1);
@@ -1108,7 +1138,9 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
         uint256 _depositsCount,
         bytes /* _depositCalldata */
     ) external returns (bytes memory publicKeys, bytes memory signatures) {
-        _auth(STAKING_ROUTER_ROLE);
+        address STAKING_ROUTER_ADDRESS = getLocator().stakingRouter();
+        require(msg.sender == STAKING_ROUTER_ADDRESS, "NOT_STAKING_ROUTER");
+        // _auth(STAKING_ROUTER_ROLE);
 
         if (_depositsCount == 0) return (new bytes(0), new bytes(0));
 
@@ -2122,13 +2154,13 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
         require(_pass, "WRONG_OPERATOR_ACTIVE_STATE");
     }
 
-    function _auth(bytes32 _role) internal view {
-        _requireAuth(canPerform(msg.sender, _role, new uint256[](0)));
-    }
+    // function _auth(bytes32 _role) internal view {
+    //     _requireAuth(canPerform(msg.sender, _role, new uint256[](0)));
+    // }
 
-    function _authP(bytes32 _role, uint256[] _params) internal view {
-        _requireAuth(canPerform(msg.sender, _role, _params));
-    }
+    // function _authP(bytes32 _role, uint256[] _params) internal view {
+    //     _requireAuth(canPerform(msg.sender, _role, _params));
+    // }
 
     function _onlyNodeOperatorManager(
         address _sender,

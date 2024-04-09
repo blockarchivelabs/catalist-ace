@@ -141,32 +141,32 @@ async function deployAragonEnv({ web3, artifacts, networkStateFile = NETWORK_STA
   }
   persistNetworkState(network.name, netId, state)
 
-  logHeader(`MiniMeTokenFactory`)
-  const { miniMeTokenFactory } = await deployMiniMeTokenFactory({
-    artifacts,
-    owner: state.deployer,
-    miniMeTokenFactoryAddress: state.miniMeTokenFactoryAddress
-  })
-  state = readNetworkState(network.name, netId)
-  state.miniMeTokenFactory = {
-    address: miniMeTokenFactory.address,
-    constructorArgs: miniMeTokenFactory.constructorArgs,
-  }
-  persistNetworkState(network.name, netId, state)
+  // logHeader(`MiniMeTokenFactory`)
+  // const { miniMeTokenFactory } = await deployMiniMeTokenFactory({
+  //   artifacts,
+  //   owner: state.deployer,
+  //   miniMeTokenFactoryAddress: state.miniMeTokenFactoryAddress
+  // })
+  // state = readNetworkState(network.name, netId)
+  // state.miniMeTokenFactory = {
+  //   address: miniMeTokenFactory.address,
+  //   constructorArgs: miniMeTokenFactory.constructorArgs,
+  // }
+  // persistNetworkState(network.name, netId, state)
 
-  logHeader('AragonID')
-  const { aragonID } = await deployAragonID({
-    artifacts,
-    owner: state.deployer,
-    ens: ens,
-    aragonIDAddress: state.aragonIDAddress
-  })
-  state = readNetworkState(network.name, netId)
-  state.aragonID = {
-    address: aragonID.address,
-    constructorArgs: aragonID.constructorArgs,
-  }
-  persistNetworkState(network.name, netId, state)
+  // logHeader('AragonID')
+  // const { aragonID } = await deployAragonID({
+  //   artifacts,
+  //   owner: state.deployer,
+  //   ens: ens,
+  //   aragonIDAddress: state.aragonIDAddress
+  // })
+  // state = readNetworkState(network.name, netId)
+  // state.aragonID = {
+  //   address: aragonID.address,
+  //   constructorArgs: aragonID.constructorArgs,
+  // }
+  // persistNetworkState(network.name, netId, state)
 
   await TotalGasCounter.incrementTotalGasUsedInStateFile()
 }

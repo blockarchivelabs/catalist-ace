@@ -11,8 +11,8 @@ const { network } = require('hardhat')
 const REQUIRED_NET_STATE = [
   'ens',
   'daoFactory',
-  'miniMeTokenFactory',
-  'aragonID',
+  // 'miniMeTokenFactory',
+  // 'aragonID',
   'apmRegistryFactory',
   'deployer',
   'catalistTemplate',
@@ -40,8 +40,8 @@ async function deployTemplate({ web3, artifacts }) {
     assert.addressEqual(templateConfig._owner, state.deployer, 'tmpl: owner')
     assert.addressEqual(templateConfig._daoFactory, state.daoFactory.address, 'tmpl: daoFactory')
     assert.addressEqual(templateConfig._ens, state.ens.address, 'tmpl: ens')
-    assert.addressEqual(templateConfig._miniMeFactory, state.miniMeTokenFactory.address, 'tmpl: miniMeFactory')
-    assert.addressEqual(templateConfig._aragonID, state.aragonID.address, 'tmpl: aragonId')
+    // assert.addressEqual(templateConfig._miniMeFactory, state.miniMeTokenFactory.address, 'tmpl: miniMeFactory')
+    // assert.addressEqual(templateConfig._aragonID, state.aragonID.address, 'tmpl: aragonId')
     assert.addressEqual(templateConfig._apmRegistryFactory, state.apmRegistryFactory.address, 'tmpl: apmRegistryFactory')
     log.success(`the config`)
   }
