@@ -2,17 +2,17 @@ const { parseEther } = require('ethers/lib/utils')
 const { ethers } = require('hardhat')
 const { hexConcat, pad, ETH, e27, e18, toBN } = require('./utils')
 const { getEventArgument, ZERO_ADDRESS } = require('@aragon/contract-helpers-test')
+const fs = require('fs')
 
 async function main() {
   console.log('Getting the deposit contract...')
-  const CatalistAddress = '0xc00c0beC9F5C6b245A5c232598b3A2cc1558C3c7'
-  const HashConsensusAddress = '0x99bbA657f2BbC93c02D617f8bA121cB8Fc104Acf'
-  const LegacyOracleAddress = '0x3b2eA4DC3E52f79F3050f30312A14D019B16F3A9'
-  const NodeOperatorsRegistryAddress = '0x5C3A16AE3fCbc7B81e6cE87d8e47dE59a6Ab6140'
-  const StakingRouterAddress = '0x95401dc811bb5740090279Ba06cfA8fcF6113778'
-  const WithdrawalQueueERC721Address = '0x9E545E3C0baAB3E08CdfD552C960A1050f373042'
-  const AccountingOracleAddress = '0x4826533B4897376654Bb4d4AD88B7faFD0C98528'
-  // const WbACEAddress = '0x851356ae760d987E095750cCeb3bC6014560891C'
+  const addresses = JSON.parse(fs.readFileSync('./deployed-local.json', 'utf-8'))
+  const CatalistAddress = addresses['app:catalist'].proxy.address
+  const HashConsensusAddress = addresses.hashConsensusForAccountingOracle.address
+  const StakingRouterAddress = addresses.stakingRouter.proxy.address
+  const AccountingOracleAddress = addresses.accountingOracle.proxy.address
+  const WithdrawalQueueERC721Address = addresses.withdrawalQueueERC721.proxy.address
+  const NodeOperatorRegistryAddress = addresses['app:node-operators-registry'].proxy.address
   
   const catalist = await ethers.getContractAt('Catalist', CatalistAddress)
   const legacyOracle = await ethers.getContractAt('LegacyOracle', LegacyOracleAddress)
