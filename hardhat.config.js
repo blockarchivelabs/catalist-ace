@@ -86,8 +86,8 @@ const getNetConfig = (networkName, ethAccountName) => {
       timeout: 60000 * 15,
       chainId: 6480000002,
       accounts: ['f11a771308f235a1331b098d0212db69ac049e56c9f1e0da739a39e8b743363c'],
-      gasPrice: 1010000000,
-      gas: 3000000,
+      // gasPrice: 1010000000,
+      // gas: 3000000,
     },
     ace_mainnet: {
       ...base,
