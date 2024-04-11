@@ -78,7 +78,7 @@ const getNetConfig = (networkName, ethAccountName) => {
         gasPrice: 0,
       },
     },
-    ace_test: {
+    ace_devnet: {
       ...base,
       // url: 'http://20.197.51.29:8545',
       url: RPC_URL,

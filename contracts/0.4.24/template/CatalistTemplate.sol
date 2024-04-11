@@ -196,8 +196,8 @@ contract CatalistTemplate is IsContract {
             address _owner,
             address _daoFactory,
             address _ens,
-            address _miniMeFactory,
-            address _aragonID,
+            // address _miniMeFactory,
+            // address _aragonID,
             address _apmRegistryFactory
         )
     {
@@ -205,8 +205,8 @@ contract CatalistTemplate is IsContract {
             owner,
             daoFactory,
             ens,
-            miniMeFactory,
-            aragonID,
+            // miniMeFactory,
+            // aragonID,
             apmRegistryFactory
         );
     }

@@ -2,7 +2,7 @@ const { parseEther } = require('ethers/lib/utils')
 const { ethers } = require('hardhat')
 const fs = require('fs')
 
-// RPC_URL=http://20.197.51.29:8545 npx hardhat run scripts/interact/interact-ace-devnet.js --network ace_test
+// RPC_URL=http://20.197.51.29:8545 npx hardhat run scripts/interact/interact-ace-devnet.js --network ace_devnet
 async function main() {
   console.log('Getting the deposit contract...')
   const addresses = JSON.parse(fs.readFileSync('./deployed-ace-devnet-bACE.json', 'utf-8'))

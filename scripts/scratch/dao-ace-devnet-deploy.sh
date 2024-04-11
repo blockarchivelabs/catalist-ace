@@ -20,7 +20,7 @@ if [[ -z "$GATE_SEAL_FACTORY" ]]; then
     exit 1
 fi
 
-export NETWORK="ace_test"
+export NETWORK="ace_devnet"
 export NETWORK_STATE_FILE="deployed-${NETWORK}.json"
 export NETWORK_STATE_DEFAULTS_FILE="deployed-testnet-defaults.json"
 

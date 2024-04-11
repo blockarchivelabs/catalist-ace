@@ -14,7 +14,7 @@ const REQUIRED_NET_STATE = [
   "app:node-operators-registry",
   "accountingOracle",
   "burner",
-  "daoInitialSettings",
+  // "daoInitialSettings",
   "eip712BACE",
   "hashConsensusForAccountingOracle",
   "hashConsensusForValidatorsExitBusOracle",

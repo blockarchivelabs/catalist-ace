@@ -1,7 +1,7 @@
 const { parseEther } = require('ethers/lib/utils')
 const { ethers } = require('hardhat')
 
-// RPC_URL=http://20.197.51.29:8545 npx hardhat run scripts/interact/interact-ace-devnet.js --network ace_test
+// RPC_URL=http://20.197.51.29:8545 npx hardhat run scripts/interact/interact-ace-devnet.js --network ace_devnet
 async function main() {
   console.log('Getting the deposit contract...')
   const CatalistAddress = '0x72bB7806B8459337b231016e182348CD853E3106'
