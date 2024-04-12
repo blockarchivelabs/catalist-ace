@@ -40,7 +40,7 @@ abstract contract WithdrawalQueueBase {
     bytes32 internal constant LAST_CHECKPOINT_INDEX_POSITION =
         keccak256("catalist.WithdrawalQueue.lastCheckpointIndex");
     /// @dev amount of eth locked on contract for further claiming
-    bytes32 internal constant LOCKED_ACEER_AMOUNT_POSITION =
+    bytes32 internal constant LOCKED_ACE_AMOUNT_POSITION =
         keccak256("catalist.WithdrawalQueue.lockedAceAmount");
     /// @dev withdrawal requests mapped to the owners
     bytes32 internal constant REQUEST_BY_OWNER_POSITION =
@@ -139,7 +139,7 @@ abstract contract WithdrawalQueueBase {
 
     /// @notice amount of ACE on this contract balance that is locked for withdrawal and available to claim
     function getLockedAceAmount() public view returns (uint256) {
-        return LOCKED_ACEER_AMOUNT_POSITION.getStorageUint256();
+        return LOCKED_ACE_AMOUNT_POSITION.getStorageUint256();
     }
 
     /// @notice length of the checkpoint array. Last possible value for the hint.
@@ -707,7 +707,7 @@ abstract contract WithdrawalQueueBase {
     }
 
     function _setLockedAceAmount(uint256 _lockedAceAmount) internal {
-        LOCKED_ACEER_AMOUNT_POSITION.setStorageUint256(_lockedAceAmount);
+        LOCKED_ACE_AMOUNT_POSITION.setStorageUint256(_lockedAceAmount);
     }
 
     function _setLastReportTimestamp(uint256 _lastReportTimestamp) internal {

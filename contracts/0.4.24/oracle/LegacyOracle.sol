@@ -97,9 +97,9 @@ contract LegacyOracle is Versioned, AragonApp {
         keccak256("catalist.CatalistOracle.contractVersion");
 
     /// Historic data about 2 last completed reports and their times
-    bytes32 internal constant POST_COMPLETED_TOTAL_POOLED_ACEER_POSITION =
+    bytes32 internal constant POST_COMPLETED_TOTAL_POOLED_ACE_POSITION =
         keccak256("catalist.CatalistOracle.postCompletedTotalPooledAce");
-    bytes32 internal constant PRE_COMPLETED_TOTAL_POOLED_ACEER_POSITION =
+    bytes32 internal constant PRE_COMPLETED_TOTAL_POOLED_ACE_POSITION =
         keccak256("catalist.CatalistOracle.preCompletedTotalPooledAce");
     bytes32 internal constant LAST_COMPLETED_EPOCH_ID_POSITION =
         keccak256("catalist.CatalistOracle.lastCompletedEpochId");
@@ -217,9 +217,9 @@ contract LegacyOracle is Versioned, AragonApp {
             uint256 timeElapsed
         )
     {
-        postTotalPooledAce = POST_COMPLETED_TOTAL_POOLED_ACEER_POSITION
+        postTotalPooledAce = POST_COMPLETED_TOTAL_POOLED_ACE_POSITION
             .getStorageUint256();
-        preTotalPooledAce = PRE_COMPLETED_TOTAL_POOLED_ACEER_POSITION
+        preTotalPooledAce = PRE_COMPLETED_TOTAL_POOLED_ACE_POSITION
             .getStorageUint256();
         timeElapsed = TIME_ELAPSED_POSITION.getStorageUint256();
     }
@@ -242,10 +242,8 @@ contract LegacyOracle is Versioned, AragonApp {
     ) external {
         require(msg.sender == getCatalist(), "SENDER_NOT_ALLOWED");
 
-        PRE_COMPLETED_TOTAL_POOLED_ACEER_POSITION.setStorageUint256(
-            preTotalAce
-        );
-        POST_COMPLETED_TOTAL_POOLED_ACEER_POSITION.setStorageUint256(
+        PRE_COMPLETED_TOTAL_POOLED_ACE_POSITION.setStorageUint256(preTotalAce);
+        POST_COMPLETED_TOTAL_POOLED_ACE_POSITION.setStorageUint256(
             postTotalAce
         );
         TIME_ELAPSED_POSITION.setStorageUint256(timeElapsed);

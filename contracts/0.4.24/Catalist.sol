@@ -200,7 +200,7 @@ contract Catalist is Versioned, BACEPermit, AragonApp {
     bytes32 internal constant STAKING_STATE_POSITION =
         0xa3678de4a579be090bed1177e0a24f77cc29d181ac22fd7688aca344d8938015; // keccak256("catalist.Catalist.stakeLimit");
     /// @dev amount of Ace (on the current Ace side) buffered on this smart contract balance
-    bytes32 internal constant BUFFERED_ACEER_POSITION =
+    bytes32 internal constant BUFFERED_ACE_POSITION =
         0xed310af23f61f96daefbcd140b306c0bdbf8c178398299741687b90e794772b0; // keccak256("catalist.Catalist.bufferedAce");
     /// @dev number of deposited validators (incrementing counter of deposit operations).
     bytes32 internal constant DEPOSITED_VALIDATORS_POSITION =
@@ -797,7 +797,7 @@ contract Catalist is Versioned, BACEPermit, AragonApp {
             depositsValue = depositsCount.mul(DEPOSIT_SIZE);
             /// @dev firstly update the local state of the contract to prevent a reentrancy attack,
             ///     even if the StakingRouter is a trusted contract.
-            BUFFERED_ACEER_POSITION.setStorageUint256(
+            BUFFERED_ACE_POSITION.setStorageUint256(
                 _getBufferedAce().sub(depositsValue)
             );
             emit Unbuffered(depositsValue);
@@ -1235,11 +1235,11 @@ contract Catalist is Versioned, BACEPermit, AragonApp {
      * @dev Gets the amount of Ace temporary buffered on this contract balance
      */
     function _getBufferedAce() internal view returns (uint256) {
-        return BUFFERED_ACEER_POSITION.getStorageUint256();
+        return BUFFERED_ACE_POSITION.getStorageUint256();
     }
 
     function _setBufferedAce(uint256 _newBufferedAce) internal {
-        BUFFERED_ACEER_POSITION.setStorageUint256(_newBufferedAce);
+        BUFFERED_ACE_POSITION.setStorageUint256(_newBufferedAce);
     }
 
     /// @dev Calculates and returns the total base balance (multiple of 32) of validators in transient state,

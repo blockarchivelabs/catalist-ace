@@ -4,7 +4,7 @@
 /* See contracts/COMPILERS.md */
 pragma solidity 0.8.9;
 
-import { ECDSA } from "../common/lib/ECDSA.sol";
+import {ECDSA} from "../common/lib/ECDSA.sol";
 
 interface ICatalist {
     function deposit(
