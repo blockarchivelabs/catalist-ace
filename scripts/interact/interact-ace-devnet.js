@@ -5,7 +5,7 @@ const fs = require('fs')
 // RPC_URL=http://20.197.51.29:8545 npx hardhat run scripts/interact/interact-ace-devnet.js --network ace_devnet
 async function main() {
   console.log('Getting the deposit contract...')
-  const addresses = JSON.parse(fs.readFileSync('./deployed-ace_devnet.json', 'utf-8'))
+  const addresses = JSON.parse(fs.readFileSync('./deployed-ace-devnet.json', 'utf-8'))
   const CatalistAddress = addresses['app:catalist'].proxy.address
   const HashConsensusAddress = addresses.hashConsensusForAccountingOracle.address
   const StakingRouterAddress = addresses.stakingRouter.proxy.address
@@ -29,20 +29,20 @@ async function main() {
   const SLOTS_PER_EPOCH = chainSpec.slotsPerEpoch
   const SECONDS_PER_SLOT = chainSpec.secondsPerSlot
 
-  console.log()
-  console.log('Querying update initial epoch...')
-  const latestBlockTimestamp = (await ethers.provider.getBlock('latest')).timestamp
-  const initialEpoch = Math.floor((latestBlockTimestamp - GENESIS_TIME)
-    / (SLOTS_PER_EPOCH * SECONDS_PER_SLOT))
-  await hashConsensus.updateInitialEpoch(
-    initialEpoch, 
-    {
-      gasLimit: 1000000,
-      gasPrice: 100000,
-    }
-  )
-  console.log('Latest Block Timestamp:', latestBlockTimestamp)
-  console.log('Initial Epoch:', initialEpoch)
+  // console.log()
+  // console.log('Querying update initial epoch...')
+  // const latestBlockTimestamp = (await ethers.provider.getBlock('latest')).timestamp
+  // const initialEpoch = Math.floor((latestBlockTimestamp - GENESIS_TIME)
+  //   / (SLOTS_PER_EPOCH * SECONDS_PER_SLOT))
+  // await hashConsensus.updateInitialEpoch(
+  //   initialEpoch, 
+  //   {
+  //     gasLimit: 1000000,
+  //     gasPrice: 100000,
+  //   }
+  // )
+  // console.log('Latest Block Timestamp:', latestBlockTimestamp)
+  // console.log('Initial Epoch:', initialEpoch)
   
   // console.log()
   // const beforeBalance = await catalist.balanceOf(deployerAddress)
@@ -62,13 +62,13 @@ async function main() {
   // const afterBalance = await catalist.balanceOf(deployerAddress)
   // console.log('After Balance: ', +afterBalance / fix)
   
-  console.log()
-  console.log('Querying get member...')
-  const members = await hashConsensus.getMembers({
-    gasLimit: 1000000,
-    gasPrice: 100000,
-  })
-  console.log('Members:', members)
+  // console.log()
+  // console.log('Querying get member...')
+  // const members = await hashConsensus.getMembers({
+  //   gasLimit: 1000000,
+  //   gasPrice: 100000,
+  // })
+  // console.log('Members:', members)
 
   // console.log()
   // console.log('Querying add STAKING_MODULE_MANAGE_ROLE to deployer and ad1...')
@@ -113,6 +113,37 @@ async function main() {
   // console.log('Querying get singing keys...')
   // const signingKeys = await nodeOperatorRegistry.getSigningKeys(operatorId, 0, 5)
   // console.log('Signing Keys:', signingKeys)
+
+  console.log()
+  console.log('Querying getWithdrawalRequests()...')
+  const withdrawalRequests = await withdrawalQueueERC721.getWithdrawalRequests(
+    '0x26AC28D33EcBf947951d6B7d8a1e6569eE73d076',
+    {
+      gasLimit: 1000000,
+      gasPrice: 100000,
+    }
+  )
+  console.log('Withdrawal Requests:', withdrawalRequests)
+
+  console.log()
+  console.log('Querying getLastCheckpointIndex()...')
+  const lastCheckpointIndex = await withdrawalQueueERC721.getLastCheckpointIndex({
+    gasLimit: 1000000,
+    gasPrice: 100000,
+  })
+  console.log('Last Checkpoint Index:', lastCheckpointIndex.toString())
+
+  // console.log()
+  // console.log('Querying findCheckpointHints()...')
+  // const checkpointHints = await withdrawalQueueERC721.findCheckpointHints(
+  //   [1, 2, 3, 4],
+  //   1,
+  //   await withdrawalQueueERC721.getLastCheckpointIndex() - 1,
+  //   {
+  //     gasLimit: 1000000,
+  //     gasPrice: 100000,
+  //   }
+  // )
 }
 
 main()

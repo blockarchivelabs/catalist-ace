@@ -2,30 +2,43 @@ const { parseEther } = require('ethers/lib/utils')
 const { ethers } = require('hardhat')
 const { hexConcat, pad, ETH, e27, e18, toBN } = require('./utils')
 const fs = require('fs')
+const { DSMAttestMessage } = require('../../test/helpers/signatures')
 
 // RPC_URL=http://20.197.13.207:8545 npx hardhat run scripts/interact/interact-ace-mainnet.js --network ace_mainnet
 async function main() {
   console.log('Getting the deposit contract...')
   const addresses = JSON.parse(fs.readFileSync('./deployed-ace_mainnet.json', 'utf-8'))
+  const depositContractAddress = addresses.chainSpec.depositContract
   const CatalistAddress = addresses['app:catalist'].proxy.address
   const HashConsensusAddress = addresses.hashConsensusForAccountingOracle.address
   const StakingRouterAddress = addresses.stakingRouter.proxy.address
   const AccountingOracleAddress = addresses.accountingOracle.proxy.address
   const WithdrawalQueueERC721Address = addresses.withdrawalQueueERC721.proxy.address
   const NodeOperatorRegistryAddress = addresses['app:node-operators-registry'].proxy.address
+  const DepositSecurityModuleAddress = addresses.depositSecurityModule.address
 
+  const depositContract = await ethers.getContractAt('DepositContract', depositContractAddress)
   const catalist = await ethers.getContractAt('Catalist', CatalistAddress)
   const hashConsensus = await ethers.getContractAt('HashConsensus', HashConsensusAddress)
   const stakingRouter = await ethers.getContractAt('StakingRouter', StakingRouterAddress)
   const accountingOracle = await ethers.getContractAt('AccountingOracle', AccountingOracleAddress)
   const withdrawalQueueERC721 = await ethers.getContractAt('WithdrawalQueueERC721', WithdrawalQueueERC721Address)
   const nodeOperatorRegistry = await ethers.getContractAt('NodeOperatorsRegistry', NodeOperatorRegistryAddress)
+  const depositSecurityModule = await ethers.getContractAt('DepositSecurityModule', DepositSecurityModuleAddress)
 
   const deployerAddress = '0x63cac65c5eb17E6Dd47D9313e23169f79d1Ab058'
+  const deployerPrivateKey = 'f11a771308f235a1331b098d0212db69ac049e56c9f1e0da739a39e8b743363c'
   const oracleMemberAddress = '0xB458c332C242247C46e065Cf987a05bAf7612904'
+  const testerAddress = '0x26AC28D33EcBf947951d6B7d8a1e6569eE73d076'
 
   // console.log()
-  // const beforeBalance = await catalist.balanceOf(deployerAddress)
+  // const beforeBalance = await catalist.balanceOf(
+  //   testerAddress,
+  //   {
+  //     gasLimit: 1000000,
+  //     gasPrice: 100000,
+  //   }
+  // )
   // console.log('Before Balance: ', beforeBalance.toString())
 
   // console.log()
@@ -96,13 +109,60 @@ async function main() {
   //   }
   // );
 
-  console.log()
-  console.log('Querying get singing keys...')
-  const signingKeys = await nodeOperatorRegistry.getSigningKeys(operatorId, 0, 5, {
-    gasLimit: 1000000,
-    gasPrice: 100000,
-  })
-  console.log('Signing Keys:', signingKeys)
+  // console.log('Querying get singing keys...')
+  // const signingKeys = await nodeOperatorRegistry.getSigningKeys(operatorId, 0, 5, {
+  //   gasLimit: 1000000,
+  //   gasPrice: 100000,
+  // })
+  // console.log('Signing Keys:', signingKeys)
+
+  // console.log()
+  // console.log('Querying setNodeOperatorStakingLimit()...')
+  // await nodeOperatorRegistry.setNodeOperatorStakingLimit(
+  //   0,
+  //   1000000000,
+  //   {
+  //     gasLimit: 1000000,
+  //     gasPrice: 100000,
+  //   }
+  // )
+
+  // console.log()
+  // console.log('Querying getStakingModules()...')
+  // const stakingModules = await stakingRouter.getStakingModules({
+  //   gasLimit: 1000000,
+  //   gasPrice: 100000,
+  // })
+  // console.log('Staking Modules:', stakingModules)
+
+  // console.log()
+  // console.log('Querying getStakingModuleNonce()...')
+  // const stakingModuleId = 1
+  // const stakingModuleNonce = await stakingRouter.getStakingModuleNonce(
+  //   stakingModuleId,
+  //   {
+  //     gasLimit: 1000000,
+  //     gasPrice: 100000,
+  //   }
+  // )
+  // console.log('Staking Module Nonce:', stakingModuleNonce)
+
+  // console.log()
+  // console.log('Querying grantRole(STAKING_MODULE_RESUME_ROLE)...')
+  // await stakingRouter.grantRole(
+  //   await stakingRouter.STAKING_MODULE_RESUME_ROLE(),
+  //   deployerAddress
+  // )
+
+  // console.log()
+  // console.log('Querying resumeStakingModule()...')
+  // await stakingRouter.resumeStakingModule(
+  //   1,
+  //   {
+  //     gasLimit: 1000000,
+  //     gasPrice: 100000,
+  //   }
+  // )
 
   // console.log()
   // console.log('Querying getWithdrawalRequests()...')
@@ -118,13 +178,133 @@ async function main() {
   // console.log()
   // console.log('Querying getWithdrawalStatus()...')
   // const withdrawalStatus = await withdrawalQueueERC721.getWithdrawalStatus(
-  //   [1],
+  //   [2, 3],
   //   {
   //     gasLimit: 1000000,
   //     gasPrice: 100000,
   //   }
   // )
   // console.log('Withdrawal Status:', withdrawalStatus)
+
+  // console.log()
+  // console.log('Querying getWithdrawalRequests()...')
+  // const withdrawalRequests = await withdrawalQueueERC721.getWithdrawalRequests(
+  //   '0x26AC28D33EcBf947951d6B7d8a1e6569eE73d076',
+  //   {
+  //     gasLimit: 1000000,
+  //     gasPrice: 100000,
+  //   }
+  // )
+  // console.log('Withdrawal Requests:', withdrawalRequests)
+
+  // console.log()
+  // console.log('Querying getLastCheckpointIndex()...')
+  // const lastCheckpointIndex = await withdrawalQueueERC721.getLastCheckpointIndex({
+  //   gasLimit: 1000000,
+  //   gasPrice: 100000,
+  // })
+  // console.log('Last Checkpoint Index:', lastCheckpointIndex.toString())
+
+  // console.log()
+  // console.log('Querying findCheckpointHints()...')
+  // const checkpointHints = await withdrawalQueueERC721.findCheckpointHints(
+  //   [1, 2, 3, 4],
+  //   1,
+  //   await withdrawalQueueERC721.getLastCheckpointIndex() - 1,
+  //   {
+  //     gasLimit: 1000000,
+  //     gasPrice: 100000,
+  //   }
+  // )
+
+  // console.log()
+  // console.log('Querying addGuardian()...')
+  // await depositSecurityModule.addGuardian(
+  //   deployerAddress,
+  //   1,
+  //   {
+  //     gasLimit: 1000000,
+  //     gasPrice: 100000,
+  //   }
+  // )
+
+  // console.log()
+  // console.log('Querying getGuardians()...')
+  // const guardians = await depositSecurityModule.getGuardians({
+  //   gasLimit: 1000000,
+  //   gasPrice: 100000,
+  // })
+  // console.log('Guardians:', guardians)
+
+  // console.log()
+  // console.log('Querying getGuardianQuorum()...')
+  // const guardianQuorum = await depositSecurityModule.getGuardianQuorum({
+  //   gasLimit: 1000000,
+  //   gasPrice: 100000,
+  // })
+  // console.log('Guardian Quorum:', guardianQuorum.toString())
+
+  // const stakingModuleId = 1
+  // console.log()
+  // console.log('Querying StakingModuleNonce()...')
+  // const STAKING_MODULE_NONCE = await stakingRouter.getStakingModuleNonce(
+  //   stakingModuleId,
+  //   {
+  //     gasLimit: 1000000,
+  //     gasPrice: 100000,
+  //   }
+  // )
+  // console.log('Staking Module Nonce:', STAKING_MODULE_NONCE)
+
+  // console.log()
+  // console.log('Querying get latest block...')
+  // const latestBlock = await ethers.provider.getBlock('latest')
+  // console.log('Latest Block:', latestBlock) 
+  // console.log('Latest Block Number:', latestBlock.number)
+  // console.log('Latest Block Hash:', latestBlock.hash)
+
+  // console.log()
+  // console.log('Querying get deposit root...')
+  // const DEPOSIT_ROOT = await depositContract.get_deposit_root({
+  //   gasLimit: 1000000,
+  //   gasPrice: 100000,
+  // })
+  // console.log('Deposit Root:', DEPOSIT_ROOT)
+
+  // const ATTEST_MESSAGE_PREFIX = await depositSecurityModule.ATTEST_MESSAGE_PREFIX({
+  //   gasLimit: 1000000,
+  //   gasPrice: 100000,
+  // })
+
+  // DSMAttestMessage.setMessagePrefix(ATTEST_MESSAGE_PREFIX)
+  // let validAttestMessage = new DSMAttestMessage(
+  //   latestBlock.number, 
+  //   latestBlock.hash, 
+  //   DEPOSIT_ROOT, 
+  //   stakingModuleId, 
+  //   +STAKING_MODULE_NONCE
+  // )
+
+  // console.log()
+  // console.log('Querying sign()...')
+  // const deployerSign = validAttestMessage.sign(deployerPrivateKey)
+  // console.log('Deployer Sign:', deployerSign)
+
+  // console.log()
+  // console.log('Querying depositBufferedAce()...')
+  // await depositSecurityModule.depositBufferedAce(
+  //   latestBlock.number,
+  //   latestBlock.hash,
+  //   DEPOSIT_ROOT,
+  //   stakingModuleId,
+  //   +STAKING_MODULE_NONCE,
+  //   '0x00',
+  //   [deployerSign],
+  //   {
+  //     gasLimit: 1000000,
+  //     gasPrice: 100000,
+  //   }
+  // )
 }
 
 main()
