@@ -27,9 +27,9 @@ async function deployNewContracts({ web3, artifacts }) {
   assertRequiredNetworkState(state, REQUIRED_NET_STATE)
   const catalistAddress = state["app:catalist"].proxy.address
   const legacyOracleAddress = state["app:oracle"].proxy.address
-  const votingAddress = state["app:aragon-voting"].proxy.address
-  const agentAddress = state["app:aragon-agent"].proxy.address
-  const treasuryAddress = agentAddress
+  // const votingAddress = state["app:aragon-voting"].proxy.address
+  // const agentAddress = state["app:aragon-agent"].proxy.address
+  // const treasuryAddress = agentAddress
   const chainSpec = state["chainSpec"]
   const depositSecurityModuleParams = state["depositSecurityModule"].deployParameters
   const burnerParams = state["burner"].deployParameters
@@ -130,9 +130,9 @@ async function deployNewContracts({ web3, artifacts }) {
   //
   // === WithdrawalVault ===
   //
-  const withdrawalVaultImpl = await deployImplementation("withdrawalVault", "WithdrawalVault", deployer, [catalistAddress, treasuryAddress])
+  const withdrawalVaultImpl = await deployImplementation("withdrawalVault", "WithdrawalVault", deployer, [catalistAddress, deployer])
   state = readNetworkState(network.name, netId)
-  const withdrawalsManagerProxyConstructorArgs = [votingAddress, withdrawalVaultImpl.address]
+  const withdrawalsManagerProxyConstructorArgs = [deployer, withdrawalVaultImpl.address]
   const withdrawalsManagerProxy = await deployContract("WithdrawalsManagerProxy", withdrawalsManagerProxyConstructorArgs, deployer)
   const withdrawalVaultAddress = withdrawalsManagerProxy.address
   state.withdrawalVault = {
@@ -151,7 +151,7 @@ async function deployNewContracts({ web3, artifacts }) {
   // === CatalistExecutionLayerRewardsVault ===
   //
   const elRewardsVaultAddress = await deployWithoutProxy(
-    "executionLayerRewardsVault", "CatalistExecutionLayerRewardsVault", deployer, [catalistAddress, treasuryAddress]
+    "executionLayerRewardsVault", "CatalistExecutionLayerRewardsVault", deployer, [catalistAddress, deployer]
   )
   logWideSplitter()
 
@@ -239,7 +239,7 @@ async function deployNewContracts({ web3, artifacts }) {
   //
   const burnerArgs = [
     admin,
-    treasuryAddress,
+    deployer,
     catalistAddress,
     burnerParams.totalCoverSharesBurnt,
     burnerParams.totalNonCoverSharesBurnt,
@@ -261,7 +261,7 @@ async function deployNewContracts({ web3, artifacts }) {
     postTokenRebaseReceiver,
     burnerAddress,
     stakingRouterAddress,
-    treasuryAddress,
+    deployer,
     validatorsExitBusOracleAddress,
     withdrawalQueueERC721Address,
     withdrawalVaultAddress,
