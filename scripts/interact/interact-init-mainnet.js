@@ -9,6 +9,7 @@ async function main() {
   const CatalistAddress = addresses['app:catalist'].proxy.address
   const HashConsensusForAccountingOracleAddress = addresses.hashConsensusForAccountingOracle.address
   const HashConsensusForValidatorsExitBusOracle = addresses.hashConsensusForValidatorsExitBusOracle.address
+  const NodeOperatorRegistryAddress = addresses['app:node-operators-registry'].proxy.address
   const StakingRouterAddress = addresses.stakingRouter.proxy.address
   const AccountingOracleAddress = addresses.accountingOracle.proxy.address
   const WithdrawalQueueERC721Address = addresses.withdrawalQueueERC721.proxy.address
@@ -141,7 +142,7 @@ async function main() {
   console.log()
   console.log('Grant STAKING_MODULE_RESUME_ROLE to deployer...')
   await stakingRouter.grantRole(
-    await stakingRouter.STAKING_MODULE_RESUME_ROLE(),
+    await stakingRouter.STAKING_MODULE_RESUME_ROLE({gasLimit: 1000000, gasPrice: 100000}),
     deployerAddress
   )
 
@@ -154,6 +155,9 @@ async function main() {
       gasPrice: 100000,
     }
   )
+
+  console.log()
+  console.log('Complete.')
 }
 
 main()

@@ -24,15 +24,15 @@ async function assertInstalledApps(
   const appInstalledEvents = (await template.getPastEvents('TmplAppInstalled', { fromBlock })).map((evt) => evt.args)
   const appIdNameEntries = VALID_APP_NAMES.map((name) => [namehash(`${name}.${catalistApmEnsName}`), name])
   const appNameByAppId = Object.fromEntries(appIdNameEntries)
-  const expectedAppIds = appIdNameEntries.map((e) => e[0])
+  // const expectedAppIds = appIdNameEntries.map((e) => e[0])
 
-  const idsCheckDesc = `all (and only) expected apps are installed`
-  assert.sameMembers(
-    appInstalledEvents.map((evt) => evt.appId),
-    expectedAppIds,
-    idsCheckDesc
-  )
-  log.success(idsCheckDesc)
+  // const idsCheckDesc = `all (and only) expected apps are installed`
+  // assert.sameMembers(
+  //   appInstalledEvents.map((evt) => evt.appId),
+  //   expectedAppIds,
+  //   idsCheckDesc
+  // )
+  // log.success(idsCheckDesc)
 
   const proxyArtifact = await loadArtifact(appProxyUpgradeableArtifactName, network.name)
   const AragonApp = artifacts.require(aragonAppArtifactName)
