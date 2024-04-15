@@ -121,7 +121,7 @@ contract BACE is IERC20, Pausable {
      * @return the name of the token.
      */
     function name() external pure returns (string) {
-        return "Liquid staked Ace 1.0";
+        return "Bond Ace 1.0";
     }
 
     /**
