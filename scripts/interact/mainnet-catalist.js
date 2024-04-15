@@ -4,7 +4,7 @@ const { hexConcat, pad, ETH, e27, e18, toBN } = require('./utils')
 const fs = require('fs')
 const { DSMAttestMessage } = require('../../test/helpers/signatures')
 
-// RPC_URL=http://20.197.13.207:8545 npx hardhat run scripts/interact/mainnet-withdraw.js --network ace_mainnet
+// RPC_URL=http://20.197.13.207:8545 npx hardhat run scripts/interact/mainnet-catalist.js --network ace_mainnet
 async function main() {
   console.log('Getting the deposit contract...')
   const addresses = JSON.parse(fs.readFileSync('./deployed-ace_mainnet.json', 'utf-8'))
@@ -32,55 +32,19 @@ async function main() {
   const testerAddress = '0x26AC28D33EcBf947951d6B7d8a1e6569eE73d076'
 
   console.log()
-  console.log('Querying getWithdrawalRequests()...')
-  const account = testerAddress
-  const withdrawalRequests = await withdrawalQueueERC721.getWithdrawalRequests(
-    account,
+  console.log('Get tester balance...')
+  const testerBalance = await catalist.balanceOf(
+    testerAddress,
     {
       gasLimit: 1000000,
       gasPrice: 100000,
     }
   )
-  console.log('Withdrawal Requests:', withdrawalRequests)
-  
-  const copiedWithdrawalRequests = withdrawalRequests.map((request) => {
-    return +request;
-  });
-  const requestIds = copiedWithdrawalRequests.sort((a, b) => a - b);
-  console.log('Sorted Withdrawal Requests:', requestIds)
-
-  console.log()
-  console.log('Querying getWithdrawalStatus()...')
-  const withdrawalStatus = await withdrawalQueueERC721.getWithdrawalStatus(
-    requestIds,
-    {
-      gasLimit: 1000000,
-      gasPrice: 100000,
-    }
-  )
-  console.log('Withdrawal Status:', withdrawalStatus)
-
-  console.log()
-  console.log('Querying getLastCheckpointIndex()...')
-  const lastCheckpointIndex = await withdrawalQueueERC721.getLastCheckpointIndex({
+  const decimals = await catalist.decimals({
     gasLimit: 1000000,
     gasPrice: 100000,
   })
-  console.log('Last Checkpoint Index:', +lastCheckpointIndex)
-
-  console.log()
-  console.log('Querying findCheckpointHints()...')
-  const firstIdx = lastCheckpointIndex - 1
-  const checkpointHints = await withdrawalQueueERC721.findCheckpointHints(
-    requestIds,
-    firstIdx,
-    +lastCheckpointIndex,
-    {
-      gasLimit: 1000000,
-      gasPrice: 100000,
-    }
-  )
-  console.log('Checkpoint Hints:', checkpointHints)
+  console.log('- Tester Balance:', +testerBalance / (10 ** +decimals))
 }
 
 main()
