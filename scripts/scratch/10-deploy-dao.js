@@ -21,7 +21,7 @@ const REQUIRED_NET_STATE = [
   `app:${APP_NAMES.CATALIST}`,
   `app:${APP_NAMES.ORACLE}`,
   `app:${APP_NAMES.NODE_OPERATORS_REGISTRY}`,
-  'daoInitialSettings',
+  // 'daoInitialSettings',
 ]
 
 const ARAGON_APM_ENS_DOMAIN = 'aragonpm.eth'
@@ -53,22 +53,9 @@ async function deployDAO({ web3, artifacts }) {
   await checkAppRepos(state)
   log.splitter()
 
-  const { daoInitialSettings } = state
-
-  const votingSettings = [
-    daoInitialSettings.voting.minSupportRequired,
-    daoInitialSettings.voting.minAcceptanceQuorum,
-    daoInitialSettings.voting.voteDuration,
-    daoInitialSettings.voting.objectionPhaseDuration,
-  ]
-
   // log(`Using DAO token settings:`, daoInitialSettings.token)
   // log(`Using DAO voting settings:`, daoInitialSettings.voting)
-  const receipt = await makeTx(template, 'newDAO', [
-    daoInitialSettings.token.name,
-    daoInitialSettings.token.symbol,
-    votingSettings,
-  ], { from: state.deployer })
+  const receipt = await makeTx(template, 'newDAO', [], { from: state.deployer })
   state.catalistTemplateNewDaoTx = receipt.tx
   persistNetworkState(network.name, netId, state)
 

@@ -12,10 +12,9 @@ async function main() {
   const StakingRouterAddress = addresses.stakingRouter.proxy.address
   const AccountingOracleAddress = addresses.accountingOracle.proxy.address
   const WithdrawalQueueERC721Address = addresses.withdrawalQueueERC721.proxy.address
-  const NodeOperatorRegistryAddress = addresses['app:node-operators-registry'].proxy.address
+  const NodeOperatorsRegistryAddress = addresses['app:node-operators-registry'].proxy.address
   
   const catalist = await ethers.getContractAt('Catalist', CatalistAddress)
-  const legacyOracle = await ethers.getContractAt('LegacyOracle', LegacyOracleAddress)
   const hashConsensus = await ethers.getContractAt('HashConsensus', HashConsensusAddress)
   const stakingRouter = await ethers.getContractAt('StakingRouter', StakingRouterAddress)
   const withdrawalQueueERC721 = await ethers.getContractAt('WithdrawalQueueERC721', WithdrawalQueueERC721Address)
@@ -24,41 +23,26 @@ async function main() {
 
   const [owner, ad1] = await ethers.getSigners()
 
-  console.log()
-  console.log('Querying get member...')
-  const members = await hashConsensus.connect(owner).getMembers()
-  console.log('Members:', members)
-
-  console.log()
-  const beforeBalance = await catalist.connect(owner).balanceOf(owner.address)
-  console.log('Before Balance: ', beforeBalance.toString())
-
-  console.log()
-  console.log('Staking 100ACE...')
-  await catalist.connect(owner).submit(owner.address, {
-    value: parseEther('100'),
-    gasLimit: 1000000,
-    gasPrice: 100000,
-  })
-
-  console.log()
-  const afterBalance = await catalist.connect(owner).balanceOf(owner.address)
-  console.log('After Balance: ', afterBalance.toString())
+  // console.log()
+  // console.log('Querying get member...')
+  // const members = await hashConsensus.connect(owner).getMembers()
+  // console.log('Members:', members)
 
   // console.log()
-  // console.log('Querying owner approve...')
-  // await catalist.connect(owner).approve(
-  //   WithdrawalQueueERC721Address, 
-  //   parseEther('10')
-  // )
+  // const beforeBalance = await catalist.connect(owner).balanceOf(owner.address)
+  // console.log('Before Balance: ', beforeBalance.toString())
 
   // console.log()
-  // console.log('Querying allowance...')
-  // const allowance = await catalist.connect(owner).allowance(
-  //   owner.address, 
-  //   WithdrawalQueueERC721Address
-  // )
-  // console.log('Allowance:', allowance.toString())
+  // console.log('Staking 100ACE...')
+  // await catalist.connect(owner).submit(owner.address, {
+  //   value: parseEther('100'),
+  //   gasLimit: 1000000,
+  //   gasPrice: 100000,
+  // })
+
+  // console.log()
+  // const afterBalance = await catalist.connect(owner).balanceOf(owner.address)
+  // console.log('After Balance: ', afterBalance.toString())
 
   // console.log()
   // console.log('Querying request withdrawals...')
@@ -110,6 +94,11 @@ async function main() {
   // console.log('Querying get singing keys...')
   // const signingKeys = await nodeOperatorsRegistry.connect(owner).getSigningKeys(operatorId, 0, 1)
   // console.log('Signing Keys:', signingKeys)
+
+  // console.log()
+  // console.log('Get StakingModuleStatus...')
+  // const status = await stakingRouter.connect(owner).getStakingModuleStatus(1, {gasLimit: 1000000, gasPrice: 100000})
+  // console.log('- Status:', status)
 }
 
 main()

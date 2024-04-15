@@ -1,8 +1,6 @@
-const { parseEther } = require('ethers/lib/utils')
 const { ethers } = require('hardhat')
 const { hexConcat, pad, ETH, e27, e18, toBN } = require('./utils')
 const fs = require('fs')
-const { DSMAttestMessage } = require('../../test/helpers/signatures')
 
 // RPC_URL=http://20.197.13.207:8545 npx hardhat run scripts/interact/mainnet-withdraw.js --network ace_mainnet
 async function main() {
@@ -40,14 +38,12 @@ async function main() {
       gasLimit: 1000000,
       gasPrice: 100000,
     }
-  )
-  console.log('Withdrawal Requests:', withdrawalRequests)
-  
+  )  
   const copiedWithdrawalRequests = withdrawalRequests.map((request) => {
     return +request;
   });
   const requestIds = copiedWithdrawalRequests.sort((a, b) => a - b);
-  console.log('Sorted Withdrawal Requests:', requestIds)
+  console.log('- Withdrawal Requests:', requestIds)
 
   console.log()
   console.log('Querying getWithdrawalStatus()...')
@@ -58,7 +54,7 @@ async function main() {
       gasPrice: 100000,
     }
   )
-  console.log('Withdrawal Status:', withdrawalStatus)
+  console.log('- Withdrawal Status:', withdrawalStatus)
 
   console.log()
   console.log('Querying getLastCheckpointIndex()...')
@@ -66,7 +62,7 @@ async function main() {
     gasLimit: 1000000,
     gasPrice: 100000,
   })
-  console.log('Last Checkpoint Index:', +lastCheckpointIndex)
+  console.log('- Last Checkpoint Index:', +lastCheckpointIndex)
 
   console.log()
   console.log('Querying findCheckpointHints()...')
@@ -80,7 +76,7 @@ async function main() {
       gasPrice: 100000,
     }
   )
-  console.log('Checkpoint Hints:', checkpointHints)
+  console.log('- Checkpoint Hints:', checkpointHints)
 }
 
 main()

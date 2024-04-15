@@ -31,20 +31,28 @@ async function main() {
   const oracleMemberAddress = '0xB458c332C242247C46e065Cf987a05bAf7612904'
   const testerAddress = '0x26AC28D33EcBf947951d6B7d8a1e6569eE73d076'
 
+  // console.log()
+  // console.log('Get tester balance...')
+  // const testerBalance = await catalist.balanceOf(
+  //   testerAddress,
+  //   {
+  //     gasLimit: 1000000,
+  //     gasPrice: 100000,
+  //   }
+  // )
+  // const decimals = await catalist.decimals({
+  //   gasLimit: 1000000,
+  //   gasPrice: 100000,
+  // })
+  // console.log('- Tester Balance:', +testerBalance / (10 ** +decimals))
+
   console.log()
-  console.log('Get tester balance...')
-  const testerBalance = await catalist.balanceOf(
-    testerAddress,
-    {
-      gasLimit: 1000000,
-      gasPrice: 100000,
-    }
-  )
-  const decimals = await catalist.decimals({
+  console.log('Get current stake limit...')
+  const stakeLimit = await catalist.getCurrentStakeLimit({
     gasLimit: 1000000,
     gasPrice: 100000,
   })
-  console.log('- Tester Balance:', +testerBalance / (10 ** +decimals))
+  console.log('- Current Stake Limit:', +stakeLimit)
 }
 
 main()

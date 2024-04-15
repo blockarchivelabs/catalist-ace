@@ -21,7 +21,7 @@ async function saveDeployParameters({ web3, artifacts }) {
   })
 
   const state = readNetworkState(network.name, netId)
-  const ldoHolder = Object.keys(state.vestingParams.holders)[0]
+  // const ldoHolder = Object.keys(state.vestingParams.holders)[0]
   const gateSealAddress = (GATE_SEAL_FACTORY === null || GATE_SEAL_FACTORY === ZERO_ADDRESS)
     ? ZERO_ADDRESS : ''
 
@@ -31,7 +31,7 @@ async function saveDeployParameters({ web3, artifacts }) {
   state.gateSeal = {
     ...state.gateSeal,
     factoryAddress: GATE_SEAL_FACTORY,
-    sealingCommittee: ldoHolder,
+    // sealingCommittee: ldoHolder,
     address: gateSealAddress,
   }
   state.chainSpec = {

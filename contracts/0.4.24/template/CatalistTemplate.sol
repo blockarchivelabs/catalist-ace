@@ -356,11 +356,12 @@ contract CatalistTemplate is IsContract {
         emit TmplReposCreated();
     }
 
-    function newDAO(
-        string _tokenName,
-        string _tokenSymbol,
-        uint64[4] _votingSettings
-    ) external onlyOwner {
+    // function newDAO(
+    //     string _tokenName,
+    //     string _tokenSymbol,
+    //     uint64[4] _votingSettings
+    // ) external onlyOwner {
+    function newDAO() external onlyOwner {
         DeployState memory state = deployState;
 
         require(
