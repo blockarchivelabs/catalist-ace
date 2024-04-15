@@ -53,7 +53,7 @@ contract EIP712BACE is IEIP712BACE {
             revert ZeroBACEAddress();
         }
 
-        bytes32 hashedName = keccak256("Bond Ace 2.0");
+        bytes32 hashedName = keccak256("Bond Ace");
         bytes32 hashedVersion = keccak256("2");
         bytes32 typeHash = keccak256(
             "EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)"
@@ -147,6 +147,6 @@ contract EIP712BACE is IEIP712BACE {
             address verifyingContract
         )
     {
-        return ("Bond Ace 2.0", "2", block.chainid, _bACE);
+        return ("Bond Ace", "1", block.chainid, _bACE);
     }
 }
