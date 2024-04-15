@@ -18,7 +18,7 @@ import "@aragon/os/contracts/common/IsContract.sol";
 import "@aragon/apps-agent/contracts/Agent.sol";
 import "@aragon/apps-vault/contracts/Vault.sol";
 
-import { Voting } from "@aragon/apps-lido/apps/voting/contracts/Voting.sol";
+import {Voting} from "@aragon/apps-lido/apps/voting/contracts/Voting.sol";
 
 import "@aragon/apps-finance/contracts/Finance.sol";
 import "@aragon/apps-lido/apps/token-manager/contracts/TokenManager.sol";
@@ -161,8 +161,8 @@ contract CatalistTemplate is IsContract {
         address _owner,
         DAOFactory _daoFactory,
         ENS _ens,
-        MiniMeTokenFactory _miniMeFactory,
-        IFIFSResolvingRegistrar _aragonID,
+        // MiniMeTokenFactory _miniMeFactory,
+        // IFIFSResolvingRegistrar _aragonID,
         APMRegistryFactory _apmRegistryFactory
     ) public {
         require(_owner != address(0), ERROR_ZERO_OWNER);
@@ -171,11 +171,11 @@ contract CatalistTemplate is IsContract {
             ERROR_DAO_FACTORY_NOT_CONTRACT
         );
         require(isContract(address(_ens)), ERROR_ENS_NOT_CONTRACT);
-        require(
-            isContract(address(_miniMeFactory)),
-            ERROR_MINIME_FACTORY_NOT_CONTRACT
-        );
-        require(isContract(address(_aragonID)), ERROR_ARAGON_ID_NOT_CONTRACT);
+        // require(
+        //     isContract(address(_miniMeFactory)),
+        //     ERROR_MINIME_FACTORY_NOT_CONTRACT
+        // );
+        // require(isContract(address(_aragonID)), ERROR_ARAGON_ID_NOT_CONTRACT);
         require(
             isContract(address(_apmRegistryFactory)),
             ERROR_APM_REGISTRY_FACTORY_NOT_CONTRACT
@@ -184,8 +184,8 @@ contract CatalistTemplate is IsContract {
         owner = _owner;
         daoFactory = _daoFactory;
         ens = _ens;
-        miniMeFactory = _miniMeFactory;
-        aragonID = _aragonID;
+        // miniMeFactory = _miniMeFactory;
+        // aragonID = _aragonID;
         apmRegistryFactory = _apmRegistryFactory;
     }
 
@@ -196,8 +196,8 @@ contract CatalistTemplate is IsContract {
             address _owner,
             address _daoFactory,
             address _ens,
-            address _miniMeFactory,
-            address _aragonID,
+            // address _miniMeFactory,
+            // address _aragonID,
             address _apmRegistryFactory
         )
     {
@@ -205,8 +205,8 @@ contract CatalistTemplate is IsContract {
             owner,
             daoFactory,
             ens,
-            miniMeFactory,
-            aragonID,
+            // miniMeFactory,
+            // aragonID,
             apmRegistryFactory
         );
     }
@@ -262,54 +262,54 @@ contract CatalistTemplate is IsContract {
         ens.setOwner(node, _to);
     }
 
-    function createStdAragonRepos(
-        address _agentImpl,
-        address _financeImpl,
-        address _tokenManagerImpl,
-        address _votingImpl
-    ) external onlyOwner {
-        uint16[3] memory initialSemanticVersion = [
-            uint16(1),
-            uint16(0),
-            uint16(0)
-        ];
+    // function createStdAragonRepos(
+    //     address _agentImpl,
+    //     address _financeImpl,
+    //     address _tokenManagerImpl,
+    //     address _votingImpl
+    // ) external onlyOwner {
+    //     uint16[3] memory initialSemanticVersion = [
+    //         uint16(1),
+    //         uint16(0),
+    //         uint16(0)
+    //     ];
 
-        bytes memory dummyContentURI = new bytes(0);
+    //     bytes memory dummyContentURI = new bytes(0);
 
-        APMRegistry catalistRegistry = deployState.catalistRegistry;
+    //     APMRegistry catalistRegistry = deployState.catalistRegistry;
 
-        apmRepos.aragonAgent = catalistRegistry.newRepoWithVersion(
-            ARAGON_AGENT_APP_NAME,
-            this,
-            initialSemanticVersion,
-            _agentImpl,
-            dummyContentURI
-        );
+    //     apmRepos.aragonAgent = catalistRegistry.newRepoWithVersion(
+    //         ARAGON_AGENT_APP_NAME,
+    //         this,
+    //         initialSemanticVersion,
+    //         _agentImpl,
+    //         dummyContentURI
+    //     );
 
-        apmRepos.aragonFinance = catalistRegistry.newRepoWithVersion(
-            ARAGON_FINANCE_APP_NAME,
-            this,
-            initialSemanticVersion,
-            _financeImpl,
-            dummyContentURI
-        );
+    //     apmRepos.aragonFinance = catalistRegistry.newRepoWithVersion(
+    //         ARAGON_FINANCE_APP_NAME,
+    //         this,
+    //         initialSemanticVersion,
+    //         _financeImpl,
+    //         dummyContentURI
+    //     );
 
-        apmRepos.aragonTokenManager = catalistRegistry.newRepoWithVersion(
-            ARAGON_TOKEN_MANAGER_APP_NAME,
-            this,
-            initialSemanticVersion,
-            _tokenManagerImpl,
-            dummyContentURI
-        );
+    //     apmRepos.aragonTokenManager = catalistRegistry.newRepoWithVersion(
+    //         ARAGON_TOKEN_MANAGER_APP_NAME,
+    //         this,
+    //         initialSemanticVersion,
+    //         _tokenManagerImpl,
+    //         dummyContentURI
+    //     );
 
-        apmRepos.aragonVoting = catalistRegistry.newRepoWithVersion(
-            ARAGON_VOTING_APP_NAME,
-            this,
-            initialSemanticVersion,
-            _votingImpl,
-            dummyContentURI
-        );
-    }
+    //     apmRepos.aragonVoting = catalistRegistry.newRepoWithVersion(
+    //         ARAGON_VOTING_APP_NAME,
+    //         this,
+    //         initialSemanticVersion,
+    //         _votingImpl,
+    //         dummyContentURI
+    //     );
+    // }
 
     function createRepos(
         uint16[3] _initialSemanticVersion,
@@ -369,38 +369,38 @@ contract CatalistTemplate is IsContract {
         );
         require(state.dao == address(0), ERROR_DAO_ALREADY_DEPLOYED);
 
-        state.token = _createToken(_tokenName, _tokenSymbol, TOKEN_DECIMALS);
+        // state.token = _createToken(_tokenName, _tokenSymbol, TOKEN_DECIMALS);
         (state.dao, state.acl) = _createDAO();
 
-        state.agent = _installAgentApp(
-            state.catalistRegistryEnsNode,
-            state.dao
-        );
+        // state.agent = _installAgentApp(
+        //     state.catalistRegistryEnsNode,
+        //     state.dao
+        // );
 
-        state.finance = _installFinanceApp(
-            state.catalistRegistryEnsNode,
-            state.dao,
-            state.agent,
-            DEFAULT_FINANCE_PERIOD
-        );
+        // state.finance = _installFinanceApp(
+        //     state.catalistRegistryEnsNode,
+        //     state.dao,
+        //     state.agent,
+        //     DEFAULT_FINANCE_PERIOD
+        // );
 
-        state.tokenManager = _installTokenManagerApp(
-            state.catalistRegistryEnsNode,
-            state.dao,
-            state.token,
-            TOKEN_TRANSFERABLE,
-            TOKEN_MAX_PER_ACCOUNT
-        );
+        // state.tokenManager = _installTokenManagerApp(
+        //     state.catalistRegistryEnsNode,
+        //     state.dao,
+        //     state.token,
+        //     TOKEN_TRANSFERABLE,
+        //     TOKEN_MAX_PER_ACCOUNT
+        // );
 
-        state.voting = _installVotingApp(
-            state.catalistRegistryEnsNode,
-            state.dao,
-            state.token,
-            _votingSettings[0], // support
-            _votingSettings[1], // acceptance
-            _votingSettings[2], // duration
-            _votingSettings[3] // objectionPhaseDuration
-        );
+        // state.voting = _installVotingApp(
+        //     state.catalistRegistryEnsNode,
+        //     state.dao,
+        //     state.token,
+        //     _votingSettings[0], // support
+        //     _votingSettings[1], // acceptance
+        //     _votingSettings[2], // duration
+        //     _votingSettings[3] // objectionPhaseDuration
+        // );
 
         bytes memory noInit = new bytes(0);
 
@@ -432,45 +432,45 @@ contract CatalistTemplate is IsContract {
         );
 
         // used for issuing vested tokens in the next step
-        _createTokenManagerPermissionsForTemplate(
-            state.acl,
-            state.tokenManager
-        );
+        // _createTokenManagerPermissionsForTemplate(
+        //     state.acl,
+        //     state.tokenManager
+        // );
 
         emit TmplDAOAndTokenDeployed(address(state.dao), address(state.token));
 
         deployState = state;
     }
 
-    function issueTokens(
-        address[] _holders,
-        uint256[] _amounts,
-        uint64 _vestingStart,
-        uint64 _vestingCliff,
-        uint64 _vestingEnd,
-        bool _vestingRevokable,
-        uint256 _expectedFinalTotalSupply
-    ) external onlyOwner {
-        require(_holders.length > 0, ERROR_EMPTY_HOLDERS);
-        require(_holders.length == _amounts.length, ERROR_BAD_AMOUNTS_LEN);
+    // function issueTokens(
+    //     address[] _holders,
+    //     uint256[] _amounts,
+    //     uint64 _vestingStart,
+    //     uint64 _vestingCliff,
+    //     uint64 _vestingEnd,
+    //     bool _vestingRevokable,
+    //     uint256 _expectedFinalTotalSupply
+    // ) external onlyOwner {
+    //     require(_holders.length > 0, ERROR_EMPTY_HOLDERS);
+    //     require(_holders.length == _amounts.length, ERROR_BAD_AMOUNTS_LEN);
 
-        TokenManager tokenManager = deployState.tokenManager;
-        require(tokenManager != address(0), ERROR_DAO_NOT_DEPLOYED);
+    //     TokenManager tokenManager = deployState.tokenManager;
+    //     require(tokenManager != address(0), ERROR_DAO_NOT_DEPLOYED);
 
-        uint256 totalAmount = _issueTokens(
-            tokenManager,
-            deployState.token,
-            _holders,
-            _amounts,
-            _vestingStart,
-            _vestingCliff,
-            _vestingEnd,
-            _vestingRevokable,
-            _expectedFinalTotalSupply
-        );
+    //     uint256 totalAmount = _issueTokens(
+    //         tokenManager,
+    //         deployState.token,
+    //         _holders,
+    //         _amounts,
+    //         _vestingStart,
+    //         _vestingCliff,
+    //         _vestingEnd,
+    //         _vestingRevokable,
+    //         _expectedFinalTotalSupply
+    //     );
 
-        emit TmplTokensIssued(totalAmount);
-    }
+    //     emit TmplTokensIssued(totalAmount);
+    // }
 
     function finalizeDAO(
         string _daoName,
@@ -486,21 +486,21 @@ contract CatalistTemplate is IsContract {
 
         state.stakingRouter = _stakingRouter;
 
-        if (_unvestedTokensAmount != 0) {
-            // using issue + assign to avoid setting the additional MINT_ROLE for the template
-            state.tokenManager.issue(_unvestedTokensAmount);
-            state.tokenManager.assign(state.agent, _unvestedTokensAmount);
-            emit TmplTokensIssued(_unvestedTokensAmount);
-        }
+        // if (_unvestedTokensAmount != 0) {
+        //     // using issue + assign to avoid setting the additional MINT_ROLE for the template
+        //     state.tokenManager.issue(_unvestedTokensAmount);
+        //     state.tokenManager.assign(state.agent, _unvestedTokensAmount);
+        //     emit TmplTokensIssued(_unvestedTokensAmount);
+        // }
 
         _setupPermissions(state, repos);
-        _transferRootPermissionsFromTemplateAndFinalizeDAO(
-            state.dao,
-            state.voting
-        );
+        // _transferRootPermissionsFromTemplateAndFinalizeDAO(
+        //     state.dao,
+        //     state.voting
+        // );
         _resetState();
 
-        aragonID.register(keccak256(abi.encodePacked(_daoName)), state.dao);
+        // aragonID.register(keccak256(abi.encodePacked(_daoName)), state.dao);
 
         emit TmplDaoFinalized();
     }
@@ -689,12 +689,12 @@ contract CatalistTemplate is IsContract {
         ACL acl = _state.acl;
         Voting voting = _state.voting;
 
-        _createAgentPermissions(acl, _state.agent, voting);
-        _createVaultPermissions(acl, _state.agent, _state.finance, voting);
-        _createFinancePermissions(acl, _state.finance, voting);
-        _createEvmScriptsRegistryPermissions(acl, voting);
-        _createVotingPermissions(acl, voting, _state.tokenManager);
-        _configureTokenManagerPermissions(acl, _state.tokenManager, voting);
+        // _createAgentPermissions(acl, _state.agent, voting);
+        // _createVaultPermissions(acl, _state.agent, _state.finance, voting);
+        // _createFinancePermissions(acl, _state.finance, voting);
+        // _createEvmScriptsRegistryPermissions(acl, voting);
+        // _createVotingPermissions(acl, voting, _state.tokenManager);
+        // _configureTokenManagerPermissions(acl, _state.tokenManager, voting);
 
         // APM
 
@@ -707,90 +707,90 @@ contract CatalistTemplate is IsContract {
             .catalistRegistry
             .registrar();
 
-        _transferPermissionFromTemplate(
-            apmACL,
-            _state.catalistRegistry,
-            voting,
-            _state.catalistRegistry.CREATE_REPO_ROLE()
-        );
-        apmACL.setPermissionManager(voting, apmDAO, apmDAO.APP_MANAGER_ROLE());
-        _transferPermissionFromTemplate(
-            apmACL,
-            apmACL,
-            voting,
-            apmACL.CREATE_PERMISSIONS_ROLE()
-        );
-        apmACL.setPermissionManager(
-            voting,
-            apmRegistrar,
-            apmRegistrar.CREATE_NAME_ROLE()
-        );
-        apmACL.setPermissionManager(
-            voting,
-            apmRegistrar,
-            apmRegistrar.POINT_ROOTNODE_ROLE()
-        );
+        // _transferPermissionFromTemplate(
+        //     apmACL,
+        //     _state.catalistRegistry,
+        //     voting,
+        //     _state.catalistRegistry.CREATE_REPO_ROLE()
+        // );
+        // apmACL.setPermissionManager(voting, apmDAO, apmDAO.APP_MANAGER_ROLE());
+        // _transferPermissionFromTemplate(
+        //     apmACL,
+        //     apmACL,
+        //     voting,
+        //     apmACL.CREATE_PERMISSIONS_ROLE()
+        // );
+        // apmACL.setPermissionManager(
+        //     voting,
+        //     apmRegistrar,
+        //     apmRegistrar.CREATE_NAME_ROLE()
+        // );
+        // apmACL.setPermissionManager(
+        //     voting,
+        //     apmRegistrar,
+        //     apmRegistrar.POINT_ROOTNODE_ROLE()
+        // );
 
         // APM repos
 
         // using loops to save contract size
-        Repo[10] memory repoAddresses;
-        repoAddresses[0] = _repos.catalist;
-        repoAddresses[1] = _repos.oracle;
-        repoAddresses[2] = _repos.nodeOperatorsRegistry;
-        repoAddresses[3] = _repos.aragonAgent;
-        repoAddresses[4] = _repos.aragonFinance;
-        repoAddresses[5] = _repos.aragonTokenManager;
-        repoAddresses[6] = _repos.aragonVoting;
-        repoAddresses[7] = _resolveRepo(
-            _getAppId(APM_APP_NAME, _state.catalistRegistryEnsNode)
-        );
-        repoAddresses[8] = _resolveRepo(
-            _getAppId(APM_REPO_APP_NAME, _state.catalistRegistryEnsNode)
-        );
-        repoAddresses[9] = _resolveRepo(
-            _getAppId(APM_ENSSUB_APP_NAME, _state.catalistRegistryEnsNode)
-        );
-        for (uint256 i = 0; i < repoAddresses.length; ++i) {
-            _transferPermissionFromTemplate(
-                apmACL,
-                repoAddresses[i],
-                voting,
-                REPO_CREATE_VERSION_ROLE
-            );
-        }
+        // Repo[10] memory repoAddresses;
+        // repoAddresses[0] = _repos.catalist;
+        // repoAddresses[1] = _repos.oracle;
+        // repoAddresses[2] = _repos.nodeOperatorsRegistry;
+        // repoAddresses[3] = _repos.aragonAgent;
+        // repoAddresses[4] = _repos.aragonFinance;
+        // repoAddresses[5] = _repos.aragonTokenManager;
+        // repoAddresses[6] = _repos.aragonVoting;
+        // repoAddresses[7] = _resolveRepo(
+        //     _getAppId(APM_APP_NAME, _state.catalistRegistryEnsNode)
+        // );
+        // repoAddresses[8] = _resolveRepo(
+        //     _getAppId(APM_REPO_APP_NAME, _state.catalistRegistryEnsNode)
+        // );
+        // repoAddresses[9] = _resolveRepo(
+        //     _getAppId(APM_ENSSUB_APP_NAME, _state.catalistRegistryEnsNode)
+        // );
+        // for (uint256 i = 0; i < repoAddresses.length; ++i) {
+        //     _transferPermissionFromTemplate(
+        //         apmACL,
+        //         repoAddresses[i],
+        //         voting,
+        //         REPO_CREATE_VERSION_ROLE
+        //     );
+        // }
 
-        // using loops to save contract size
-        bytes32[6] memory perms;
+        // // using loops to save contract size
+        // bytes32[6] memory perms;
 
-        // NodeOperatorsRegistry
-        perms[0] = _state.operators.MANAGE_SIGNING_KEYS();
-        perms[1] = _state.operators.SET_NODE_OPERATOR_LIMIT_ROLE();
-        for (i = 0; i < 2; ++i) {
-            _createPermissionForVoting(acl, _state.operators, perms[i], voting);
-        }
-        acl.createPermission(
-            _state.stakingRouter,
-            _state.operators,
-            _state.operators.STAKING_ROUTER_ROLE(),
-            voting
-        );
-        acl.createPermission(
-            _state.agent,
-            _state.operators,
-            _state.operators.MANAGE_NODE_OPERATOR_ROLE(),
-            voting
-        );
+        // // NodeOperatorsRegistry
+        // perms[0] = _state.operators.MANAGE_SIGNING_KEYS();
+        // perms[1] = _state.operators.SET_NODE_OPERATOR_LIMIT_ROLE();
+        // for (i = 0; i < 2; ++i) {
+        //     _createPermissionForVoting(acl, _state.operators, perms[i], voting);
+        // }
+        // acl.createPermission(
+        //     _state.stakingRouter,
+        //     _state.operators,
+        //     _state.operators.STAKING_ROUTER_ROLE(),
+        //     voting
+        // );
+        // acl.createPermission(
+        //     _state.agent,
+        //     _state.operators,
+        //     _state.operators.MANAGE_NODE_OPERATOR_ROLE(),
+        //     voting
+        // );
 
-        // Catalist
-        perms[0] = _state.catalist.PAUSE_ROLE();
-        perms[1] = _state.catalist.RESUME_ROLE();
-        perms[2] = _state.catalist.STAKING_PAUSE_ROLE();
-        perms[3] = _state.catalist.STAKING_CONTROL_ROLE();
-        perms[4] = _state.catalist.UNSAFE_CHANGE_DEPOSITED_VALIDATORS_ROLE();
-        for (i = 0; i < 5; ++i) {
-            _createPermissionForVoting(acl, _state.catalist, perms[i], voting);
-        }
+        // // Catalist
+        // perms[0] = _state.catalist.PAUSE_ROLE();
+        // perms[1] = _state.catalist.RESUME_ROLE();
+        // perms[2] = _state.catalist.STAKING_PAUSE_ROLE();
+        // perms[3] = _state.catalist.STAKING_CONTROL_ROLE();
+        // perms[4] = _state.catalist.UNSAFE_CHANGE_DEPOSITED_VALIDATORS_ROLE();
+        // for (i = 0; i < 5; ++i) {
+        //     _createPermissionForVoting(acl, _state.catalist, perms[i], voting);
+        // }
     }
 
     function _createTokenManagerPermissionsForTemplate(

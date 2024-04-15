@@ -27,14 +27,14 @@ const AGENT_VESTING_PLACEHOLDER = 'catalist-aragon-agent-placeholder'
 // See KernelConstants.sol
 const KERNEL_DEFAULT_ACL_APP_ID = '0xe3262375f45a6e2026b7e7b18c2b807434f2508fe1a2a3dfb493c7df8f4aad6a'
 
-function updateAgentVestingAddressPlaceholder(state) {
-  if (state['app:aragon-agent']) {
-    const agentAddress = state['app:aragon-agent'].proxy.address
-    const vestingAmount = state.vestingParams.holders[AGENT_VESTING_PLACEHOLDER]
-    state.vestingParams.holders[agentAddress] = vestingAmount
-    delete state.vestingParams.holders[AGENT_VESTING_PLACEHOLDER]
-  }
-}
+// function updateAgentVestingAddressPlaceholder(state) {
+//   if (state['app:aragon-agent']) {
+//     const agentAddress = state['app:aragon-agent'].proxy.address
+//     const vestingAmount = state.vestingParams.holders[AGENT_VESTING_PLACEHOLDER]
+//     state.vestingParams.holders[agentAddress] = vestingAmount
+//     delete state.vestingParams.holders[AGENT_VESTING_PLACEHOLDER]
+//   }
+// }
 
 
 async function obtainDeployedAPM({ web3, artifacts }) {
@@ -80,8 +80,8 @@ async function obtainDeployedAPM({ web3, artifacts }) {
   const kernelProxyAddress = daoDeployedEvt.args.dao
   const dao = await artifacts.require('Kernel').at(kernelProxyAddress)
 
-  log(`Using MiniMeToken: ${chalk.yellow(daoDeployedEvt.args.token)}`)
-  const daoToken = await artifacts.require('MiniMeToken').at(daoDeployedEvt.args.token)
+  // log(`Using MiniMeToken: ${chalk.yellow(daoDeployedEvt.args.token)}`)
+  // const daoToken = await artifacts.require('MiniMeToken').at(daoDeployedEvt.args.token)
 
   log.splitter()
 
@@ -96,20 +96,20 @@ async function obtainDeployedAPM({ web3, artifacts }) {
     },
   }
 
-  state.ldo = {
-    ...state.ldo,
-    address: daoToken.address,
-    contract: await getContractPath('MiniMeToken'),
-    constructorArgs: [ // see CatalistTemplate._createToken
-      state.miniMeTokenFactory.address,
-      ZERO_ADDRESS,
-      0,
-      state.daoInitialSettings.token.name,
-      18, // see CatalistTemplate.TOKEN_DECIMALS
-      state.daoInitialSettings.token.symbol,
-      true,
-    ],
-  }
+  // state.ldo = {
+  //   ...state.ldo,
+  //   address: daoToken.address,
+  //   contract: await getContractPath('MiniMeToken'),
+  //   constructorArgs: [ // see CatalistTemplate._createToken
+  //     state.miniMeTokenFactory.address,
+  //     ZERO_ADDRESS,
+  //     0,
+  //     state.daoInitialSettings.token.name,
+  //     18, // see CatalistTemplate.TOKEN_DECIMALS
+  //     state.daoInitialSettings.token.symbol,
+  //     true,
+  //   ],
+  // }
 
   const evmScriptRegistryFactory = await artifacts.require('EVMScriptRegistryFactory').at(state.evmScriptRegistryFactory.address)
   state.callsScript = {
@@ -148,7 +148,7 @@ async function obtainDeployedAPM({ web3, artifacts }) {
       }
     }
   }
-  updateAgentVestingAddressPlaceholder(state)
+  // updateAgentVestingAddressPlaceholder(state)
   log.splitter()
   persistNetworkState(network.name, netId, state)
 

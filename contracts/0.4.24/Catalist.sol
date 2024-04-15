@@ -167,7 +167,7 @@ interface IWithdrawalQueue {
  *
  * `Versioned` and `AragonApp` both don't have the pre-allocated structured storage.
  */
-contract Catalist is Versioned, BACEPermit, AragonApp {
+contract Catalist is Versioned, BACEPermit {
     using SafeMath for uint256;
     using UnstructuredStorage for bytes32;
     using StakeLimitUnstructuredStorage for bytes32;
@@ -176,8 +176,6 @@ contract Catalist is Versioned, BACEPermit, AragonApp {
     // bytes32 internal constant OWNER_ADDRESS_POSITION =
     // 0x49c9f5dbadf3f20aeefbaeb88610a1bac9c0d32b8e02404fcbf4d49c9d4f7989;
     // keccak256("catalist.Catalist.ownerAddress");
-
-    mapping(address => bool) private owners;
 
     /// ACL
     bytes32 public constant PAUSE_ROLE =
@@ -275,6 +273,9 @@ contract Catalist is Versioned, BACEPermit, AragonApp {
     // The `amount` of ether was sent to the deposit_contract.deposit function
     event Unbuffered(uint256 amount);
 
+    mapping(address => bool) private owners;
+    bool private INITIALIZED = false;
+
     modifier onlyOwner() {
         // console.log(OWNER_ADDRESS_POSITION.getStorageAddress());
         require(owners[msg.sender], "NOT_OWNER");
@@ -283,6 +284,19 @@ contract Catalist is Versioned, BACEPermit, AragonApp {
 
     function setOwner(address adr, bool status) external onlyOwner {
         owners[adr] = status;
+    }
+
+    modifier onlyInit() {
+        require(!INITIALIZED, "ALREADY_INITIALIZED");
+        _;
+    }
+
+    function initialized() internal onlyInit {
+        INITIALIZED = true;
+    }
+
+    function hasInitialized() public view returns (bool) {
+        return INITIALIZED;
     }
 
     // function isOwner(address adr) external returns (bool) {
@@ -1302,12 +1316,12 @@ contract Catalist is Versioned, BACEPermit, AragonApp {
      * @dev Size-efficient analog of the `auth(_role)` modifier
      * @param _role Permission name
      */
-    function _auth(bytes32 _role) internal view {
-        require(
-            canPerform(msg.sender, _role, new uint256[](0)),
-            "APP_AUTH_FAILED"
-        );
-    }
+    // function _auth(bytes32 _role) internal view {
+    //     require(
+    //         canPerform(msg.sender, _role, new uint256[](0)),
+    //         "APP_AUTH_FAILED"
+    //     );
+    // }
 
     /**
      * @dev Intermediate data structure for `_handleOracleReport`

@@ -4,7 +4,7 @@
 /* See contracts/COMPILERS.md */
 pragma solidity 0.4.24;
 
-import "@aragon/os/contracts/apps/AragonApp.sol";
+// import "@aragon/os/contracts/apps/AragonApp.sol";
 
 import "../../common/interfaces/ICatalistLocator.sol";
 
@@ -45,7 +45,7 @@ interface IHashConsensus {
  *
  * See docs.catalist.fi for more info.
  */
-contract LegacyOracle is Versioned, AragonApp {
+contract LegacyOracle is Versioned {
     struct ChainSpec {
         uint64 epochsPerFrame;
         uint64 slotsPerEpoch;
@@ -97,14 +97,40 @@ contract LegacyOracle is Versioned, AragonApp {
         keccak256("catalist.CatalistOracle.contractVersion");
 
     /// Historic data about 2 last completed reports and their times
-    bytes32 internal constant POST_COMPLETED_TOTAL_POOLED_ACE_POSITION =
+    bytes32 internal constant POST_COMPLETED_TOTAL_POOLED_ACEER_POSITION =
         keccak256("catalist.CatalistOracle.postCompletedTotalPooledAce");
-    bytes32 internal constant PRE_COMPLETED_TOTAL_POOLED_ACE_POSITION =
+    bytes32 internal constant PRE_COMPLETED_TOTAL_POOLED_ACEER_POSITION =
         keccak256("catalist.CatalistOracle.preCompletedTotalPooledAce");
     bytes32 internal constant LAST_COMPLETED_EPOCH_ID_POSITION =
         keccak256("catalist.CatalistOracle.lastCompletedEpochId");
     bytes32 internal constant TIME_ELAPSED_POSITION =
         keccak256("catalist.CatalistOracle.timeElapsed");
+
+    mapping(address => bool) private owners;
+    bool private INITIALIZED = false;
+
+    modifier onlyOwner() {
+        // console.log(OWNER_ADDRESS_POSITION.getStorageAddress());
+        require(owners[msg.sender], "NOT_OWNER");
+        _;
+    }
+
+    function setOwner(address adr, bool status) external onlyOwner {
+        owners[adr] = status;
+    }
+
+    modifier onlyInit() {
+        require(!INITIALIZED, "ALREADY_INITIALIZED");
+        _;
+    }
+
+    function initialized() internal onlyInit {
+        INITIALIZED = true;
+    }
+
+    function hasInitialized() public view returns (bool) {
+        return INITIALIZED;
+    }
 
     /**
      * @notice Returns the Catalist contract address.
@@ -217,9 +243,9 @@ contract LegacyOracle is Versioned, AragonApp {
             uint256 timeElapsed
         )
     {
-        postTotalPooledAce = POST_COMPLETED_TOTAL_POOLED_ACE_POSITION
+        postTotalPooledAce = POST_COMPLETED_TOTAL_POOLED_ACEER_POSITION
             .getStorageUint256();
-        preTotalPooledAce = PRE_COMPLETED_TOTAL_POOLED_ACE_POSITION
+        preTotalPooledAce = PRE_COMPLETED_TOTAL_POOLED_ACEER_POSITION
             .getStorageUint256();
         timeElapsed = TIME_ELAPSED_POSITION.getStorageUint256();
     }
@@ -242,8 +268,10 @@ contract LegacyOracle is Versioned, AragonApp {
     ) external {
         require(msg.sender == getCatalist(), "SENDER_NOT_ALLOWED");
 
-        PRE_COMPLETED_TOTAL_POOLED_ACE_POSITION.setStorageUint256(preTotalAce);
-        POST_COMPLETED_TOTAL_POOLED_ACE_POSITION.setStorageUint256(
+        PRE_COMPLETED_TOTAL_POOLED_ACEER_POSITION.setStorageUint256(
+            preTotalAce
+        );
+        POST_COMPLETED_TOTAL_POOLED_ACEER_POSITION.setStorageUint256(
             postTotalAce
         );
         TIME_ELAPSED_POSITION.setStorageUint256(timeElapsed);
