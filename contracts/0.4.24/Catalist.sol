@@ -193,27 +193,27 @@ contract Catalist is Versioned, BACEPermit {
 
     /// @dev storage slot position for the Catalist protocol contracts locator
     bytes32 internal constant CATALIST_LOCATOR_POSITION =
-        0x9ef78dff90f100ea94042bd00ccb978430524befc391d3e510b5f55ff3166df7; // keccak256("catalist.Catalist.catalistLocator")
+        0xd846dcc6cc8271912ab22557eaae25bec80567e73e5c75846b82a81731216e41; // keccak256("catalist.Catalist.catalistLocator")
     /// @dev storage slot position of the staking rate limit structure
     bytes32 internal constant STAKING_STATE_POSITION =
-        0xa3678de4a579be090bed1177e0a24f77cc29d181ac22fd7688aca344d8938015; // keccak256("catalist.Catalist.stakeLimit");
+        0x2ac4d417d24c70eeb7ae6bacf47d2e95c6f8b69e6d6d7f68c63eb7e97785dd69; // keccak256("catalist.Catalist.stakeLimit");
     /// @dev amount of Ace (on the current Ace side) buffered on this smart contract balance
     bytes32 internal constant BUFFERED_ACE_POSITION =
-        0xed310af23f61f96daefbcd140b306c0bdbf8c178398299741687b90e794772b0; // keccak256("catalist.Catalist.bufferedAce");
+        0x0ed1f698562b5ad14506381442889796f8effd69ac96180bfc3ce0cd1dd537c4; // keccak256("catalist.Catalist.bufferedAce");
     /// @dev number of deposited validators (incrementing counter of deposit operations).
     bytes32 internal constant DEPOSITED_VALIDATORS_POSITION =
-        0xe6e35175eb53fc006520a2a9c3e9711a7c00de6ff2c32dd31df8c5a24cac1b5c; // keccak256("catalist.Catalist.depositedValidators");
+        0x88b5db98ab172fbd866e06aa9505470a0f3d8a522cf6c1de203b939b518a647f; // keccak256("catalist.Catalist.depositedValidators");
     /// @dev total amount of ether on Consensus Layer (sum of all the balances of Catalist validators)
     // "beacon" in the `keccak256()` parameter is staying here for compatibility reason
     bytes32 internal constant CL_BALANCE_POSITION =
-        0xa66d35f054e68143c18f32c990ed5cb972bb68a68f500cd2dd3a16bbf3686483; // keccak256("catalist.Catalist.beaconBalance");
+        0xedd4d9e8b1b678bffca4c023a5d349ab9879eba62d00f79f0e8cdbcd75964289; // keccak256("catalist.Catalist.beaconBalance");
     /// @dev number of Catalist's validators available in the Consensus Layer state
     // "beacon" in the `keccak256()` parameter is staying here for compatibility reason
     bytes32 internal constant CL_VALIDATORS_POSITION =
-        0x9f70001d82b6ef54e9d3725b46581c3eb9ee3aa02b941b6aa54d678a9ca35b10; // keccak256("catalist.Catalist.beaconValidators");
+        0xeeb2882049a86d177014c5163196e50a066d763111bc283004740e8144cb259d; // keccak256("catalist.Catalist.beaconValidators");
     /// @dev Just a counter of total amount of execution layer rewards received by Catalist contract. Not used in the logic.
     bytes32 internal constant TOTAL_EL_REWARDS_COLLECTED_POSITION =
-        0xafe016039542d12eec0183bb0b1ffc2ca45b027126a494672fba4154ee77facb; // keccak256("catalist.Catalist.totalELRewardsCollected");
+        0xf4df98bbf3bf5680a5ed7048d3937043eefd93259b49953a5049481aedb19e1f; // keccak256("catalist.Catalist.totalELRewardsCollected");
 
     // Staking was paused (don't accept user's ether submits)
     event StakingPaused();

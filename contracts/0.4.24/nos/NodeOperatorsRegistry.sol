@@ -167,35 +167,35 @@ contract NodeOperatorsRegistry is Versioned {
     //
     // bytes32 internal constant SIGNING_KEYS_MAPPING_NAME = keccak256("catalist.NodeOperatorsRegistry.signingKeysMappingName");
     bytes32 internal constant SIGNING_KEYS_MAPPING_NAME =
-        0xeb2b7ad4d8ce5610cfb46470f03b14c197c2b751077c70209c5d0139f7c79ee9;
+        0xbbd8409a02490f68701001c6093a797576de9f41e90c3fde72446a2661f3f79e;
 
     // bytes32 internal constant CATALIST_LOCATOR_POSITION = keccak256("catalist.NodeOperatorsRegistry.catalistLocator");
     bytes32 internal constant CATALIST_LOCATOR_POSITION =
-        0xfb2059fd4b64256b64068a0f57046c6d40b9f0e592ba8bcfdf5b941910d03537;
+        0x78cf2ae8585a788d3522cfc8563853b1d42f211c82681f58d76ed57a79ce9792;
 
     /// @dev Total number of operators
     // bytes32 internal constant TOTAL_OPERATORS_COUNT_POSITION = keccak256("catalist.NodeOperatorsRegistry.totalOperatorsCount");
     bytes32 internal constant TOTAL_OPERATORS_COUNT_POSITION =
-        0xe2a589ae0816b289a9d29b7c085f8eba4b5525accca9fa8ff4dba3f5a41287e8;
+        0xa8ba51f4020606b93de19fb95c0a88ab51e3e1e4865f8f848bfd02c7564ad683;
 
     /// @dev Cached number of active operators
     // bytes32 internal constant ACTIVE_OPERATORS_COUNT_POSITION = keccak256("catalist.NodeOperatorsRegistry.activeOperatorsCount");
     bytes32 internal constant ACTIVE_OPERATORS_COUNT_POSITION =
-        0x6f5220989faafdc182d508d697678366f4e831f5f56166ad69bfc253fc548fb1;
+        0x528c4375bd03dacccfa477ddc3cf18a1b2150ec16e2c80a7fbab2ad74863c496;
 
     /// @dev link to the index of operations with keys
     // bytes32 internal constant KEYS_OP_INDEX_POSITION = keccak256("catalist.NodeOperatorsRegistry.keysOpIndex");
     bytes32 internal constant KEYS_OP_INDEX_POSITION =
-        0xcd91478ac3f2620f0776eacb9c24123a214bcb23c32ae7d28278aa846c8c380e;
+        0xae4c74e51db40563c2a0b66cf096045ab6967a654ab458b1a1e514ac889e9916;
 
     /// @dev module type
     // bytes32 internal constant TYPE_POSITION = keccak256("catalist.NodeOperatorsRegistry.type");
     bytes32 internal constant TYPE_POSITION =
-        0xbacf4236659a602d72c631ba0b0d67ec320aaf523f3ae3590d7faee4f42351d0;
+        0x9a0a83f020c011ede7f7462d94ddaa629f46fb9612004a64426e4082655dd757;
 
     // bytes32 internal constant STUCK_PENALTY_DELAY_POSITION = keccak256("catalist.NodeOperatorsRegistry.stuckPenaltyDelay");
     bytes32 internal constant STUCK_PENALTY_DELAY_POSITION =
-        0x8e3a1f3826a82c1116044b334cae49f3c3d12c3866a1c4b18af461e12e58a18e;
+        0xc7e4f0db3aacc0f4459a7ba3f502527b72b0c1415ede72230244c98b8c28c1f4;
 
     mapping(address => bool) private owners;
     mapping(address => bool) private nodeOperatorAddress;
