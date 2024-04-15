@@ -4,7 +4,7 @@ const { hexConcat, pad, ETH, e27, e18, toBN } = require('./utils');
 const fs = require('fs');
 const { DSMAttestMessage } = require('../../test/helpers/signatures');
 
-// RPC_URL=http://20.197.13.207:8545 npx hardhat run scripts/interact/interact-ace-mainnet.js --network ace_mainnet
+// RPC_URL=http://20.197.13.207:8545 npx hardhat run scripts/interact/mainnet-operator.js --network ace_mainnet
 async function main() {
   console.log('Getting the deposit contract...');
   const addresses = JSON.parse(
@@ -58,25 +58,58 @@ async function main() {
   const oracleMemberAddress = '0xB458c332C242247C46e065Cf987a05bAf7612904';
   const testerAddress = '0x26AC28D33EcBf947951d6B7d8a1e6569eE73d076';
 
-  console.log();
-  console.log('Querying add node operator...');
-  const operatorId = await nodeOperatorRegistry.addNodeOperator(
-    'test-operator',
-    deployerAddress
-  );
-  console.log('Operator ID:', operatorId);
+  // console.log();
+  // console.log('Querying add node operator...');
+  // const operatorId = await nodeOperatorRegistry.addNodeOperator(
+  //   'test-operator',
+  //   deployerAddress
+  // );
+  // console.log('Operator ID:', operatorId);
 
-  console.log();
-  console.log('Querying setNodeOperatorStakingLimit()...');
-  const stakingLimit = 1000000000;
-  await nodeOperatorRegistry.setNodeOperatorStakingLimit(
-    operatorId,
-    stakingLimit,
-    {
-      gasLimit: 1000000,
-      gasPrice: 100000,
-    }
-  );
+  // console.log();
+  // console.log('Querying setNodeOperatorStakingLimit()...');
+  // const stakingLimit = 1000000000;
+  // await nodeOperatorRegistry.setNodeOperatorStakingLimit(
+  //   operatorId,
+  //   stakingLimit,
+  //   {
+  //     gasLimit: 1000000,
+  //     gasPrice: 100000,
+  //   }
+  // );
+
+  // console.log();
+  // console.log('Get active node operators count...');
+  // const activeOperatorsCount = await nodeOperatorRegistry.getActiveNodeOperatorsCount({
+  //   gasLimit: 1000000,
+  //   gasPrice: 100000,
+  // });
+  // console.log('Active operators count:', +activeOperatorsCount);
+
+  // console.log();
+  // console.log('Set node operator reward address...');
+  // const operatorId = 0
+  // await nodeOperatorRegistry.setNodeOperatorRewardAddress(
+  //   operatorId,
+  //   testerAddress,
+  //   {
+  //     gasLimit: 1000000,
+  //     gasPrice: 100000,
+  //   }
+  // )
+
+  // console.log()
+  // console.log('Get node operator info...')
+  // const operatorId = 0
+  // const operatorInfo = await nodeOperatorRegistry.getNodeOperator(
+  //   operatorId,
+  //   true,
+  //   {
+  //     gasLimit: 1000000,
+  //     gasPrice: 100000,
+  //   }
+  // )
+  // console.log(operatorInfo)
 }
 
 main()

@@ -434,7 +434,7 @@ contract DepositSecurityModule {
             .getStakingModuleLastDepositBlock(stakingModuleId);
         bool isCatalistCanDeposit = CATALIST.canDeposit();
         return (isModuleActive &&
-            quorum > 0 &&
+            // quorum > 0 &&
             block.number - lastDepositBlock >= minDepositBlockDistance &&
             isCatalistCanDeposit);
     }
@@ -455,17 +455,25 @@ contract DepositSecurityModule {
      *
      * | ATTEST_MESSAGE_PREFIX | blockNumber | blockHash | depositRoot | stakingModuleId | nonce |
      */
+    // function depositBufferedAce(
+    //     uint256 blockNumber,
+    //     bytes32 blockHash,
+    //     bytes32 depositRoot,
+    //     uint256 stakingModuleId,
+    //     uint256 nonce,
+    //     bytes calldata depositCalldata,
+    //     Signature[] calldata sortedGuardianSignatures
+    // ) external onlyOwner {
     function depositBufferedAce(
         uint256 blockNumber,
         bytes32 blockHash,
         bytes32 depositRoot,
         uint256 stakingModuleId,
         uint256 nonce,
-        bytes calldata depositCalldata,
-        Signature[] calldata sortedGuardianSignatures
-    ) external {
-        if (quorum == 0 || sortedGuardianSignatures.length < quorum)
-            revert DepositNoQuorum();
+        bytes calldata depositCalldata
+    ) external onlyOwner {
+        // if (quorum == 0 || sortedGuardianSignatures.length < quorum)
+        //     revert DepositNoQuorum();
 
         bytes32 onchainDepositRoot = IDepositContract(DEPOSIT_CONTRACT)
             .get_deposit_root();
@@ -486,14 +494,14 @@ contract DepositSecurityModule {
         );
         if (nonce != onchainNonce) revert DepositNonceChanged();
 
-        _verifySignatures(
-            depositRoot,
-            blockNumber,
-            blockHash,
-            stakingModuleId,
-            nonce,
-            sortedGuardianSignatures
-        );
+        // _verifySignatures(
+        //     depositRoot,
+        //     blockNumber,
+        //     blockHash,
+        //     stakingModuleId,
+        //     nonce,
+        //     sortedGuardianSignatures
+        // );
 
         CATALIST.deposit(maxDepositsPerBlock, stakingModuleId, depositCalldata);
     }

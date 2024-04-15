@@ -58,7 +58,7 @@
   "hashConsensusForAccountingOracle": {
     "deployParameters": {
       "fastLaneLengthSlots": 10,
-      "epochsPerFrame": 12
+      "epochsPerFrame": 5
     }
   },
   "accountingOracle": {

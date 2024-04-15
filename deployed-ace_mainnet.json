@@ -299,11 +299,11 @@
     },
     "implementation": {
       "contract": "contracts/0.8.9/CatalistLocator.sol",
-      "address": "0x8f744ECF16293801cFB28B4f063D7267cD7541F1",
+      "address": "0x5588fc14f7CE05474dB3CcC39D0905cCde032ac0",
       "constructorArgs": [
         [
           "0xAC9d01Fa37A9492876Ead645D95011795e07bFEE",
-          "0x2A01eC7b698710CB22Ddfb2c95285E10f5ed31cB",
+          "0x91d3cF59cd75963564A4AF443bF111Fc47fBdf72",
           "0x03b6d55847692466aFe580Dcc9750874138d6204",
           "0x342B3AA29a7425bcd0dB61d7c8Ca2D1D66AE7CED",
           "0x23bBA284db799Ca49381bEA734F1A55f14692f5c",
@@ -377,7 +377,7 @@
       "pauseIntentValidityPeriodBlocks": 6646
     },
     "contract": "contracts/0.8.9/DepositSecurityModule.sol",
-    "address": "0x2A01eC7b698710CB22Ddfb2c95285E10f5ed31cB",
+    "address": "0x91d3cF59cd75963564A4AF443bF111Fc47fBdf72",
     "constructorArgs": [
       "0x23bBA284db799Ca49381bEA734F1A55f14692f5c",
       "0xace0000000000000000000000000000000000aCe",
