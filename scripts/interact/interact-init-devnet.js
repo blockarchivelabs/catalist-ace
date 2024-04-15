@@ -46,7 +46,11 @@ async function main() {
   console.log('Grant RESUME_ROLE to deployer in WithdrawalQueue...')
   await withdrawalQueueERC721.grantRole(
     await withdrawalQueueERC721.RESUME_ROLE({gasLimit: 1000000, gasPrice: 100000}),
-    deployerAddress
+    deployerAddress,
+    {
+      gasLimit: 1000000,
+      gasPrice: 100000,
+    }
   )
 
   console.log()
@@ -61,11 +65,19 @@ async function main() {
   console.log('Grant MANAGE_MEMBERS_AND_QUORUM_ROLE to deployer in HashConsensus...')
   await hashConsensusForAccountingOracle.grantRole(
     await hashConsensusForAccountingOracle.MANAGE_MEMBERS_AND_QUORUM_ROLE({gasLimit: 1000000, gasPrice: 100000}), 
-    deployerAddress
+    deployerAddress,
+    {
+      gasLimit: 1000000,
+      gasPrice: 100000,
+    }
   )
   await hashConsensusForValidatorsExitBusOracle.grantRole(
     await hashConsensusForValidatorsExitBusOracle.MANAGE_MEMBERS_AND_QUORUM_ROLE({gasLimit: 1000000, gasPrice: 100000}), 
-    deployerAddress
+    deployerAddress,
+    {
+      gasLimit: 1000000,
+      gasPrice: 100000,
+    }
   )
   
   console.log()
