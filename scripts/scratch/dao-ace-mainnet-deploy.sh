@@ -37,3 +37,5 @@ export GAS_PRIORITY_FEE="${GAS_PRIORITY_FEE:=1}"
 export GAS_MAX_FEE="${GAS_MAX_FEE:=100}"
 
 bash scripts/scratch/dao-deploy.sh
+
+npx hardhat run scripts/interact/interact-init-mainnet.js --network ace_mainnet
