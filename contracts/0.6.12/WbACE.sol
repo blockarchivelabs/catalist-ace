@@ -35,8 +35,8 @@ contract WbACE is ERC20Permit {
         IBACE _bACE
     )
         public
-        ERC20Permit("Wrapped liquid staked Ace 2.0")
-        ERC20("Wrapped liquid staked Ace 2.0", "wbACE")
+        ERC20Permit("Wrapped Bond Ace")
+        ERC20("Wrapped Bond Ace", "wbACE")
     {
         bACE = _bACE;
     }
