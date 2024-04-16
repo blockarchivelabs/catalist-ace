@@ -148,13 +148,25 @@ async function main() {
 
   console.log()
   console.log('Resume staking module...')
+  const STAKING_MODULE_ID = 1
   await stakingRouter.resumeStakingModule(
-    1,
+    STAKING_MODULE_ID,
     {
       gasLimit: 1000000,
       gasPrice: 100000,
     }
   )
+
+  console.log()
+  console.log('Check staking module status...')
+  const stakingModuleStatus = await stakingRouter.stakingModuleStatus(
+    STAKING_MODULE_ID,
+    {
+      gasLimit: 1000000,
+      gasPrice: 100000,
+    }
+  )
+  console.log('- status:', stakingModuleStatus)
 
   console.log()
   console.log('Complete.')

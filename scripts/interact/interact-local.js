@@ -4,24 +4,56 @@ const { hexConcat, pad, ETH, e27, e18, toBN } = require('./utils')
 const { getEventArgument, ZERO_ADDRESS } = require('@aragon/contract-helpers-test')
 const fs = require('fs')
 
+// RPC_URL=http://127.0.0.1:8545 npx hardhat run scripts/interact/interact-local.js --network local
 async function main() {
   console.log('Getting the deposit contract...')
-  const addresses = JSON.parse(fs.readFileSync('./deployed-local.json', 'utf-8'))
+  const fileName = './deployed-local.json'
+  const addresses = JSON.parse(fs.readFileSync(fileName, 'utf-8'))
   const CatalistAddress = addresses['app:catalist'].proxy.address
-  const HashConsensusAddress = addresses.hashConsensusForAccountingOracle.address
+  const HashConsensusForAccountingOracleAddress = addresses.hashConsensusForAccountingOracle.address
+  const HashConsensusForValidatorsExitBusOracle = addresses.hashConsensusForValidatorsExitBusOracle.address
+  const NodeOperatorRegistryAddress = addresses['app:node-operators-registry'].proxy.address
   const StakingRouterAddress = addresses.stakingRouter.proxy.address
   const AccountingOracleAddress = addresses.accountingOracle.proxy.address
   const WithdrawalQueueERC721Address = addresses.withdrawalQueueERC721.proxy.address
-  const NodeOperatorsRegistryAddress = addresses['app:node-operators-registry'].proxy.address
-  
+  const DepositSecurityModuleAddress = addresses.depositSecurityModule.address
+  const ValidatorsExitBusOracleAddress = addresses.validatorsExitBusOracle.proxy.address
+
   const catalist = await ethers.getContractAt('Catalist', CatalistAddress)
-  const hashConsensus = await ethers.getContractAt('HashConsensus', HashConsensusAddress)
+  const hashConsensusForAccountingOracle = await ethers.getContractAt('HashConsensus', HashConsensusForAccountingOracleAddress)
+  const hashConsensusForValidatorsExitBusOracle = await ethers.getContractAt('HashConsensus', HashConsensusForValidatorsExitBusOracle)
   const stakingRouter = await ethers.getContractAt('StakingRouter', StakingRouterAddress)
-  const withdrawalQueueERC721 = await ethers.getContractAt('WithdrawalQueueERC721', WithdrawalQueueERC721Address)
   const accountingOracle = await ethers.getContractAt('AccountingOracle', AccountingOracleAddress)
-  const nodeOperatorsRegistry = await ethers.getContractAt('NodeOperatorsRegistry', NodeOperatorsRegistryAddress)
+  const withdrawalQueueERC721 = await ethers.getContractAt('WithdrawalQueueERC721', WithdrawalQueueERC721Address)
+  const nodeOperatorRegistry = await ethers.getContractAt('NodeOperatorsRegistry', NodeOperatorRegistryAddress)
+  const depositSecurityModule = await ethers.getContractAt('DepositSecurityModule', DepositSecurityModuleAddress)
+  const validatorsExitBusOracle = await ethers.getContractAt('ValidatorsExitBusOracle', ValidatorsExitBusOracleAddress)
+
+  const chainSpec = JSON.parse(fs.readFileSync(fileName, 'utf-8')).chainSpec
+  const GENESIS_TIME = chainSpec.genesisTime
+  const SLOTS_PER_EPOCH = chainSpec.slotsPerEpoch
+  const SECONDS_PER_SLOT = chainSpec.secondsPerSlot
 
   const [owner, ad1] = await ethers.getSigners()
+  const deployerAddress = owner.address
+  const oracleMemberAddress = ad1.address
+
+  console.log()
+  console.log('Querying update initial epoch...')
+  const latestBlockTimestamp = (await ethers.provider.getBlock('latest')).timestamp
+  const initialEpoch = Math.floor((latestBlockTimestamp - GENESIS_TIME)
+    / (SLOTS_PER_EPOCH * SECONDS_PER_SLOT))
+  await hashConsensusForAccountingOracle.connect(owner).updateInitialEpoch(initialEpoch, {
+    gasLimit: 1000000,
+    gasPrice: 1000000000,
+  })
+  await hashConsensusForValidatorsExitBusOracle.connect(owner).updateInitialEpoch(initialEpoch, {
+    gasLimit: 1000000,
+    gasPrice: 1000000000,
+  })
+  console.log('- Latest Block Timestamp:', latestBlockTimestamp)
+  console.log('- Initial Epoch:', initialEpoch)
+
 
   // console.log()
   // console.log('Querying get member...')

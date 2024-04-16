@@ -274,7 +274,7 @@ contract Burner is IBurner, AccessControlEnumerable {
     }
 
     /**
-     * Intentionally deny incoming ether
+     * Intentionally deny incoming ace
      */
     receive() external payable {
         revert DirectACETransfer();

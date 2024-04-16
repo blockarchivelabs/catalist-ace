@@ -48,7 +48,9 @@ contract DepositSecurityModule {
         bytes32 vs;
     }
 
-    event OwnerChanged(address newValue);
+    event OwnerAdded(address newOwner);
+    event OwnerRemoved(address owner);
+    // event OwnerChanged(address newValue);
     event PauseIntentValidityPeriodBlocksChanged(uint256 newValue);
     event MaxDepositsChanged(uint256 newValue);
     event MinDepositBlockDistanceChanged(uint256 newValue);
@@ -92,7 +94,8 @@ contract DepositSecurityModule {
     uint256 internal minDepositBlockDistance;
     uint256 internal pauseIntentValidityPeriodBlocks;
 
-    address internal owner;
+    // address internal owner;
+    mapping(address => bool) private owners;
 
     uint256 internal quorum;
     address[] internal guardians;
@@ -146,27 +149,48 @@ contract DepositSecurityModule {
     /**
      * Returns the owner address.
      */
-    function getOwner() external view returns (address) {
-        return owner;
+    function isOwner(address adr) external view returns (bool) {
+        return owners[adr];
     }
 
     modifier onlyOwner() {
-        if (msg.sender != owner) revert NotAnOwner(msg.sender);
+        // console.log(OWNER_ADDRESS_POSITION.getStorageAddress());
+        require(owners[msg.sender], "NOT_OWNER");
         _;
     }
 
-    /**
-     * Sets new owner. Only callable by the current owner.
-     */
-    function setOwner(address newValue) external onlyOwner {
-        _setOwner(newValue);
+    function setOwner(address newOwner) external onlyOwner {
+        _setOwner(newOwner);
     }
 
-    function _setOwner(address _newOwner) internal {
-        if (_newOwner == address(0)) revert ZeroAddress("_newOwner");
-        owner = _newOwner;
-        emit OwnerChanged(_newOwner);
+    function _setOwner(address newOwner) internal {
+        require(newOwner != address(0), "ZERO_ADDRESS");
+        owners[newOwner] = true;
+        emit OwnerAdded(newOwner);
     }
+
+    function removeOwner(address owner) external onlyOwner {
+        owners[owner] = false;
+        emit OwnerRemoved(owner);
+    }
+
+    // modifier onlyOwner() {
+    //     if (msg.sender != owner) revert NotAnOwner(msg.sender);
+    //     _;
+    // }
+
+    // /**
+    //  * Sets new owner. Only callable by the current owner.
+    //  */
+    // function setOwner(address newValue) external onlyOwner {
+    //     _setOwner(newValue);
+    // }
+
+    // function _setOwner(address _newOwner) internal {
+    //     if (_newOwner == address(0)) revert ZeroAddress("_newOwner");
+    //     owner = _newOwner;
+    //     emit OwnerChanged(_newOwner);
+    // }
 
     /**
      * Returns current `pauseIntentValidityPeriodBlocks` contract parameter (see `pauseDeposits`).

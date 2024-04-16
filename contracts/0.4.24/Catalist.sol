@@ -4,7 +4,7 @@
 /* See contracts/COMPILERS.md */
 pragma solidity 0.4.24;
 
-// import "@aragon/os/contracts/apps/AragonApp.sol";
+import "@aragon/os/contracts/apps/AragonApp.sol";
 import "@aragon/os/contracts/lib/math/SafeMath.sol";
 
 import "../common/interfaces/ICatalistLocator.sol";
@@ -51,7 +51,7 @@ interface IOracleReportSanityChecker {
         uint256 _withdrawalVaultBalance,
         uint256 _elRewardsVaultBalance,
         uint256 _sharesRequestedToBurn,
-        uint256 _etherToLockForWithdrawals,
+        uint256 _aceToLockForWithdrawals,
         uint256 _newSharesToBurnForWithdrawals
     )
         external
@@ -71,7 +71,7 @@ interface IOracleReportSanityChecker {
     function checkSimulatedShareRate(
         uint256 _postTotalPooledAce,
         uint256 _postTotalShares,
-        uint256 _etherLockedOnWithdrawalQueue,
+        uint256 _aceLockedOnWithdrawalQueue,
         uint256 _sharesBurntDueToWithdrawals,
         uint256 _simulatedShareRate
     ) external view;
@@ -203,7 +203,7 @@ contract Catalist is Versioned, BACEPermit {
     /// @dev number of deposited validators (incrementing counter of deposit operations).
     bytes32 internal constant DEPOSITED_VALIDATORS_POSITION =
         0x88b5db98ab172fbd866e06aa9505470a0f3d8a522cf6c1de203b939b518a647f; // keccak256("catalist.Catalist.depositedValidators");
-    /// @dev total amount of ether on Consensus Layer (sum of all the balances of Catalist validators)
+    /// @dev total amount of ace on Consensus Layer (sum of all the balances of Catalist validators)
     // "beacon" in the `keccak256()` parameter is staying here for compatibility reason
     bytes32 internal constant CL_BALANCE_POSITION =
         0xedd4d9e8b1b678bffca4c023a5d349ab9879eba62d00f79f0e8cdbcd75964289; // keccak256("catalist.Catalist.beaconBalance");
@@ -215,9 +215,9 @@ contract Catalist is Versioned, BACEPermit {
     bytes32 internal constant TOTAL_EL_REWARDS_COLLECTED_POSITION =
         0xf4df98bbf3bf5680a5ed7048d3937043eefd93259b49953a5049481aedb19e1f; // keccak256("catalist.Catalist.totalELRewardsCollected");
 
-    // Staking was paused (don't accept user's ether submits)
+    // Staking was paused (don't accept user's ace submits)
     event StakingPaused();
-    // Staking was resumed (accept user's ether submits)
+    // Staking was resumed (accept user's ace submits)
     event StakingResumed();
     // Staking limit was set (rate limits user's submits)
     event StakingLimitSet(
@@ -270,7 +270,7 @@ contract Catalist is Versioned, BACEPermit {
     // Records a deposit made by a user
     event Submitted(address indexed sender, uint256 amount, address referral);
 
-    // The `amount` of ether was sent to the deposit_contract.deposit function
+    // The `amount` of ace was sent to the deposit_contract.deposit function
     event Unbuffered(uint256 amount);
 
     mapping(address => bool) private owners;
@@ -641,7 +641,7 @@ contract Catalist is Versioned, BACEPermit {
      * while passing empty `_withdrawalFinalizationBatches` and `_simulatedShareRate` == 0, plugging the returned values
      * to the following formula: `_simulatedShareRate = (postTotalPooledAce * 1e27) / postTotalShares`
      *
-     * @return postRebaseAmounts[0]: `postTotalPooledAce` amount of ether in the protocol after report
+     * @return postRebaseAmounts[0]: `postTotalPooledAce` amount of ace in the protocol after report
      * @return postRebaseAmounts[1]: `postTotalShares` amount of shares in the protocol after report
      * @return postRebaseAmounts[2]: `withdrawals` withdrawn from the withdrawals vault
      * @return postRebaseAmounts[3]: `elRewards` withdrawn from the execution layer rewards vault
@@ -739,7 +739,7 @@ contract Catalist is Versioned, BACEPermit {
      * @notice Returns the key values related to Consensus Layer side of the contract. It historically contains beacon
      * @return depositedValidators - number of deposited validators from Catalist contract side
      * @return beaconValidators - number of Catalist validators visible on Consensus Layer, reported by oracle
-     * @return beaconBalance - total amount of ether on the Consensus Layer side (sum of all the balances of Catalist validators)
+     * @return beaconBalance - total amount of ace on the Consensus Layer side (sum of all the balances of Catalist validators)
      *
      * @dev `beacon` in naming still here for historical reasons
      */
@@ -758,7 +758,7 @@ contract Catalist is Versioned, BACEPermit {
     }
 
     /**
-     * @dev Check that Catalist allows depositing buffered ether to the consensus layer
+     * @dev Check that Catalist allows depositing buffered ace to the consensus layer
      * Depends on the bunker state and protocol's pause state
      */
     function canDeposit() public view returns (bool) {
@@ -766,7 +766,7 @@ contract Catalist is Versioned, BACEPermit {
     }
 
     /**
-     * @dev Returns depositable ether amount.
+     * @dev Returns depositable ace amount.
      * Takes into account unfinalized bACE required by WithdrawalQueue
      */
     function getDepositableAce() public view returns (uint256) {
@@ -825,9 +825,9 @@ contract Catalist is Versioned, BACEPermit {
             emit DepositedValidatorsChanged(newDepositedValidators);
         }
 
-        /// @dev transfer ether to StakingRouter and make a deposit at the same time. All the ether
+        /// @dev transfer ace to StakingRouter and make a deposit at the same time. All the ace
         ///     sent to StakingRouter is counted as deposited. If StakingRouter can't deposit all
-        ///     passed ether it MUST revert the whole transaction (never happens in normal circumstances)
+        ///     passed ace it MUST revert the whole transaction (never happens in normal circumstances)
         stakingRouter.deposit.value(depositsValue)(
             depositsCount,
             _stakingModuleId,
@@ -966,7 +966,7 @@ contract Catalist is Versioned, BACEPermit {
         uint256 _elRewardsToWithdraw,
         uint256[] _withdrawalFinalizationBatches,
         uint256 _simulatedShareRate,
-        uint256 _etherToLockOnWithdrawalQueue
+        uint256 _aceToLockOnWithdrawalQueue
     ) internal {
         // withdraw execution layer rewards and put them to the buffer
         if (_elRewardsToWithdraw > 0) {
@@ -981,12 +981,12 @@ contract Catalist is Versioned, BACEPermit {
             );
         }
 
-        // finalize withdrawals (send ether, assign shares for burning)
-        if (_etherToLockOnWithdrawalQueue > 0) {
+        // finalize withdrawals (send ace, assign shares for burning)
+        if (_aceToLockOnWithdrawalQueue > 0) {
             IWithdrawalQueue withdrawalQueue = IWithdrawalQueue(
                 _contracts.withdrawalQueue
             );
-            withdrawalQueue.finalize.value(_etherToLockOnWithdrawalQueue)(
+            withdrawalQueue.finalize.value(_aceToLockOnWithdrawalQueue)(
                 _withdrawalFinalizationBatches[
                     _withdrawalFinalizationBatches.length - 1
                 ],
@@ -997,7 +997,7 @@ contract Catalist is Versioned, BACEPermit {
         uint256 postBufferedAce = _getBufferedAce()
             .add(_elRewardsToWithdraw)
             .add(_withdrawalsToWithdraw)
-            .sub(_etherToLockOnWithdrawalQueue); // Collected from ELVault // Collected from WithdrawalVault // Sent to WithdrawalQueue
+            .sub(_aceToLockOnWithdrawalQueue); // Collected from ELVault // Collected from WithdrawalVault // Sent to WithdrawalQueue
 
         _setBufferedAce(postBufferedAce);
     }
@@ -1009,7 +1009,7 @@ contract Catalist is Versioned, BACEPermit {
     function _calculateWithdrawals(
         OracleReportContracts memory _contracts,
         OracleReportedData memory _reportedData
-    ) internal view returns (uint256 etherToLock, uint256 sharesToBurn) {
+    ) internal view returns (uint256 aceToLock, uint256 sharesToBurn) {
         IWithdrawalQueue withdrawalQueue = IWithdrawalQueue(
             _contracts.withdrawalQueue
         );
@@ -1023,7 +1023,7 @@ contract Catalist is Versioned, BACEPermit {
                     _reportedData.reportTimestamp
                 );
 
-            (etherToLock, sharesToBurn) = withdrawalQueue.prefinalize(
+            (aceToLock, sharesToBurn) = withdrawalQueue.prefinalize(
                 _reportedData.withdrawalFinalizationBatches,
                 _reportedData.simulatedShareRate
             );
@@ -1332,7 +1332,7 @@ contract Catalist is Versioned, BACEPermit {
         uint256 preCLBalance;
         uint256 preTotalPooledAce;
         uint256 preTotalShares;
-        uint256 etherToLockOnWithdrawalQueue;
+        uint256 aceToLockOnWithdrawalQueue;
         uint256 sharesToBurnFromWithdrawalQueue;
         uint256 simulatedSharesToBurn;
         uint256 sharesToBurn;
@@ -1347,7 +1347,7 @@ contract Catalist is Versioned, BACEPermit {
      * Key steps:
      * 1. Take a snapshot of the current (pre-) state
      * 2. Pass the report data to sanity checker (reverts if malformed)
-     * 3. Pre-calculate the ether to lock for withdrawal queue and shares to be burnt
+     * 3. Pre-calculate the ace to lock for withdrawal queue and shares to be burnt
      * 4. Pass the accounting values to sanity checker to smoothen positive token rebase
      *    (i.e., postpone the extra rewards to be applied during the next rounds)
      * 5. Invoke finalization of the withdrawal requests
@@ -1387,11 +1387,11 @@ contract Catalist is Versioned, BACEPermit {
         _checkAccountingOracleReport(contracts, _reportedData, reportContext);
 
         // Step 3.
-        // Pre-calculate the ether to lock for withdrawal queue and shares to be burnt
+        // Pre-calculate the ace to lock for withdrawal queue and shares to be burnt
         // due to withdrawal requests to finalize
         if (_reportedData.withdrawalFinalizationBatches.length != 0) {
             (
-                reportContext.etherToLockOnWithdrawalQueue,
+                reportContext.aceToLockOnWithdrawalQueue,
                 reportContext.sharesToBurnFromWithdrawalQueue
             ) = _calculateWithdrawals(contracts, _reportedData);
 
@@ -1422,19 +1422,19 @@ contract Catalist is Versioned, BACEPermit {
                 _reportedData.withdrawalVaultBalance,
                 _reportedData.elRewardsVaultBalance,
                 _reportedData.sharesRequestedToBurn,
-                reportContext.etherToLockOnWithdrawalQueue,
+                reportContext.aceToLockOnWithdrawalQueue,
                 reportContext.sharesToBurnFromWithdrawalQueue
             );
 
         // Step 5.
-        // Invoke finalization of the withdrawal requests (send ether to withdrawal queue, assign shares to be burnt)
+        // Invoke finalization of the withdrawal requests (send ace to withdrawal queue, assign shares to be burnt)
         _collectRewardsAndProcessWithdrawals(
             contracts,
             withdrawals,
             elRewards,
             _reportedData.withdrawalFinalizationBatches,
             _reportedData.simulatedShareRate,
-            reportContext.etherToLockOnWithdrawalQueue
+            reportContext.aceToLockOnWithdrawalQueue
         );
 
         emit ACEDistributed(
@@ -1481,7 +1481,7 @@ contract Catalist is Versioned, BACEPermit {
                 .checkSimulatedShareRate(
                     postTotalPooledAce,
                     postTotalShares,
-                    reportContext.etherToLockOnWithdrawalQueue,
+                    reportContext.aceToLockOnWithdrawalQueue,
                     reportContext.sharesToBurn.sub(
                         reportContext.simulatedSharesToBurn
                     ),

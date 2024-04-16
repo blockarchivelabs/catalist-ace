@@ -15,7 +15,7 @@ import {Math256} from "../../common/lib/Math256.sol";
  *
  * The limiter allows to account for:
  * - consensus layer balance updates (can be either positive or negative)
- * - total pooled ether changes (withdrawing funds from vaults on execution layer)
+ * - total pooled ace changes (withdrawing funds from vaults on execution layer)
  * - total shares changes (burning due to coverage, NOR penalization, withdrawals finalization, etc.)
  */
 
@@ -23,11 +23,11 @@ import {Math256} from "../../common/lib/Math256.sol";
  * @dev Internal limiter representation struct (storing in memory)
  */
 struct TokenRebaseLimiterData {
-    uint256 preTotalPooledAce; // pre-rebase total pooled ether
+    uint256 preTotalPooledAce; // pre-rebase total pooled ace
     uint256 preTotalShares; // pre-rebase total shares
-    uint256 currentTotalPooledAce; // intermediate total pooled ether amount while token rebase is in progress
+    uint256 currentTotalPooledAce; // intermediate total pooled ace amount while token rebase is in progress
     uint256 positiveRebaseLimit; // positive rebase limit (target value) with 1e9 precision (`LIMITER_PRECISION_BASE`)
-    uint256 maxTotalPooledAce; // maximum total pooled ether that still fits into the positive rebase limit (cached)
+    uint256 maxTotalPooledAce; // maximum total pooled ace that still fits into the positive rebase limit (cached)
 }
 
 /**
@@ -36,10 +36,10 @@ struct TokenRebaseLimiterData {
  *
  * Conventions:
  *     R - token rebase limit (i.e, {postShareRate / preShareRate - 1} <= R);
- *   inc - total pooled ether increase;
+ *   inc - total pooled ace increase;
  *   dec - total shares decrease.
  *
- * ### Step 1. Calculating the allowed total pooled ether changes (preTotalShares === postTotalShares)
+ * ### Step 1. Calculating the allowed total pooled ace changes (preTotalShares === postTotalShares)
  *     Used for `PositiveTokenRebaseLimiter.increaseAce()`, `PositiveTokenRebaseLimiter.decreaseAce()`.
  *
  * R = ((preTotalPooledAce + inc) / preTotalShares) / (preTotalPooledAce / preTotalShares) - 1
@@ -76,7 +76,7 @@ library PositiveTokenRebaseLimiter {
     /**
      * @dev Initialize the new `LimiterState` structure instance
      * @param _rebaseLimit max limiter value (saturation point), see `LIMITER_PRECISION_BASE`
-     * @param _preTotalPooledAce pre-rebase total pooled ether, see `Catalist.getTotalPooledAce()`
+     * @param _preTotalPooledAce pre-rebase total pooled ace, see `Catalist.getTotalPooledAce()`
      * @param _preTotalShares pre-rebase total shares, see `Catalist.getTotalShares()`
      * @return limiterState newly initialized limiter structure
      */
@@ -120,37 +120,37 @@ library PositiveTokenRebaseLimiter {
     }
 
     /**
-     * @notice decrease total pooled ether by the given amount of ether
+     * @notice decrease total pooled ace by the given amount of ace
      * @param _limiterState limit repr struct
-     * @param _etherAmount amount of ether to decrease
+     * @param _aceAmount amount of ace to decrease
      */
     function decreaseAce(
         TokenRebaseLimiterData memory _limiterState,
-        uint256 _etherAmount
+        uint256 _aceAmount
     ) internal pure {
         if (_limiterState.positiveRebaseLimit == UNLIMITED_REBASE) return;
 
-        if (_etherAmount > _limiterState.currentTotalPooledAce)
+        if (_aceAmount > _limiterState.currentTotalPooledAce)
             revert NegativeTotalPooledAce();
 
-        _limiterState.currentTotalPooledAce -= _etherAmount;
+        _limiterState.currentTotalPooledAce -= _aceAmount;
     }
 
     /**
-     * @dev increase total pooled ether up to the limit and return the consumed value (not exceeding the limit)
+     * @dev increase total pooled ace up to the limit and return the consumed value (not exceeding the limit)
      * @param _limiterState limit repr struct
-     * @param _etherAmount desired ether addition
-     * @return consumedAce appended ether still not exceeding the limit
+     * @param _aceAmount desired ace addition
+     * @return consumedAce appended ace still not exceeding the limit
      */
     function increaseAce(
         TokenRebaseLimiterData memory _limiterState,
-        uint256 _etherAmount
+        uint256 _aceAmount
     ) internal pure returns (uint256 consumedAce) {
         if (_limiterState.positiveRebaseLimit == UNLIMITED_REBASE)
-            return _etherAmount;
+            return _aceAmount;
 
         uint256 prevPooledAce = _limiterState.currentTotalPooledAce;
-        _limiterState.currentTotalPooledAce += _etherAmount;
+        _limiterState.currentTotalPooledAce += _aceAmount;
 
         _limiterState.currentTotalPooledAce = Math256.min(
             _limiterState.currentTotalPooledAce,

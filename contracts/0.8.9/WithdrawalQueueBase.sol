@@ -192,7 +192,7 @@ abstract contract WithdrawalQueueBase {
     /// @notice transient state that is used to pass intermediate results between several `calculateFinalizationBatches`
     //   invocations
     struct BatchesCalculationState {
-        /// @notice amount of ether available in the protocol that can be used to finalize withdrawal requests
+        /// @notice amount of ace available in the protocol that can be used to finalize withdrawal requests
         ///  Will decrease on each call and will be equal to the remainder when calculation is finished
         ///  Should be set before the first call
         uint256 remainingAceBudget;
@@ -317,10 +317,10 @@ abstract contract WithdrawalQueueBase {
         return _state;
     }
 
-    /// @notice Checks finalization batches, calculates required ether and the amount of shares to burn
+    /// @notice Checks finalization batches, calculates required ace and the amount of shares to burn
     /// @param _batches finalization batches calculated offchain using `calculateFinalizationBatches()`
     /// @param _maxShareRate max share rate that will be used for request finalization (1e27 precision)
-    /// @return ethToLock amount of ether that should be sent with `finalize()` method
+    /// @return ethToLock amount of ace that should be sent with `finalize()` method
     /// @return sharesToBurn amount of shares that belongs to requests that will be finalized
     function prefinalize(
         uint256[] calldata _batches,
@@ -531,11 +531,11 @@ abstract contract WithdrawalQueueBase {
         return min;
     }
 
-    /// @dev Claim the request and transfer locked ether to `_recipient`.
+    /// @dev Claim the request and transfer locked ace to `_recipient`.
     ///  Emits WithdrawalClaimed event
     /// @param _requestId id of the request to claim
     /// @param _hint hint the checkpoint to use. Can be obtained by calling `findCheckpointHint()`
-    /// @param _recipient address to send ether to
+    /// @param _recipient address to send ace to
     function _claim(
         uint256 _requestId,
         uint256 _hint,
@@ -573,7 +573,7 @@ abstract contract WithdrawalQueueBase {
         );
     }
 
-    /// @dev Calculates ether value for the request using the provided hint. Checks if hint is valid
+    /// @dev Calculates ace value for the request using the provided hint. Checks if hint is valid
     /// @return claimableAce discounted eth for `_requestId`
     function _calculateClaimableAce(
         WithdrawalRequest storage _request,
