@@ -97,8 +97,8 @@ const getNetConfig = (networkName, ethAccountName) => {
       chainId: 648,
       // ensAddress: netState.ensAddress,
       accounts: ['f11a771308f235a1331b098d0212db69ac049e56c9f1e0da739a39e8b743363c'],
-      gasPrice: 10100,
-      gas: 1000000,
+      // gasPrice: 10100,
+      // gas: 1000000,
     },
     goerli: {
       ...base,
