@@ -28,6 +28,7 @@ import "@aragon/id/contracts/IFIFSResolvingRegistrar.sol";
 import "../Catalist.sol";
 import "../oracle/LegacyOracle.sol";
 import "../nos/NodeOperatorsRegistry.sol";
+import "hardhat/console.sol";
 
 contract CatalistTemplate is IsContract {
     // Configuration errors
@@ -495,10 +496,10 @@ contract CatalistTemplate is IsContract {
         // }
 
         _setupPermissions(state, repos);
-        // _transferRootPermissionsFromTemplateAndFinalizeDAO(
-        //     state.dao,
-        //     state.voting
-        // );
+        _transferRootPermissionsFromTemplateAndFinalizeDAO(
+            state.dao,
+            msg.sender
+        );
         _resetState();
 
         // aragonID.register(keccak256(abi.encodePacked(_daoName)), state.dao);
@@ -693,7 +694,7 @@ contract CatalistTemplate is IsContract {
         // _createAgentPermissions(acl, _state.agent, voting);
         // _createVaultPermissions(acl, _state.agent, _state.finance, voting);
         // _createFinancePermissions(acl, _state.finance, voting);
-        // _createEvmScriptsRegistryPermissions(acl, voting);
+        _createEvmScriptsRegistryPermissions(acl, msg.sender);
         // _createVotingPermissions(acl, voting, _state.tokenManager);
         // _configureTokenManagerPermissions(acl, _state.tokenManager, voting);
 
@@ -708,90 +709,111 @@ contract CatalistTemplate is IsContract {
             .catalistRegistry
             .registrar();
 
-        // _transferPermissionFromTemplate(
-        //     apmACL,
-        //     _state.catalistRegistry,
-        //     voting,
-        //     _state.catalistRegistry.CREATE_REPO_ROLE()
+        _transferPermissionFromTemplate(
+            apmACL,
+            _state.catalistRegistry,
+            msg.sender,
+            _state.catalistRegistry.CREATE_REPO_ROLE()
+        );
+        apmACL.setPermissionManager(
+            msg.sender,
+            apmDAO,
+            apmDAO.APP_MANAGER_ROLE()
+        );
+        apmACL.grantPermission(msg.sender, apmDAO, apmDAO.APP_MANAGER_ROLE());
+        // apmACL.grantPermissionP(
+        //     msg.sender,
+        //     apmDAO,
+        //     apmDAO.APP_MANAGER_ROLE(),
+        //     arr(_namespace, _appId)
         // );
-        // apmACL.setPermissionManager(voting, apmDAO, apmDAO.APP_MANAGER_ROLE());
-        // _transferPermissionFromTemplate(
-        //     apmACL,
-        //     apmACL,
-        //     voting,
-        //     apmACL.CREATE_PERMISSIONS_ROLE()
-        // );
-        // apmACL.setPermissionManager(
-        //     voting,
-        //     apmRegistrar,
-        //     apmRegistrar.CREATE_NAME_ROLE()
-        // );
-        // apmACL.setPermissionManager(
-        //     voting,
-        //     apmRegistrar,
-        //     apmRegistrar.POINT_ROOTNODE_ROLE()
-        // );
+        _transferPermissionFromTemplate(
+            apmACL,
+            apmACL,
+            msg.sender,
+            apmACL.CREATE_PERMISSIONS_ROLE()
+        );
+        apmACL.setPermissionManager(
+            msg.sender,
+            apmRegistrar,
+            apmRegistrar.CREATE_NAME_ROLE()
+        );
+        apmACL.setPermissionManager(
+            msg.sender,
+            apmRegistrar,
+            apmRegistrar.POINT_ROOTNODE_ROLE()
+        );
 
         // APM repos
 
         // using loops to save contract size
-        // Repo[10] memory repoAddresses;
-        // repoAddresses[0] = _repos.catalist;
-        // repoAddresses[1] = _repos.oracle;
-        // repoAddresses[2] = _repos.nodeOperatorsRegistry;
-        // repoAddresses[3] = _repos.aragonAgent;
-        // repoAddresses[4] = _repos.aragonFinance;
-        // repoAddresses[5] = _repos.aragonTokenManager;
-        // repoAddresses[6] = _repos.aragonVoting;
-        // repoAddresses[7] = _resolveRepo(
-        //     _getAppId(APM_APP_NAME, _state.catalistRegistryEnsNode)
-        // );
-        // repoAddresses[8] = _resolveRepo(
-        //     _getAppId(APM_REPO_APP_NAME, _state.catalistRegistryEnsNode)
-        // );
-        // repoAddresses[9] = _resolveRepo(
-        //     _getAppId(APM_ENSSUB_APP_NAME, _state.catalistRegistryEnsNode)
-        // );
-        // for (uint256 i = 0; i < repoAddresses.length; ++i) {
-        //     _transferPermissionFromTemplate(
-        //         apmACL,
-        //         repoAddresses[i],
-        //         voting,
-        //         REPO_CREATE_VERSION_ROLE
-        //     );
-        // }
+        Repo[10] memory repoAddresses;
+        repoAddresses[0] = _repos.catalist;
+        repoAddresses[1] = _repos.oracle;
+        repoAddresses[2] = _repos.nodeOperatorsRegistry;
+        repoAddresses[3] = _repos.aragonAgent;
+        repoAddresses[4] = _repos.aragonFinance;
+        repoAddresses[5] = _repos.aragonTokenManager;
+        repoAddresses[6] = _repos.aragonVoting;
+        repoAddresses[7] = _resolveRepo(
+            _getAppId(APM_APP_NAME, _state.catalistRegistryEnsNode)
+        );
+        repoAddresses[8] = _resolveRepo(
+            _getAppId(APM_REPO_APP_NAME, _state.catalistRegistryEnsNode)
+        );
+        repoAddresses[9] = _resolveRepo(
+            _getAppId(APM_ENSSUB_APP_NAME, _state.catalistRegistryEnsNode)
+        );
+        for (uint256 i = 0; i < repoAddresses.length; ++i) {
+            _transferPermissionFromTemplate(
+                apmACL,
+                repoAddresses[i],
+                msg.sender,
+                REPO_CREATE_VERSION_ROLE
+            );
+        }
 
-        // // using loops to save contract size
-        // bytes32[6] memory perms;
+        // using loops to save contract size
+        bytes32[6] memory perms;
 
-        // // NodeOperatorsRegistry
-        // perms[0] = _state.operators.MANAGE_SIGNING_KEYS();
-        // perms[1] = _state.operators.SET_NODE_OPERATOR_LIMIT_ROLE();
-        // for (i = 0; i < 2; ++i) {
-        //     _createPermissionForVoting(acl, _state.operators, perms[i], voting);
-        // }
-        // acl.createPermission(
-        //     _state.stakingRouter,
-        //     _state.operators,
-        //     _state.operators.STAKING_ROUTER_ROLE(),
-        //     voting
-        // );
-        // acl.createPermission(
-        //     _state.agent,
-        //     _state.operators,
-        //     _state.operators.MANAGE_NODE_OPERATOR_ROLE(),
-        //     voting
-        // );
+        // NodeOperatorsRegistry
+        perms[0] = _state.operators.MANAGE_SIGNING_KEYS();
+        perms[1] = _state.operators.SET_NODE_OPERATOR_LIMIT_ROLE();
+        for (i = 0; i < 2; ++i) {
+            _createPermissionForVoting(
+                acl,
+                _state.operators,
+                perms[i],
+                msg.sender
+            );
+        }
+        acl.createPermission(
+            _state.stakingRouter,
+            _state.operators,
+            _state.operators.STAKING_ROUTER_ROLE(),
+            msg.sender
+        );
+        acl.createPermission(
+            msg.sender,
+            _state.operators,
+            _state.operators.MANAGE_NODE_OPERATOR_ROLE(),
+            msg.sender
+        );
 
-        // // Catalist
-        // perms[0] = _state.catalist.PAUSE_ROLE();
-        // perms[1] = _state.catalist.RESUME_ROLE();
-        // perms[2] = _state.catalist.STAKING_PAUSE_ROLE();
-        // perms[3] = _state.catalist.STAKING_CONTROL_ROLE();
-        // perms[4] = _state.catalist.UNSAFE_CHANGE_DEPOSITED_VALIDATORS_ROLE();
-        // for (i = 0; i < 5; ++i) {
-        //     _createPermissionForVoting(acl, _state.catalist, perms[i], voting);
-        // }
+        // Catalist
+        perms[0] = _state.catalist.PAUSE_ROLE();
+        perms[1] = _state.catalist.RESUME_ROLE();
+        perms[2] = _state.catalist.STAKING_PAUSE_ROLE();
+        perms[3] = _state.catalist.STAKING_CONTROL_ROLE();
+        perms[4] = _state.catalist.UNSAFE_CHANGE_DEPOSITED_VALIDATORS_ROLE();
+        for (i = 0; i < 5; ++i) {
+            _createPermissionForVoting(
+                acl,
+                _state.catalist,
+                perms[i],
+                msg.sender
+            );
+        }
     }
 
     function _createTokenManagerPermissionsForTemplate(
@@ -952,6 +974,7 @@ contract CatalistTemplate is IsContract {
         bytes32 _permission
     ) private {
         _acl.createPermission(address(this), _app, _permission, address(this));
+        // _acl.createPermission(msg.sender, _app, _permission, msg.sender);
     }
 
     function _removePermissionFromTemplate(
@@ -1003,6 +1026,7 @@ contract CatalistTemplate is IsContract {
         _acl.grantPermission(_to, _app, _permission);
         _acl.revokePermission(address(this), _app, _permission);
         _acl.setPermissionManager(_manager, _app, _permission);
+        console.log("Permission transferred");
     }
 
     /* APM and ENS */

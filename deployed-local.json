@@ -355,7 +355,7 @@
       "0x998abeb3E57409262aE5b751f60747921B33613E"
     ]
   },
-  "initialDeployTotalGasUsed": 69667674,
+  "initialDeployTotalGasUsed": 70706310,
   "legacyOracle": {
     "deployParameters": {
       "lastCompletedEpochId": 0

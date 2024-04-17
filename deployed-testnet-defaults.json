@@ -5,7 +5,7 @@
     "sealDuration": 5184000,
     "expiryTimestamp": 1714521600
   },
-  "catalistApmEnsName": "catalistpm.ace",
+  "catalistApmEnsName": "catalistpm.eth",
   "catalistApmEnsRegDurationSec": 946080000,
   "daoAragonId": "catalist-dao",
   "chainSpec": {

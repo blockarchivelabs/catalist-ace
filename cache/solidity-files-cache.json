@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/0.4.24/BACE.sol": {
-      "lastModificationDate": 1713230459087,
-      "contentHash": "db3c07d2404d239374ca7bcb66833292",
+      "lastModificationDate": 1713319274041,
+      "contentHash": "827c9a2e57a6b877ce55d2fc47cc686f",
       "sourceName": "contracts/0.4.24/BACE.sol",
       "solcConfig": {
         "version": "0.4.24",
@@ -238,7 +238,7 @@
       ]
     },
     "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/0.4.24/Catalist.sol": {
-      "lastModificationDate": 1713265746248,
+      "lastModificationDate": 1713268439461,
       "contentHash": "d7240ff4f125f400768c53ab4ac7e8df",
       "sourceName": "contracts/0.4.24/Catalist.sol",
       "solcConfig": {
@@ -1230,8 +1230,8 @@
       ]
     },
     "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/0.4.24/template/CatalistTemplate.sol": {
-      "lastModificationDate": 1713230459088,
-      "contentHash": "8a917de4482c6a2a070a58db456506cf",
+      "lastModificationDate": 1713320991056,
+      "contentHash": "23542e2c1998a0a443942fd555b455e6",
       "sourceName": "contracts/0.4.24/template/CatalistTemplate.sol",
       "solcConfig": {
         "version": "0.4.24",
@@ -1277,7 +1277,8 @@
         "@aragon/id/contracts/IFIFSResolvingRegistrar.sol",
         "../Catalist.sol",
         "../oracle/LegacyOracle.sol",
-        "../nos/NodeOperatorsRegistry.sol"
+        "../nos/NodeOperatorsRegistry.sol",
+        "hardhat/console.sol"
       ],
       "versionPragmas": [
         "^0.4.24"
@@ -1287,7 +1288,7 @@
       ]
     },
     "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/0.4.24/oracle/LegacyOracle.sol": {
-      "lastModificationDate": 1713230459088,
+      "lastModificationDate": 1713268439510,
       "contentHash": "ca7039d9709bf48cd7fcdff553bf33dd",
       "sourceName": "contracts/0.4.24/oracle/LegacyOracle.sol",
       "solcConfig": {
@@ -1329,7 +1330,7 @@
       ]
     },
     "/Users/seokjun/Documents/uncommonlab/ace-lido/contracts/0.4.24/nos/NodeOperatorsRegistry.sol": {
-      "lastModificationDate": 1713230459087,
+      "lastModificationDate": 1713268439522,
       "contentHash": "5cfaf64d135c5a83782ad0acef8d7fcc",
       "sourceName": "contracts/0.4.24/nos/NodeOperatorsRegistry.sol",
       "solcConfig": {

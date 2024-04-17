@@ -5,20 +5,32 @@ const fs = require('fs')
 // RPC_URL=http://20.197.51.29:8545 npx hardhat run scripts/interact/interact-ace-devnet.js --network ace_devnet
 async function main() {
   console.log('Getting the deposit contract...')
-  const addresses = JSON.parse(fs.readFileSync('./deployed-ace-devnet.json', 'utf-8'))
+  const addresses = JSON.parse(fs.readFileSync('./deployed-ace_devnet.json', 'utf-8'))
   const CatalistAddress = addresses['app:catalist'].proxy.address
-  const HashConsensusAddress = addresses.hashConsensusForAccountingOracle.address
+  const HashConsensusForAccountingOracleAddress = addresses.hashConsensusForAccountingOracle.address
+  const HashConsensusForValidatorsExitBusOracle = addresses.hashConsensusForValidatorsExitBusOracle.address
+  const NodeOperatorRegistryAddress = addresses['app:node-operators-registry'].proxy.address
   const StakingRouterAddress = addresses.stakingRouter.proxy.address
   const AccountingOracleAddress = addresses.accountingOracle.proxy.address
   const WithdrawalQueueERC721Address = addresses.withdrawalQueueERC721.proxy.address
-  const NodeOperatorRegistryAddress = addresses['app:node-operators-registry'].proxy.address
+  const DepositSecurityModuleAddress = addresses.depositSecurityModule.address
+  const ValidatorsExitBusOracleAddress = addresses.validatorsExitBusOracle.proxy.address
+  const AragonKernelAddress = addresses['aragon-kernel'].proxy.address
+  const AragonAclAddress = addresses['aragon-acl'].proxy.address
 
   const catalist = await ethers.getContractAt('Catalist', CatalistAddress)
-  const hashConsensus = await ethers.getContractAt('HashConsensus', HashConsensusAddress)
+  const catalistProxy = await ethers.getContractAt('AppProxyUpgradeable', CatalistAddress)
+  const hashConsensusForAccountingOracle = await ethers.getContractAt('HashConsensus', HashConsensusForAccountingOracleAddress)
+  const hashConsensusForValidatorsExitBusOracle = await ethers.getContractAt('HashConsensus', HashConsensusForValidatorsExitBusOracle)
   const stakingRouter = await ethers.getContractAt('StakingRouter', StakingRouterAddress)
   const accountingOracle = await ethers.getContractAt('AccountingOracle', AccountingOracleAddress)
   const withdrawalQueueERC721 = await ethers.getContractAt('WithdrawalQueueERC721', WithdrawalQueueERC721Address)
   const nodeOperatorRegistry = await ethers.getContractAt('NodeOperatorsRegistry', NodeOperatorRegistryAddress)
+  const depositSecurityModule = await ethers.getContractAt('DepositSecurityModule', DepositSecurityModuleAddress)
+  const validatorsExitBusOracle = await ethers.getContractAt('ValidatorsExitBusOracle', ValidatorsExitBusOracleAddress)
+  const aragonKernel = await ethers.getContractAt('Kernel', AragonKernelAddress)
+  const aragonKernelProxy = await ethers.getContractAt('KernelProxy', AragonKernelAddress)
+  const aragonAcl = await ethers.getContractAt('ACL', AragonAclAddress)
 
   const deployerAddress = '0x63cac65c5eb17E6Dd47D9313e23169f79d1Ab058'
   const oracleMemberAddress = '0xB458c332C242247C46e065Cf987a05bAf7612904'
@@ -28,6 +40,120 @@ async function main() {
   const GENESIS_TIME = 1705568400
   const SLOTS_PER_EPOCH = chainSpec.slotsPerEpoch
   const SECONDS_PER_SLOT = chainSpec.secondsPerSlot
+
+  const CATALIST_APP_ID = '0xfe7e515193fc7331eedd97433fad4b507d16473770a68882c43677c8f27ebcd8'
+  const NEW_CATALIST_ADDRESS = '0xDF4A425efAF188E94ae443E58101C3CE44b80D9c'
+
+  const APP_BASES_NAMESPACE = await aragonKernel.APP_BASES_NAMESPACE({
+    gasLimit: 1000000,
+    gasPrice: 100000,
+  })
+  console.log()
+  console.log('APP_BASES_NAMESPACE:', APP_BASES_NAMESPACE)
+  const APP_ADDR_NAMESPACE = await aragonKernel.APP_ADDR_NAMESPACE({
+    gasLimit: 1000000,
+    gasPrice: 100000,
+  })
+  console.log('APP_ADDR_NAMESPACE:', APP_ADDR_NAMESPACE)
+
+  // console.log()
+  // console.log('Grant APP_MANAGER_ROLE to owner...')
+  // const APP_MANAGER_ROLE = await aragonKernel.APP_MANAGER_ROLE({
+  //   gasLimit: 1000000,
+  //   gasPrice: 100000,
+  // })
+  // await aragonAcl.grantPermissionP(
+  //   deployerAddress,
+  //   AragonKernelAddress,
+  //   APP_MANAGER_ROLE,
+  //   [
+  //     APP_BASES_NAMESPACE,
+  //     CATALIST_APP_ID,
+  //   ],
+  //   {
+  //     gasLimit: 1000000,
+  //     gasPrice: 100000,
+  //   }
+  // )
+
+  console.log()
+  console.log('Get name from catalist...')
+  const beforeName = await catalist.name()
+  console.log('- name:', beforeName)
+
+  console.log()
+  console.log('Deploy new Catalist.sol...')
+  const catalistFactory = await ethers.getContractFactory('Catalist')
+  const newCatalist = await catalistFactory.deploy()
+  await newCatalist.deployed()
+  console.log('- New Catalist deployed to:', newCatalist.address)
+
+  console.log()
+  console.log('Check new Catalist name...')
+  const newName = await newCatalist.name()
+  console.log('- name:', newName)
+
+  console.log()
+  console.log('Get address from kernel...')
+  const beforeAddress = await aragonKernel.getApp(
+    APP_BASES_NAMESPACE,
+    CATALIST_APP_ID,
+    {
+      gasLimit: 1000000,
+      gasPrice: 100000,
+    }
+  )
+  console.log('- address:', beforeAddress)
+
+  console.log()
+  console.log('Set app from kernel...')
+  const changedAppId = await aragonKernel.setApp(
+    APP_BASES_NAMESPACE,
+    CATALIST_APP_ID,
+    newCatalist.address,
+    {
+      gasLimit: 1000000,
+      gasPrice: 100000,
+    }
+  )
+  console.log('- changedAppId:', changedAppId)
+
+  console.log()
+  console.log('Get address from kernel...')
+  const afterAddress = await aragonKernel.getApp(
+    APP_BASES_NAMESPACE,
+    CATALIST_APP_ID,
+    {
+      gasLimit: 1000000,
+      gasPrice: 100000,
+    }
+  )
+  console.log('- address:', afterAddress)
+
+  console.log()
+  console.log('Get name from upgraded catalist...')
+  const afterName = await catalist.name()
+  console.log('- name:', afterName)
+
+  // console.log()
+  // console.log('Get Catalist implementation address...')
+  // const appAddress = await aragonKernelProxy.apps(
+  //   APP_BASES_NAMESPACE,
+  //   CATALIST_APP_ID,
+  //   {
+  //     gasLimit: 1000000,
+  //     gasPrice: 100000,
+  //   }
+  // )
+  // console.log('- apps:', appAddress)
+
+  // console.log()
+  // console.log('Get implementation address from kernel proxy...')
+  // const implementationAddress = await aragonKernelProxy.implementation({
+  //   gasLimit: 1000000,
+  //   gasPrice: 100000,
+  // })
+  // console.log('- Implementation address:', implementationAddress)
 
   // console.log()
   // console.log('Querying update initial epoch...')
@@ -114,24 +240,24 @@ async function main() {
   // const signingKeys = await nodeOperatorRegistry.getSigningKeys(operatorId, 0, 5)
   // console.log('Signing Keys:', signingKeys)
 
-  console.log()
-  console.log('Querying getWithdrawalRequests()...')
-  const withdrawalRequests = await withdrawalQueueERC721.getWithdrawalRequests(
-    '0x26AC28D33EcBf947951d6B7d8a1e6569eE73d076',
-    {
-      gasLimit: 1000000,
-      gasPrice: 100000,
-    }
-  )
-  console.log('Withdrawal Requests:', withdrawalRequests)
+  // console.log()
+  // console.log('Querying getWithdrawalRequests()...')
+  // const withdrawalRequests = await withdrawalQueueERC721.getWithdrawalRequests(
+  //   '0x26AC28D33EcBf947951d6B7d8a1e6569eE73d076',
+  //   {
+  //     gasLimit: 1000000,
+  //     gasPrice: 100000,
+  //   }
+  // )
+  // console.log('Withdrawal Requests:', withdrawalRequests)
 
-  console.log()
-  console.log('Querying getLastCheckpointIndex()...')
-  const lastCheckpointIndex = await withdrawalQueueERC721.getLastCheckpointIndex({
-    gasLimit: 1000000,
-    gasPrice: 100000,
-  })
-  console.log('Last Checkpoint Index:', lastCheckpointIndex.toString())
+  // console.log()
+  // console.log('Querying getLastCheckpointIndex()...')
+  // const lastCheckpointIndex = await withdrawalQueueERC721.getLastCheckpointIndex({
+  //   gasLimit: 1000000,
+  //   gasPrice: 100000,
+  // })
+  // console.log('Last Checkpoint Index:', lastCheckpointIndex.toString())
 
   // console.log()
   // console.log('Querying findCheckpointHints()...')

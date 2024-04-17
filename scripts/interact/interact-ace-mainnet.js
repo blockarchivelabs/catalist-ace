@@ -21,7 +21,8 @@ async function main() {
   const DepositSecurityModuleAddress = addresses.depositSecurityModule.address
   const CatalistLocatorAddress = addresses.catalistLocator.proxy.address
   const ValidatorsExitBusOracle = addresses.validatorsExitBusOracle.proxy.address
-  const ApmRepoAddress = addresses.apmRepo.implementation.address
+  const AragonKernelAddress = addresses['aragon-kernel'].proxy.address
+  const AragonAclAddress = addresses['aragon-acl'].proxy.address
 
   const depositContract = await ethers.getContractAt('DepositContract', depositContractAddress)
   const catalist = await ethers.getContractAt('Catalist', CatalistAddress)
@@ -37,7 +38,9 @@ async function main() {
   const catalistLocator = await ethers.getContractAt('CatalistLocator', CatalistLocatorAddress)
   // const catalistLocator = await ethers.getContractAt('CatalistLocator', '0x8f744ECF16293801cFB28B4f063D7267cD7541F1')
   const validatorsExitBusOracle = await ethers.getContractAt('ValidatorsExitBusOracle', ValidatorsExitBusOracle)
-  const apmRepo = await ethers.getContractAt('Repo', ApmRepoAddress)
+  const aragonKernel = await ethers.getContractAt('Kernel', AragonKernelAddress)
+  const aragonKernelProxy = await ethers.getContractAt('KernelProxy', AragonKernelAddress)
+  const aragonAcl = await ethers.getContractAt('ACL', AragonAclAddress)
 
   const deployerAddress = '0x63cac65c5eb17E6Dd47D9313e23169f79d1Ab058'
   const deployerPrivateKey = 'f11a771308f235a1331b098d0212db69ac049e56c9f1e0da739a39e8b743363c'
@@ -49,16 +52,33 @@ async function main() {
   const SLOTS_PER_EPOCH = chainSpec.slotsPerEpoch
   const SECONDS_PER_SLOT = chainSpec.secondsPerSlot
 
-  console.log()
-  console.log('ApmRepo Address:', ApmRepoAddress)
-  
-  console.log()
-  console.log('Get latest...')
-  const latest = await apmRepo.getLatest({
+  const CATALIST_APP_ID = '0xfe7e515193fc7331eedd97433fad4b507d16473770a68882c43677c8f27ebcd8'
+  const NEW_CATALIST_ADDRESS = '0xDF4A425efAF188E94ae443E58101C3CE44b80D9c'
+
+  const APP_BASES_NAMESPACE = await aragonKernel.APP_BASES_NAMESPACE({
     gasLimit: 1000000,
     gasPrice: 100000,
   })
-  console.log('- Latest:', latest)
+  console.log()
+  console.log('APP_BASES_NAMESPACE:', APP_BASES_NAMESPACE)
+  const APP_ADDR_NAMESPACE = await aragonKernel.APP_ADDR_NAMESPACE({
+    gasLimit: 1000000,
+    gasPrice: 100000,
+  })
+  console.log('APP_ADDR_NAMESPACE:', APP_ADDR_NAMESPACE)
+
+  console.log()
+  console.log('Get address from kernel...')
+  const beforeAddress = await aragonKernel.getApp(
+    APP_BASES_NAMESPACE,
+    CATALIST_APP_ID,
+    {
+      gasLimit: 1000000,
+      gasPrice: 100000,
+    }
+  )
+  console.log('- address:', beforeAddress)
+
 
   // console.log()
   // console.log('Get implementation of catalist...')
