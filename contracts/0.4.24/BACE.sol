@@ -249,7 +249,6 @@ contract BACE is IERC20, Pausable {
         address _recipient, // queue
         uint256 _amount
     ) external returns (bool) {
-        console.log(msg.sender, _sender, allowances[_sender][msg.sender]);
         _spendAllowance(_sender, msg.sender, _amount);
         _transfer(_sender, _recipient, _amount);
         return true;

@@ -18,7 +18,7 @@ import "@aragon/os/contracts/common/IsContract.sol";
 import "@aragon/apps-agent/contracts/Agent.sol";
 import "@aragon/apps-vault/contracts/Vault.sol";
 
-import { Voting } from "@aragon/apps-lido/apps/voting/contracts/Voting.sol";
+import {Voting} from "@aragon/apps-lido/apps/voting/contracts/Voting.sol";
 
 import "@aragon/apps-finance/contracts/Finance.sol";
 import "@aragon/apps-lido/apps/token-manager/contracts/TokenManager.sol";
@@ -28,6 +28,7 @@ import "@aragon/id/contracts/IFIFSResolvingRegistrar.sol";
 import "../Catalist.sol";
 import "../oracle/LegacyOracle.sol";
 import "../nos/NodeOperatorsRegistry.sol";
+import "hardhat/console.sol";
 
 contract CatalistTemplate is IsContract {
     // Configuration errors
@@ -496,7 +497,7 @@ contract CatalistTemplate is IsContract {
         _setupPermissions(state, repos);
         _transferRootPermissionsFromTemplateAndFinalizeDAO(
             state.dao,
-            state.voting
+            msg.sender
         );
         _resetState();
 
@@ -689,12 +690,12 @@ contract CatalistTemplate is IsContract {
         ACL acl = _state.acl;
         Voting voting = _state.voting;
 
-        _createAgentPermissions(acl, _state.agent, voting);
-        _createVaultPermissions(acl, _state.agent, _state.finance, voting);
-        _createFinancePermissions(acl, _state.finance, voting);
-        _createEvmScriptsRegistryPermissions(acl, voting);
+        _createAgentPermissions(acl, _state.agent, msg.sender);
+        _createVaultPermissions(acl, _state.agent, _state.finance, msg.sender);
+        _createFinancePermissions(acl, _state.finance, msg.sender);
+        _createEvmScriptsRegistryPermissions(acl, msg.sender);
         _createVotingPermissions(acl, voting, _state.tokenManager);
-        _configureTokenManagerPermissions(acl, _state.tokenManager, voting);
+        _configureTokenManagerPermissions(acl, _state.tokenManager, msg.sender);
 
         // APM
 
@@ -710,23 +711,27 @@ contract CatalistTemplate is IsContract {
         _transferPermissionFromTemplate(
             apmACL,
             _state.catalistRegistry,
-            voting,
+            msg.sender,
             _state.catalistRegistry.CREATE_REPO_ROLE()
         );
-        apmACL.setPermissionManager(voting, apmDAO, apmDAO.APP_MANAGER_ROLE());
+        apmACL.setPermissionManager(
+            msg.sender,
+            apmDAO,
+            apmDAO.APP_MANAGER_ROLE()
+        );
         _transferPermissionFromTemplate(
             apmACL,
             apmACL,
-            voting,
+            msg.sender,
             apmACL.CREATE_PERMISSIONS_ROLE()
         );
         apmACL.setPermissionManager(
-            voting,
+            msg.sender,
             apmRegistrar,
             apmRegistrar.CREATE_NAME_ROLE()
         );
         apmACL.setPermissionManager(
-            voting,
+            msg.sender,
             apmRegistrar,
             apmRegistrar.POINT_ROOTNODE_ROLE()
         );
@@ -755,7 +760,7 @@ contract CatalistTemplate is IsContract {
             _transferPermissionFromTemplate(
                 apmACL,
                 repoAddresses[i],
-                voting,
+                msg.sender,
                 REPO_CREATE_VERSION_ROLE
             );
         }
@@ -767,19 +772,24 @@ contract CatalistTemplate is IsContract {
         perms[0] = _state.operators.MANAGE_SIGNING_KEYS();
         perms[1] = _state.operators.SET_NODE_OPERATOR_LIMIT_ROLE();
         for (i = 0; i < 2; ++i) {
-            _createPermissionForVoting(acl, _state.operators, perms[i], voting);
+            _createPermissionForVoting(
+                acl,
+                _state.operators,
+                perms[i],
+                msg.sender
+            );
         }
         acl.createPermission(
             _state.stakingRouter,
             _state.operators,
             _state.operators.STAKING_ROUTER_ROLE(),
-            voting
+            msg.sender
         );
         acl.createPermission(
             _state.agent,
             _state.operators,
             _state.operators.MANAGE_NODE_OPERATOR_ROLE(),
-            voting
+            msg.sender
         );
 
         // Catalist
@@ -789,7 +799,12 @@ contract CatalistTemplate is IsContract {
         perms[3] = _state.catalist.STAKING_CONTROL_ROLE();
         perms[4] = _state.catalist.UNSAFE_CHANGE_DEPOSITED_VALIDATORS_ROLE();
         for (i = 0; i < 5; ++i) {
-            _createPermissionForVoting(acl, _state.catalist, perms[i], voting);
+            _createPermissionForVoting(
+                acl,
+                _state.catalist,
+                perms[i],
+                msg.sender
+            );
         }
     }
 
@@ -981,6 +996,7 @@ contract CatalistTemplate is IsContract {
             _acl.CREATE_PERMISSIONS_ROLE(),
             _voting
         );
+        console.log("Transfering permissions");
     }
 
     function _transferPermissionFromTemplate(
