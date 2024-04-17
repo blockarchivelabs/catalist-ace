@@ -9,8 +9,8 @@ const { makeTx, TotalGasCounter } = require('../helpers/deploy')
 const REQUIRED_NET_STATE = [
   `app:${APP_NAMES.CATALIST}`,
   `app:${APP_NAMES.ORACLE}`,
-  "app:aragon-agent",
-  "app:aragon-voting",
+  // "app:aragon-agent",
+  // "app:aragon-voting",
   "app:node-operators-registry",
   "accountingOracle",
   "burner",

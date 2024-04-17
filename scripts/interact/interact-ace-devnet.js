@@ -2,23 +2,83 @@ const { parseEther } = require('ethers/lib/utils')
 const { ethers } = require('hardhat')
 const fs = require('fs')
 
+function dangerouslyCastUintArrayToBytes(input) {
+  // Calculate the byte length of the array
+  let byteLength = input.length * 32;
+  // Create a new Uint8Array with the calculated byte length
+  let output = new Uint8Array(byteLength);
+  // Copy the elements of the input array into the output array
+  for (let i = 0; i < input.length; i++) {
+      // Get the current uint256 value from the input array
+      let value = input[i];
+      // Convert the uint256 value into bytes and copy it into the output array
+      for (let j = 0; j < 32; j++) {
+          // Calculate the byte offset for the current value
+          let byteOffset = i * 32 + j;
+          // Extract the byte at the current position
+          let byte = (value / (2 ** (8 * (31 - j)))) & 0xff;
+          // Set the byte in the output array
+          output[byteOffset] = byte;
+      }
+  }
+  return output;
+}
+
+function dangerouslyCastBytesToUintArray(input) {
+  // Calculate the number of uint256 values in the bytes array
+  let intsLength = input.length / 32;
+  // Ensure that the length of the bytes array is a multiple of 32
+  if (input.length !== intsLength * 32) {
+      throw new Error("Improper length");
+  }
+  // Create a new Uint256 array with the calculated length
+  let output = new Array(intsLength);
+  // Copy the bytes array into the uint256 array
+  for (let i = 0; i < intsLength; i++) {
+      // Calculate the byte offset for the current uint256 value
+      let byteOffset = i * 32;
+      // Extract the bytes from the bytes array and convert them into a uint256 value
+      let value = 0;
+      for (let j = 0; j < 32; j++) {
+          // Shift the current byte to its appropriate position in the uint256 value
+          value += input[byteOffset + j] * (2 ** (8 * (31 - j)));
+      }
+      // Store the uint256 value in the output array
+      output[i] = value;
+  }
+  return output;
+}
+
+
 // RPC_URL=http://20.197.51.29:8545 npx hardhat run scripts/interact/interact-ace-devnet.js --network ace_devnet
 async function main() {
   console.log('Getting the deposit contract...')
-  const addresses = JSON.parse(fs.readFileSync('./deployed-ace-devnet.json', 'utf-8'))
+  const addresses = JSON.parse(fs.readFileSync('./deployed-ace_devnet.json', 'utf-8'))
   const CatalistAddress = addresses['app:catalist'].proxy.address
-  const HashConsensusAddress = addresses.hashConsensusForAccountingOracle.address
+  const HashConsensusForAccountingOracleAddress = addresses.hashConsensusForAccountingOracle.address
+  const HashConsensusForValidatorsExitBusOracle = addresses.hashConsensusForValidatorsExitBusOracle.address
+  const NodeOperatorRegistryAddress = addresses['app:node-operators-registry'].proxy.address
   const StakingRouterAddress = addresses.stakingRouter.proxy.address
   const AccountingOracleAddress = addresses.accountingOracle.proxy.address
   const WithdrawalQueueERC721Address = addresses.withdrawalQueueERC721.proxy.address
-  const NodeOperatorRegistryAddress = addresses['app:node-operators-registry'].proxy.address
+  const DepositSecurityModuleAddress = addresses.depositSecurityModule.address
+  const ValidatorsExitBusOracleAddress = addresses.validatorsExitBusOracle.proxy.address
+  const AragonKernelAddress = addresses['aragon-kernel'].proxy.address
+  const AragonAclAddress = addresses['aragon-acl'].proxy.address
 
   const catalist = await ethers.getContractAt('Catalist', CatalistAddress)
-  const hashConsensus = await ethers.getContractAt('HashConsensus', HashConsensusAddress)
+  const catalistProxy = await ethers.getContractAt('AppProxyUpgradeable', CatalistAddress)
+  const hashConsensusForAccountingOracle = await ethers.getContractAt('HashConsensus', HashConsensusForAccountingOracleAddress)
+  const hashConsensusForValidatorsExitBusOracle = await ethers.getContractAt('HashConsensus', HashConsensusForValidatorsExitBusOracle)
   const stakingRouter = await ethers.getContractAt('StakingRouter', StakingRouterAddress)
   const accountingOracle = await ethers.getContractAt('AccountingOracle', AccountingOracleAddress)
   const withdrawalQueueERC721 = await ethers.getContractAt('WithdrawalQueueERC721', WithdrawalQueueERC721Address)
   const nodeOperatorRegistry = await ethers.getContractAt('NodeOperatorsRegistry', NodeOperatorRegistryAddress)
+  const depositSecurityModule = await ethers.getContractAt('DepositSecurityModule', DepositSecurityModuleAddress)
+  const validatorsExitBusOracle = await ethers.getContractAt('ValidatorsExitBusOracle', ValidatorsExitBusOracleAddress)
+  const aragonKernel = await ethers.getContractAt('Kernel', AragonKernelAddress)
+  const aragonKernelProxy = await ethers.getContractAt('KernelProxy', AragonKernelAddress)
+  const aragonAcl = await ethers.getContractAt('ACL', AragonAclAddress)
 
   const deployerAddress = '0x63cac65c5eb17E6Dd47D9313e23169f79d1Ab058'
   const oracleMemberAddress = '0xB458c332C242247C46e065Cf987a05bAf7612904'
@@ -28,6 +88,126 @@ async function main() {
   const GENESIS_TIME = 1705568400
   const SLOTS_PER_EPOCH = chainSpec.slotsPerEpoch
   const SECONDS_PER_SLOT = chainSpec.secondsPerSlot
+
+  const CATALIST_APP_ID = '0xfe7e515193fc7331eedd97433fad4b507d16473770a68882c43677c8f27ebcd8'
+  const ORIGIN_CATALIST_ADDRESS = '0x528f4b1a0B36dD7E5C7f553fEE00a8F21E736b48'
+  const NEW_CATALIST_ADDRESS = '0x3B14B746e9d66e652D241fe04BBdDA46C76A4bB0'
+
+  const APP_BASES_NAMESPACE = await aragonKernel.APP_BASES_NAMESPACE({
+    gasLimit: 1000000,
+    gasPrice: 100000,
+  })
+  console.log()
+  console.log('APP_BASES_NAMESPACE:', APP_BASES_NAMESPACE)
+
+  const APP_MANAGER_ROLE = await aragonKernel.APP_MANAGER_ROLE({
+    gasLimit: 1000000,
+    gasPrice: 100000,
+  })
+  console.log('APP_MANAGER_ROLE:', APP_MANAGER_ROLE)
+
+  // console.log()
+  // console.log('Grant APP_MANAGER_ROLE to owner...')
+  // await aragonAcl.grantPermission(
+  //   deployerAddress,
+  //   AragonKernelAddress,
+  //   APP_MANAGER_ROLE,
+  //   {
+  //     gasLimit: 1000000,
+  //     gasPrice: 100000,
+  //   }
+  // )
+
+  // console.log()
+  // console.log('Check permission...')
+  // const paramBytes = dangerouslyCastUintArrayToBytes([
+  //   APP_BASES_NAMESPACE,
+  //   CATALIST_APP_ID,
+  // ])
+  // const permission = await aragonKernel.hasPermission(
+  //   deployerAddress,
+  //   AragonKernelAddress,
+  //   APP_MANAGER_ROLE,
+  //   paramBytes,
+  //   {
+  //     gasLimit: 1000000,
+  //     gasPrice: 100000,
+  //   }
+  // )
+  // console.log('- permission:', permission)
+
+  // console.log()
+  // console.log('Get name from catalist...')
+  // const beforeName = await catalist.name()
+  // console.log('- name:', beforeName)
+
+  // console.log()
+  // console.log('Get address from kernel...')
+  // const beforeAddress = await aragonKernel.getApp(
+  //   APP_BASES_NAMESPACE,
+  //   CATALIST_APP_ID,
+  //   {
+  //     gasLimit: 1000000,
+  //     gasPrice: 100000,
+  //   }
+  // )
+  // console.log('- address:', beforeAddress)
+
+  // console.log()
+  // console.log('Deploy new Catalist...')
+  // const Catalist = await ethers.getContractFactory('Catalist')
+  // const newCatalist = await Catalist.deploy()
+  // await newCatalist.deployed()
+  // console.log('New Catalist deployed to:', newCatalist.address)
+
+  // console.log()
+  // console.log('Set app from kernel...')
+  // await aragonKernel.setApp(
+  //   APP_BASES_NAMESPACE,
+  //   CATALIST_APP_ID,
+  //   NEW_CATALIST_ADDRESS,
+  //   {
+  //     gasLimit: 1000000,
+  //     gasPrice: 100000,
+  //   }
+  // )
+
+  console.log()
+  console.log('Get address from kernel...')
+  const afterAddress = await aragonKernel.getApp(
+    APP_BASES_NAMESPACE,
+    CATALIST_APP_ID,
+    {
+      gasLimit: 1000000,
+      gasPrice: 100000,
+    }
+  )
+  console.log('- address:', afterAddress)
+
+  console.log()
+  console.log('Get name from upgraded catalist...')
+  const afterName = await catalist.name()
+  console.log('- name:', afterName)
+
+  // console.log()
+  // console.log('Get Catalist implementation address...')
+  // const appAddress = await aragonKernelProxy.apps(
+  //   APP_BASES_NAMESPACE,
+  //   CATALIST_APP_ID,
+  //   {
+  //     gasLimit: 1000000,
+  //     gasPrice: 100000,
+  //   }
+  // )
+  // console.log('- apps:', appAddress)
+
+  // console.log()
+  // console.log('Get implementation address from kernel proxy...')
+  // const implementationAddress = await aragonKernelProxy.implementation({
+  //   gasLimit: 1000000,
+  //   gasPrice: 100000,
+  // })
+  // console.log('- Implementation address:', implementationAddress)
 
   // console.log()
   // console.log('Querying update initial epoch...')
@@ -114,24 +294,24 @@ async function main() {
   // const signingKeys = await nodeOperatorRegistry.getSigningKeys(operatorId, 0, 5)
   // console.log('Signing Keys:', signingKeys)
 
-  console.log()
-  console.log('Querying getWithdrawalRequests()...')
-  const withdrawalRequests = await withdrawalQueueERC721.getWithdrawalRequests(
-    '0x26AC28D33EcBf947951d6B7d8a1e6569eE73d076',
-    {
-      gasLimit: 1000000,
-      gasPrice: 100000,
-    }
-  )
-  console.log('Withdrawal Requests:', withdrawalRequests)
+  // console.log()
+  // console.log('Querying getWithdrawalRequests()...')
+  // const withdrawalRequests = await withdrawalQueueERC721.getWithdrawalRequests(
+  //   '0x26AC28D33EcBf947951d6B7d8a1e6569eE73d076',
+  //   {
+  //     gasLimit: 1000000,
+  //     gasPrice: 100000,
+  //   }
+  // )
+  // console.log('Withdrawal Requests:', withdrawalRequests)
 
-  console.log()
-  console.log('Querying getLastCheckpointIndex()...')
-  const lastCheckpointIndex = await withdrawalQueueERC721.getLastCheckpointIndex({
-    gasLimit: 1000000,
-    gasPrice: 100000,
-  })
-  console.log('Last Checkpoint Index:', lastCheckpointIndex.toString())
+  // console.log()
+  // console.log('Querying getLastCheckpointIndex()...')
+  // const lastCheckpointIndex = await withdrawalQueueERC721.getLastCheckpointIndex({
+  //   gasLimit: 1000000,
+  //   gasPrice: 100000,
+  // })
+  // console.log('Last Checkpoint Index:', lastCheckpointIndex.toString())
 
   // console.log()
   // console.log('Querying findCheckpointHints()...')

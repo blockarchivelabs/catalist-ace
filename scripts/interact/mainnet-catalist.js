@@ -4,7 +4,7 @@ const { hexConcat, pad, ETH, e27, e18, toBN } = require('./utils')
 const fs = require('fs')
 const { DSMAttestMessage } = require('../../test/helpers/signatures')
 
-// RPC_URL=http://20.197.13.207:8545 npx hardhat run scripts/interact/mainnet-staking.js --network ace_mainnet
+// RPC_URL=http://20.197.13.207:8545 npx hardhat run scripts/interact/mainnet-catalist.js --network ace_mainnet
 async function main() {
   console.log('Getting the deposit contract...')
   const addresses = JSON.parse(fs.readFileSync('./deployed-ace_mainnet.json', 'utf-8'))
@@ -32,26 +32,27 @@ async function main() {
   const testerAddress = '0x26AC28D33EcBf947951d6B7d8a1e6569eE73d076'
 
   // console.log()
-  // const beforeBalance = await catalist.balanceOf(
+  // console.log('Get tester balance...')
+  // const testerBalance = await catalist.balanceOf(
   //   testerAddress,
   //   {
   //     gasLimit: 1000000,
   //     gasPrice: 100000,
   //   }
   // )
-  // console.log('Before Balance: ', beforeBalance.toString())
-
-  // console.log()
-  // console.log('Staking 1ACE...')
-  // await catalist.submit(deployerAddress, {
-  //   value: parseEther('0.01'),
+  // const decimals = await catalist.decimals({
   //   gasLimit: 1000000,
   //   gasPrice: 100000,
   // })
+  // console.log('- Tester Balance:', +testerBalance / (10 ** +decimals))
 
-  // console.log()
-  // const afterBalance = await catalist.balanceOf(deployerAddress)
-  // console.log('After Balance: ', afterBalance.toString())
+  console.log()
+  console.log('Get current stake limit...')
+  const stakeLimit = await catalist.getCurrentStakeLimit({
+    gasLimit: 1000000,
+    gasPrice: 100000,
+  })
+  console.log('- Current Stake Limit:', +stakeLimit)
 }
 
 main()

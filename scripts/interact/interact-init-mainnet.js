@@ -1,7 +1,7 @@
 const { ethers } = require('hardhat')
 const fs = require('fs')
 
-// RPC_URL=http://20.197.13.207:8545 npx hardhat run scripts/interact/interact-ace-mainnet.js --network ace_mainnet
+// RPC_URL=http://20.197.13.207:8545 npx hardhat run scripts/interact/interact-init-mainnet.js --network ace_mainnet
 async function main() {
   console.log('Getting the deposit contract...')
   const fileName = './deployed-ace_mainnet.json'
@@ -9,6 +9,7 @@ async function main() {
   const CatalistAddress = addresses['app:catalist'].proxy.address
   const HashConsensusForAccountingOracleAddress = addresses.hashConsensusForAccountingOracle.address
   const HashConsensusForValidatorsExitBusOracle = addresses.hashConsensusForValidatorsExitBusOracle.address
+  const NodeOperatorRegistryAddress = addresses['app:node-operators-registry'].proxy.address
   const StakingRouterAddress = addresses.stakingRouter.proxy.address
   const AccountingOracleAddress = addresses.accountingOracle.proxy.address
   const WithdrawalQueueERC721Address = addresses.withdrawalQueueERC721.proxy.address
@@ -141,19 +142,34 @@ async function main() {
   console.log()
   console.log('Grant STAKING_MODULE_RESUME_ROLE to deployer...')
   await stakingRouter.grantRole(
-    await stakingRouter.STAKING_MODULE_RESUME_ROLE(),
+    await stakingRouter.STAKING_MODULE_RESUME_ROLE({gasLimit: 1000000, gasPrice: 100000}),
     deployerAddress
   )
 
   console.log()
   console.log('Resume staking module...')
+  const STAKING_MODULE_ID = 1
   await stakingRouter.resumeStakingModule(
-    1,
+    STAKING_MODULE_ID,
     {
       gasLimit: 1000000,
       gasPrice: 100000,
     }
   )
+
+  console.log()
+  console.log('Check staking module status...')
+  const stakingModuleStatus = await stakingRouter.getStakingModuleStatus(
+    STAKING_MODULE_ID,
+    {
+      gasLimit: 1000000,
+      gasPrice: 100000,
+    }
+  )
+  console.log('- status:', stakingModuleStatus)
+
+  console.log()
+  console.log('Complete.')
 }
 
 main()

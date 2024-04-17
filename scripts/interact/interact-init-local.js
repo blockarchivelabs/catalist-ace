@@ -6,27 +6,36 @@ const fs = require('fs')
 
 async function main() {
   console.log('Getting the deposit contract...')
-  const addresses = JSON.parse(fs.readFileSync('./deployed-local.json', 'utf-8'))
+  const fileName = './deployed-local.json'
+  const addresses = JSON.parse(fs.readFileSync(fileName, 'utf-8'))
   const CatalistAddress = addresses['app:catalist'].proxy.address
-  const HashConsensusAddress = addresses.hashConsensusForAccountingOracle.address
+  const HashConsensusForAccountingOracleAddress = addresses.hashConsensusForAccountingOracle.address
+  const HashConsensusForValidatorsExitBusOracle = addresses.hashConsensusForValidatorsExitBusOracle.address
+  const NodeOperatorRegistryAddress = addresses['app:node-operators-registry'].proxy.address
   const StakingRouterAddress = addresses.stakingRouter.proxy.address
   const AccountingOracleAddress = addresses.accountingOracle.proxy.address
   const WithdrawalQueueERC721Address = addresses.withdrawalQueueERC721.proxy.address
-  const NodeOperatorRegistryAddress = addresses['app:node-operators-registry'].proxy.address
-  
+  const DepositSecurityModuleAddress = addresses.depositSecurityModule.address
+  const ValidatorsExitBusOracleAddress = addresses.validatorsExitBusOracle.proxy.address
+
   const catalist = await ethers.getContractAt('Catalist', CatalistAddress)
-  const hashConsensus = await ethers.getContractAt('HashConsensus', HashConsensusAddress)
+  const hashConsensusForAccountingOracle = await ethers.getContractAt('HashConsensus', HashConsensusForAccountingOracleAddress)
+  const hashConsensusForValidatorsExitBusOracle = await ethers.getContractAt('HashConsensus', HashConsensusForValidatorsExitBusOracle)
   const stakingRouter = await ethers.getContractAt('StakingRouter', StakingRouterAddress)
-  const withdrawalQueueERC721 = await ethers.getContractAt('WithdrawalQueueERC721', WithdrawalQueueERC721Address)
   const accountingOracle = await ethers.getContractAt('AccountingOracle', AccountingOracleAddress)
-  const nodeOperatorsRegistry = await ethers.getContractAt('NodeOperatorsRegistry', NodeOperatorRegistryAddress)
+  const withdrawalQueueERC721 = await ethers.getContractAt('WithdrawalQueueERC721', WithdrawalQueueERC721Address)
+  const nodeOperatorRegistry = await ethers.getContractAt('NodeOperatorsRegistry', NodeOperatorRegistryAddress)
+  const depositSecurityModule = await ethers.getContractAt('DepositSecurityModule', DepositSecurityModuleAddress)
+  const validatorsExitBusOracle = await ethers.getContractAt('ValidatorsExitBusOracle', ValidatorsExitBusOracleAddress)
 
-  const [owner, ad1] = await ethers.getSigners()
-
-  const chainSpec = JSON.parse(fs.readFileSync('./deployed-testnet-defaults.json', 'utf-8')).chainSpec
+  const chainSpec = JSON.parse(fs.readFileSync(fileName, 'utf-8')).chainSpec
   const GENESIS_TIME = chainSpec.genesisTime
   const SLOTS_PER_EPOCH = chainSpec.slotsPerEpoch
   const SECONDS_PER_SLOT = chainSpec.secondsPerSlot
+
+  const [owner, ad1] = await ethers.getSigners()
+  const deployerAddress = owner.address
+  const oracleMemberAddress = ad1.address
 
   console.log()
   console.log('Querying resume staking...')
@@ -38,7 +47,7 @@ async function main() {
   console.log()
   console.log('Querying grant role RESUME_ROLE to owner...')
   await withdrawalQueueERC721.connect(owner).grantRole(
-    await withdrawalQueueERC721.connect(owner).RESUME_ROLE(), 
+    await withdrawalQueueERC721.connect(owner).RESUME_ROLE({gasLimit: 1000000, gasPrice: 100000}), 
     owner.address
   )
 
@@ -50,27 +59,93 @@ async function main() {
   })
 
   console.log()
-  console.log('Querying update initial epoch...')
-  const latestBlockTimestamp = (await ethers.provider.getBlock('latest')).timestamp
-  const initialEpoch = Math.floor((latestBlockTimestamp - GENESIS_TIME)
-    / (SLOTS_PER_EPOCH * SECONDS_PER_SLOT))
-  await hashConsensus.connect(owner).updateInitialEpoch(initialEpoch, {
-    gasLimit: 1000000,
-    gasPrice: 1000000000,
-  })
-  console.log('Latest Block Timestamp:', latestBlockTimestamp)
-  console.log('Initial Epoch:', initialEpoch)
-
-  console.log()
   console.log('Querying grant role to owner...')
-  await hashConsensus.connect(owner).grantRole(
-    await hashConsensus.connect(owner).MANAGE_MEMBERS_AND_QUORUM_ROLE(), 
+  await hashConsensusForAccountingOracle.connect(owner).grantRole(
+    await hashConsensusForAccountingOracle.connect(owner).MANAGE_MEMBERS_AND_QUORUM_ROLE({gasLimit: 1000000, gasPrice: 100000}), 
+    owner.address
+  )
+  await hashConsensusForValidatorsExitBusOracle.connect(owner).grantRole(
+    await hashConsensusForValidatorsExitBusOracle.connect(owner).MANAGE_MEMBERS_AND_QUORUM_ROLE({gasLimit: 1000000, gasPrice: 100000}), 
     owner.address
   )
 
   console.log()
   console.log('Querying add ad1 to consensus member...')
-  await hashConsensus.connect(owner).addMember(owner.address, 1)
+  await hashConsensusForAccountingOracle.connect(owner).addMember(owner.address, 1, {gasLimit: 1000000, gasPrice: 100000})
+  await hashConsensusForValidatorsExitBusOracle.connect(owner).addMember(owner.address, 1, {gasLimit: 1000000, gasPrice: 100000})
+
+  console.log()
+  console.log('Querying update initial epoch...')
+  const latestBlockTimestamp = (await ethers.provider.getBlock('latest')).timestamp
+  const initialEpoch = Math.floor((latestBlockTimestamp - GENESIS_TIME)
+    / (SLOTS_PER_EPOCH * SECONDS_PER_SLOT))
+  await hashConsensusForAccountingOracle.connect(owner).updateInitialEpoch(initialEpoch, {
+    gasLimit: 1000000,
+    gasPrice: 1000000000,
+  })
+  await hashConsensusForValidatorsExitBusOracle.connect(owner).updateInitialEpoch(initialEpoch, {
+    gasLimit: 1000000,
+    gasPrice: 1000000000,
+  })
+  console.log('- Latest Block Timestamp:', latestBlockTimestamp)
+  console.log('- Initial Epoch:', initialEpoch)
+
+  console.log()
+  console.log('ValidatorsExitBusOracle Address:', ValidatorsExitBusOracleAddress)
+
+  console.log()
+  console.log('Grant RESUME_ROLE to deployer in ValidatorsExitBusOracle...')
+  await validatorsExitBusOracle.connect(owner).grantRole(
+    await validatorsExitBusOracle.connect(owner).RESUME_ROLE({gasLimit: 1000000, gasPrice: 100000}),
+    deployerAddress,
+    {
+      gasLimit: 1000000,
+      gasPrice: 100000,
+    }
+  )
+
+  console.log()
+  console.log('Resume ValidatorsExitBusOracle...')
+  await validatorsExitBusOracle.connect(owner).resume({
+    gasLimit: 1000000,
+    gasPrice: 100000,
+  })
+
+  // deposit module 시작
+  console.log()
+  console.log('Add deposit security module guardian...')
+  await depositSecurityModule.connect(owner).addGuardian(
+    oracleMemberAddress,
+    1,
+    {
+      gasLimit: 1000000,
+      gasPrice: 100000,
+    }
+  )
+
+  console.log()
+  console.log('Grant STAKING_MODULE_RESUME_ROLE to deployer...')
+  await stakingRouter.connect(owner).grantRole(
+    await stakingRouter.connect(owner).STAKING_MODULE_RESUME_ROLE({gasLimit: 1000000, gasPrice: 100000}),
+    deployerAddress,
+    {
+      gasLimit: 1000000, 
+      gasPrice: 100000
+    }
+  )
+
+  // console.log()
+  // console.log('Resume staking module...')
+  // await stakingRouter.connect(owner).resumeStakingModule(
+  //   1,
+  //   {
+  //     gasLimit: 1000000,
+  //     gasPrice: 100000,
+  //   }
+  // )
+
+  console.log()
+  console.log('Complete.')
 }
 
 main()

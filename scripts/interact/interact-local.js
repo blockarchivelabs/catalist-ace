@@ -4,61 +4,174 @@ const { hexConcat, pad, ETH, e27, e18, toBN } = require('./utils')
 const { getEventArgument, ZERO_ADDRESS } = require('@aragon/contract-helpers-test')
 const fs = require('fs')
 
+// RPC_URL=http://127.0.0.1:8545 npx hardhat run scripts/interact/interact-local.js --network local
 async function main() {
   console.log('Getting the deposit contract...')
-  const addresses = JSON.parse(fs.readFileSync('./deployed-local.json', 'utf-8'))
+  const fileName = './deployed-local.json'
+  const addresses = JSON.parse(fs.readFileSync(fileName, 'utf-8'))
   const CatalistAddress = addresses['app:catalist'].proxy.address
-  const HashConsensusAddress = addresses.hashConsensusForAccountingOracle.address
+  const CatalistTemplateAddress = addresses.catalistTemplate.address
+  const HashConsensusForAccountingOracleAddress = addresses.hashConsensusForAccountingOracle.address
+  const HashConsensusForValidatorsExitBusOracle = addresses.hashConsensusForValidatorsExitBusOracle.address
+  const NodeOperatorRegistryAddress = addresses['app:node-operators-registry'].proxy.address
   const StakingRouterAddress = addresses.stakingRouter.proxy.address
   const AccountingOracleAddress = addresses.accountingOracle.proxy.address
   const WithdrawalQueueERC721Address = addresses.withdrawalQueueERC721.proxy.address
-  const NodeOperatorRegistryAddress = addresses['app:node-operators-registry'].proxy.address
-  
+  const DepositSecurityModuleAddress = addresses.depositSecurityModule.address
+  const ValidatorsExitBusOracleAddress = addresses.validatorsExitBusOracle.proxy.address
+  const AragonKernelAddress = addresses['aragon-kernel'].proxy.address
+  const AragonAclAddress = addresses['aragon-acl'].proxy.address
+
   const catalist = await ethers.getContractAt('Catalist', CatalistAddress)
-  const legacyOracle = await ethers.getContractAt('LegacyOracle', LegacyOracleAddress)
-  const hashConsensus = await ethers.getContractAt('HashConsensus', HashConsensusAddress)
+  const catalistTemplate = await ethers.getContractAt('CatalistTemplate', CatalistTemplateAddress)
+  const hashConsensusForAccountingOracle = await ethers.getContractAt('HashConsensus', HashConsensusForAccountingOracleAddress)
+  const hashConsensusForValidatorsExitBusOracle = await ethers.getContractAt('HashConsensus', HashConsensusForValidatorsExitBusOracle)
   const stakingRouter = await ethers.getContractAt('StakingRouter', StakingRouterAddress)
-  const withdrawalQueueERC721 = await ethers.getContractAt('WithdrawalQueueERC721', WithdrawalQueueERC721Address)
   const accountingOracle = await ethers.getContractAt('AccountingOracle', AccountingOracleAddress)
-  const nodeOperatorsRegistry = await ethers.getContractAt('NodeOperatorsRegistry', NodeOperatorsRegistryAddress)
+  const withdrawalQueueERC721 = await ethers.getContractAt('WithdrawalQueueERC721', WithdrawalQueueERC721Address)
+  const nodeOperatorRegistry = await ethers.getContractAt('NodeOperatorsRegistry', NodeOperatorRegistryAddress)
+  const depositSecurityModule = await ethers.getContractAt('DepositSecurityModule', DepositSecurityModuleAddress)
+  const validatorsExitBusOracle = await ethers.getContractAt('ValidatorsExitBusOracle', ValidatorsExitBusOracleAddress)
+  const aragonKernel = await ethers.getContractAt('Kernel', AragonKernelAddress)
+  const aragonKernelProxy = await ethers.getContractAt('KernelProxy', AragonKernelAddress)
+  const aragonAcl = await ethers.getContractAt('ACL', AragonAclAddress)
+
+  const chainSpec = JSON.parse(fs.readFileSync(fileName, 'utf-8')).chainSpec
+  const GENESIS_TIME = chainSpec.genesisTime
+  const SLOTS_PER_EPOCH = chainSpec.slotsPerEpoch
+  const SECONDS_PER_SLOT = chainSpec.secondsPerSlot
 
   const [owner, ad1] = await ethers.getSigners()
+  const deployerAddress = owner.address
+  const oracleMemberAddress = ad1.address
 
-  console.log()
-  console.log('Querying get member...')
-  const members = await hashConsensus.connect(owner).getMembers()
-  console.log('Members:', members)
+  const CATALIST_APP_ID = '0xfe7e515193fc7331eedd97433fad4b507d16473770a68882c43677c8f27ebcd8'
+  // const NEW_CATALIST_ADDRESS = '0xDF4A425efAF188E94ae443E58101C3CE44b80D9c'
 
+  const APP_BASES_NAMESPACE = await aragonKernel.connect(owner).APP_BASES_NAMESPACE({
+    gasLimit: 1000000,
+    gasPrice: 100000,
+  })
   console.log()
-  const beforeBalance = await catalist.connect(owner).balanceOf(owner.address)
-  console.log('Before Balance: ', beforeBalance.toString())
-
-  console.log()
-  console.log('Staking 100ACE...')
-  await catalist.connect(owner).submit(owner.address, {
-    value: parseEther('100'),
+  console.log('APP_BASES_NAMESPACE:', APP_BASES_NAMESPACE)
+  // const APP_ADDR_NAMESPACE = await aragonKernel.connect(owner).APP_ADDR_NAMESPACE({
+  //   gasLimit: 1000000,
+  //   gasPrice: 100000,
+  // })
+  // console.log('APP_ADDR_NAMESPACE:', APP_ADDR_NAMESPACE)
+  const APP_MANAGER_ROLE = await aragonKernel.connect(owner).APP_MANAGER_ROLE({
     gasLimit: 1000000,
     gasPrice: 100000,
   })
 
   console.log()
-  const afterBalance = await catalist.connect(owner).balanceOf(owner.address)
-  console.log('After Balance: ', afterBalance.toString())
+  console.log('Get permission manager...')
+  const manager = await aragonAcl.connect(owner).getPermissionManager(
+    AragonKernelAddress,
+    APP_MANAGER_ROLE,
+    {
+      gasLimit: 1000000,
+      gasPrice: 100000,
+    }
+  )
+  console.log('- manager:', manager)
+
+  console.log()
+  console.log('Grant APP_MANAGER_ROLE to owner...')
+  await aragonAcl.connect(owner).grantPermissionP(
+    owner.address,
+    AragonKernelAddress,
+    APP_MANAGER_ROLE,
+    [
+      APP_BASES_NAMESPACE,
+      CATALIST_APP_ID,
+    ],
+    {
+      gasLimit: 1000000,
+      gasPrice: 100000,
+    }
+  )
 
   // console.log()
-  // console.log('Querying owner approve...')
-  // await catalist.connect(owner).approve(
-  //   WithdrawalQueueERC721Address, 
-  //   parseEther('10')
-  // )
+  // console.log('Get name from catalist...')
+  // const beforeName = await catalist.connect(owner).name({
+  //   gasLimit: 1000000,
+  //   gasPrice: 100000,
+  // })
+  // console.log('- name:', beforeName)
+
+  console.log()
+  console.log('Deploy new Catalist.sol...')
+  const catalistFactory = await ethers.getContractFactory('Catalist')
+  const newCatalist = await catalistFactory.deploy()
+  await newCatalist.deployed()
+  console.log('- New Catalist deployed to:', newCatalist.address)
+
+  console.log()
+  console.log('Get address from kernel...')
+  const beforeAddress = await aragonKernel.connect(owner).getApp(
+    APP_BASES_NAMESPACE,
+    CATALIST_APP_ID,
+    {
+      gasLimit: 1000000,
+      gasPrice: 100000,
+    }
+  )
+  console.log('- address:', beforeAddress)
+
+  console.log()
+  console.log('Set app from kernel...')
+  const changedAppId = await aragonKernel.connect(owner).setApp(
+    APP_BASES_NAMESPACE,
+    CATALIST_APP_ID,
+    newCatalist.address,
+    {
+      gasLimit: 1000000,
+      gasPrice: 100000,
+    }
+  )
+  console.log('- changedAppId:', changedAppId)
+
+  console.log()
+  console.log('Get address from kernel...')
+  const afterAddress = await aragonKernel.connect(owner).getApp(
+    APP_BASES_NAMESPACE,
+    CATALIST_APP_ID,
+    {
+      gasLimit: 1000000,
+      gasPrice: 100000,
+    }
+  )
+  console.log('- address:', afterAddress)
+
+  console.log()
+  console.log('Get name from upgraded catalist...')
+  const afterName = await catalist.connect(owner).name({
+    gasLimit: 1000000,
+    gasPrice: 100000,
+  })
+  console.log('- name:', afterName)
 
   // console.log()
-  // console.log('Querying allowance...')
-  // const allowance = await catalist.connect(owner).allowance(
-  //   owner.address, 
-  //   WithdrawalQueueERC721Address
-  // )
-  // console.log('Allowance:', allowance.toString())
+  // console.log('Querying get member...')
+  // const members = await hashConsensus.connect(owner).getMembers()
+  // console.log('Members:', members)
+
+  // console.log()
+  // const beforeBalance = await catalist.connect(owner).balanceOf(owner.address)
+  // console.log('Before Balance: ', beforeBalance.toString())
+
+  // console.log()
+  // console.log('Staking 100ACE...')
+  // await catalist.connect(owner).submit(owner.address, {
+  //   value: parseEther('100'),
+  //   gasLimit: 1000000,
+  //   gasPrice: 100000,
+  // })
+
+  // console.log()
+  // const afterBalance = await catalist.connect(owner).balanceOf(owner.address)
+  // console.log('After Balance: ', afterBalance.toString())
 
   // console.log()
   // console.log('Querying request withdrawals...')
@@ -110,6 +223,11 @@ async function main() {
   // console.log('Querying get singing keys...')
   // const signingKeys = await nodeOperatorsRegistry.connect(owner).getSigningKeys(operatorId, 0, 1)
   // console.log('Signing Keys:', signingKeys)
+
+  // console.log()
+  // console.log('Get StakingModuleStatus...')
+  // const status = await stakingRouter.connect(owner).getStakingModuleStatus(1, {gasLimit: 1000000, gasPrice: 100000})
+  // console.log('- Status:', status)
 }
 
 main()
