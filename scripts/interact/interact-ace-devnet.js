@@ -65,6 +65,7 @@ async function main() {
   const ValidatorsExitBusOracleAddress = addresses.validatorsExitBusOracle.proxy.address
   const AragonKernelAddress = addresses['aragon-kernel'].proxy.address
   const AragonAclAddress = addresses['aragon-acl'].proxy.address
+  const VotingAddress = addresses['app:aragon-voting'].proxy.address
 
   const catalist = await ethers.getContractAt('Catalist', CatalistAddress)
   const catalistProxy = await ethers.getContractAt('AppProxyUpgradeable', CatalistAddress)
@@ -79,6 +80,7 @@ async function main() {
   const aragonKernel = await ethers.getContractAt('Kernel', AragonKernelAddress)
   const aragonKernelProxy = await ethers.getContractAt('KernelProxy', AragonKernelAddress)
   const aragonAcl = await ethers.getContractAt('ACL', AragonAclAddress)
+  const voting = await ethers.getContractAt('Voting', VotingAddress)
 
   const deployerAddress = '0x63cac65c5eb17E6Dd47D9313e23169f79d1Ab058'
   const oracleMemberAddress = '0xB458c332C242247C46e065Cf987a05bAf7612904'
@@ -105,6 +107,57 @@ async function main() {
     gasPrice: 100000,
   })
   console.log('APP_MANAGER_ROLE:', APP_MANAGER_ROLE)
+
+  console.log()
+  console.log('RESUME_ROLE...')
+  const RESUME_ROLE = await catalist.RESUME_ROLE({
+    gasLimit: 1000000,
+    gasPrice: 100000,
+  })
+  const canPerform = await catalist.canPerform(
+    deployerAddress,
+    RESUME_ROLE,
+    [],
+    {
+      gasLimit: 1000000,
+      gasPrice: 100000,
+    }
+  )
+  console.log('- Can perform:', canPerform)
+
+  console.log()
+  console.log('MANAGE_NODE_OPERATOR_ROLE...')
+  const MANAGE_NODE_OPERATOR_ROLE = await nodeOperatorRegistry.MANAGE_NODE_OPERATOR_ROLE({
+    gasLimit: 1000000,
+    gasPrice: 100000,
+  })
+  const canPerform2 = await nodeOperatorRegistry.canPerform(
+    deployerAddress,
+    MANAGE_NODE_OPERATOR_ROLE,
+    [],
+    {
+      gasLimit: 1000000,
+      gasPrice: 100000,
+    }
+  )
+  console.log('- Can perform:', canPerform2)
+
+  console.log()
+  console.log('MODIFY_QUORUM_ROLE...')
+  const MODIFY_QUORUM_ROLE = await voting.MODIFY_QUORUM_ROLE({
+    gasLimit: 1000000,
+    gasPrice: 100000,
+  })
+  const canPerform3 = await voting.canPerform(
+    deployerAddress,
+    MODIFY_QUORUM_ROLE,
+    [],
+    {
+      gasLimit: 1000000,
+      gasPrice: 100000,
+    }
+  )
+  console.log('- Can perform:', canPerform3)
 
   // console.log()
   // console.log('Grant APP_MANAGER_ROLE to owner...')
@@ -172,22 +225,22 @@ async function main() {
   //   }
   // )
 
-  console.log()
-  console.log('Get address from kernel...')
-  const afterAddress = await aragonKernel.getApp(
-    APP_BASES_NAMESPACE,
-    CATALIST_APP_ID,
-    {
-      gasLimit: 1000000,
-      gasPrice: 100000,
-    }
-  )
-  console.log('- address:', afterAddress)
+  // console.log()
+  // console.log('Get address from kernel...')
+  // const afterAddress = await aragonKernel.getApp(
+  //   APP_BASES_NAMESPACE,
+  //   CATALIST_APP_ID,
+  //   {
+  //     gasLimit: 1000000,
+  //     gasPrice: 100000,
+  //   }
+  // )
+  // console.log('- address:', afterAddress)
 
-  console.log()
-  console.log('Get name from upgraded catalist...')
-  const afterName = await catalist.name()
-  console.log('- name:', afterName)
+  // console.log()
+  // console.log('Get name from upgraded catalist...')
+  // const afterName = await catalist.name()
+  // console.log('- name:', afterName)
 
   // console.log()
   // console.log('Get Catalist implementation address...')

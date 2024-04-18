@@ -53,7 +53,8 @@ async function main() {
   const SECONDS_PER_SLOT = chainSpec.secondsPerSlot
 
   const CATALIST_APP_ID = '0xfe7e515193fc7331eedd97433fad4b507d16473770a68882c43677c8f27ebcd8'
-  const NEW_CATALIST_ADDRESS = '0xDF4A425efAF188E94ae443E58101C3CE44b80D9c'
+  const ORIGIN_CATALIST_ADDRESS = '0x14Cb36737D2EA82e617E241fb32A44f652e0E8F4'
+  const NEW_CATALIST_ADDRESS = '0x0665f48d1ddebF766837b771f29584eA6c23Dc43'
 
   const APP_BASES_NAMESPACE = await aragonKernel.APP_BASES_NAMESPACE({
     gasLimit: 1000000,
@@ -61,23 +62,123 @@ async function main() {
   })
   console.log()
   console.log('APP_BASES_NAMESPACE:', APP_BASES_NAMESPACE)
-  const APP_ADDR_NAMESPACE = await aragonKernel.APP_ADDR_NAMESPACE({
+
+  const APP_MANAGER_ROLE = await aragonKernel.APP_MANAGER_ROLE({
     gasLimit: 1000000,
     gasPrice: 100000,
   })
-  console.log('APP_ADDR_NAMESPACE:', APP_ADDR_NAMESPACE)
+  console.log('APP_MANAGER_ROLE:', APP_MANAGER_ROLE)
 
   console.log()
-  console.log('Get address from kernel...')
-  const beforeAddress = await aragonKernel.getApp(
-    APP_BASES_NAMESPACE,
-    CATALIST_APP_ID,
-    {
-      gasLimit: 1000000,
-      gasPrice: 100000,
-    }
-  )
-  console.log('- address:', beforeAddress)
+  console.log('Get name from withrawalQueueERC721...')
+  const withdrawalQueueERC721Name = await withdrawalQueueERC721.name({
+    gasLimit: 1000000,
+    gasPrice: 100000,
+  })
+  console.log('- name:', withdrawalQueueERC721Name)
+
+  // console.log()
+  // console.log('Grant APP_MANAGER_ROLE to owner...')
+  // await aragonAcl.grantPermission(
+  //   deployerAddress,
+  //   AragonKernelAddress,
+  //   APP_MANAGER_ROLE,
+  //   {
+  //     gasLimit: 1000000,
+  //     gasPrice: 100000,
+  //   }
+  // )
+
+  // console.log()
+  // console.log('Check permission...')
+  // const paramBytes = dangerouslyCastUintArrayToBytes([
+  //   APP_BASES_NAMESPACE,
+  //   CATALIST_APP_ID,
+  // ])
+  // const permission = await aragonKernel.hasPermission(
+  //   deployerAddress,
+  //   AragonKernelAddress,
+  //   APP_MANAGER_ROLE,
+  //   paramBytes,
+  //   {
+  //     gasLimit: 1000000,
+  //     gasPrice: 100000,
+  //   }
+  // )
+  // console.log('- permission:', permission)
+
+  // console.log()
+  // console.log('Get name from catalist...')
+  // const beforeName = await catalist.name()
+  // console.log('- name:', beforeName)
+
+  // console.log()
+  // console.log('Get address from kernel...')
+  // const beforeAddress = await aragonKernel.getApp(
+  //   APP_BASES_NAMESPACE,
+  //   CATALIST_APP_ID,
+  //   {
+  //     gasLimit: 1000000,
+  //     gasPrice: 100000,
+  //   }
+  // )
+  // console.log('- address:', beforeAddress)
+
+  // console.log()
+  // console.log('Deploy new Catalist...')
+  // const Catalist = await ethers.getContractFactory('Catalist')
+  // const newCatalist = await Catalist.deploy()
+  // await newCatalist.deployed()
+  // console.log('New Catalist deployed to:', newCatalist.address)
+
+  // console.log()
+  // console.log('Set app from kernel...')
+  // await aragonKernel.setApp(
+  //   APP_BASES_NAMESPACE,
+  //   CATALIST_APP_ID,
+  //   NEW_CATALIST_ADDRESS,
+  //   {
+  //     gasLimit: 1000000,
+  //     gasPrice: 100000,
+  //   }
+  // )
+
+  // console.log()
+  // console.log('Get address from kernel...')
+  // const afterAddress = await aragonKernel.getApp(
+  //   APP_BASES_NAMESPACE,
+  //   CATALIST_APP_ID,
+  //   {
+  //     gasLimit: 1000000,
+  //     gasPrice: 100000,
+  //   }
+  // )
+  // console.log('- address:', afterAddress)
+
+  // console.log()
+  // console.log('Get name from upgraded catalist...')
+  // const afterName = await catalist.name()
+  // console.log('- name:', afterName)
+
+  // console.log()
+  // console.log('Get Catalist implementation address...')
+  // const appAddress = await aragonKernelProxy.apps(
+  //   APP_BASES_NAMESPACE,
+  //   CATALIST_APP_ID,
+  //   {
+  //     gasLimit: 1000000,
+  //     gasPrice: 100000,
+  //   }
+  // )
+  // console.log('- apps:', appAddress)
+
+  // console.log()
+  // console.log('Get implementation address from kernel proxy...')
+  // const implementationAddress = await aragonKernelProxy.implementation({
+  //   gasLimit: 1000000,
+  //   gasPrice: 100000,
+  // })
+  // console.log('- Implementation address:', implementationAddress)
 
 
   // console.log()
@@ -200,3 +301,53 @@ main()
     console.error(error)
     process.exitCode = 1
   })
+
+
+
+
+  function dangerouslyCastUintArrayToBytes(input) {
+    // Calculate the byte length of the array
+    let byteLength = input.length * 32;
+    // Create a new Uint8Array with the calculated byte length
+    let output = new Uint8Array(byteLength);
+    // Copy the elements of the input array into the output array
+    for (let i = 0; i < input.length; i++) {
+        // Get the current uint256 value from the input array
+        let value = input[i];
+        // Convert the uint256 value into bytes and copy it into the output array
+        for (let j = 0; j < 32; j++) {
+            // Calculate the byte offset for the current value
+            let byteOffset = i * 32 + j;
+            // Extract the byte at the current position
+            let byte = (value / (2 ** (8 * (31 - j)))) & 0xff;
+            // Set the byte in the output array
+            output[byteOffset] = byte;
+        }
+    }
+    return output;
+  }
+  
+  function dangerouslyCastBytesToUintArray(input) {
+    // Calculate the number of uint256 values in the bytes array
+    let intsLength = input.length / 32;
+    // Ensure that the length of the bytes array is a multiple of 32
+    if (input.length !== intsLength * 32) {
+        throw new Error("Improper length");
+    }
+    // Create a new Uint256 array with the calculated length
+    let output = new Array(intsLength);
+    // Copy the bytes array into the uint256 array
+    for (let i = 0; i < intsLength; i++) {
+        // Calculate the byte offset for the current uint256 value
+        let byteOffset = i * 32;
+        // Extract the bytes from the bytes array and convert them into a uint256 value
+        let value = 0;
+        for (let j = 0; j < 32; j++) {
+            // Shift the current byte to its appropriate position in the uint256 value
+            value += input[byteOffset + j] * (2 ** (8 * (31 - j)));
+        }
+        // Store the uint256 value in the output array
+        output[i] = value;
+    }
+    return output;
+  }

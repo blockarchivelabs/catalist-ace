@@ -772,12 +772,7 @@ contract CatalistTemplate is IsContract {
         perms[0] = _state.operators.MANAGE_SIGNING_KEYS();
         perms[1] = _state.operators.SET_NODE_OPERATOR_LIMIT_ROLE();
         for (i = 0; i < 2; ++i) {
-            _createPermissionForVoting(
-                acl,
-                _state.operators,
-                perms[i],
-                msg.sender
-            );
+            _createPermission(acl, _state.operators, perms[i], msg.sender);
         }
         acl.createPermission(
             _state.stakingRouter,
@@ -786,7 +781,7 @@ contract CatalistTemplate is IsContract {
             msg.sender
         );
         acl.createPermission(
-            _state.agent,
+            msg.sender,
             _state.operators,
             _state.operators.MANAGE_NODE_OPERATOR_ROLE(),
             msg.sender
@@ -799,12 +794,7 @@ contract CatalistTemplate is IsContract {
         perms[3] = _state.catalist.STAKING_CONTROL_ROLE();
         perms[4] = _state.catalist.UNSAFE_CHANGE_DEPOSITED_VALIDATORS_ROLE();
         for (i = 0; i < 5; ++i) {
-            _createPermissionForVoting(
-                acl,
-                _state.catalist,
-                perms[i],
-                msg.sender
-            );
+            _createPermission(acl, _state.catalist, perms[i], msg.sender);
         }
     }
 
@@ -824,91 +814,76 @@ contract CatalistTemplate is IsContract {
         );
     }
 
-    function _createPermissionForVoting(
+    function _createPermission(
         ACL _acl,
         address _app,
         bytes32 perm,
-        address _voting
+        address entity
     ) internal {
-        _acl.createPermission(_voting, _app, perm, _voting);
+        _acl.createPermission(entity, _app, perm, entity);
     }
 
     function _createAgentPermissions(
         ACL _acl,
         Agent _agent,
-        address _voting
+        address entity
     ) internal {
-        _createPermissionForVoting(
-            _acl,
-            _agent,
-            _agent.EXECUTE_ROLE(),
-            _voting
-        );
-        _createPermissionForVoting(
-            _acl,
-            _agent,
-            _agent.RUN_SCRIPT_ROLE(),
-            _voting
-        );
+        _createPermission(_acl, _agent, _agent.EXECUTE_ROLE(), entity);
+        _createPermission(_acl, _agent, _agent.RUN_SCRIPT_ROLE(), entity);
     }
 
     function _createVaultPermissions(
         ACL _acl,
         Vault _vault,
         address _finance,
-        address _voting
+        address entity
     ) internal {
-        _acl.createPermission(
-            _finance,
-            _vault,
-            _vault.TRANSFER_ROLE(),
-            _voting
-        );
+        _acl.createPermission(_finance, _vault, _vault.TRANSFER_ROLE(), entity);
     }
 
     function _createFinancePermissions(
         ACL _acl,
         Finance _finance,
-        address _voting
+        address entity
     ) internal {
-        _createPermissionForVoting(
+        _createPermission(
             _acl,
             _finance,
             _finance.EXECUTE_PAYMENTS_ROLE(),
-            _voting
+            entity
         );
-        _createPermissionForVoting(
+        _createPermission(
             _acl,
             _finance,
             _finance.MANAGE_PAYMENTS_ROLE(),
-            _voting
+            entity
         );
-        _createPermissionForVoting(
+        _createPermission(
             _acl,
             _finance,
             _finance.CREATE_PAYMENTS_ROLE(),
-            _voting
+            entity
         );
     }
 
     function _createEvmScriptsRegistryPermissions(
         ACL _acl,
-        address _voting
+        address entity
     ) internal {
         EVMScriptRegistry registry = EVMScriptRegistry(
             _acl.getEVMScriptRegistry()
         );
-        _createPermissionForVoting(
+        _createPermission(
             _acl,
             registry,
             registry.REGISTRY_MANAGER_ROLE(),
-            _voting
+            entity
         );
-        _createPermissionForVoting(
+        _createPermission(
             _acl,
             registry,
             registry.REGISTRY_ADD_EXECUTOR_ROLE(),
-            _voting
+            entity
         );
     }
 
@@ -917,30 +892,30 @@ contract CatalistTemplate is IsContract {
         Voting _voting,
         address _tokenManager
     ) internal {
-        _createPermissionForVoting(
+        _createPermission(
             _acl,
             _voting,
             _voting.MODIFY_QUORUM_ROLE(),
-            _voting
+            msg.sender
         );
-        _createPermissionForVoting(
+        _createPermission(
             _acl,
             _voting,
             _voting.MODIFY_SUPPORT_ROLE(),
-            _voting
+            msg.sender
         );
         _acl.createPermission(
             _tokenManager,
             _voting,
             _voting.CREATE_VOTES_ROLE(),
-            _voting
+            msg.sender
         );
     }
 
     function _configureTokenManagerPermissions(
         ACL _acl,
         TokenManager _tokenManager,
-        address _voting
+        address entity
     ) internal {
         _removePermissionFromTemplate(
             _acl,
@@ -952,11 +927,11 @@ contract CatalistTemplate is IsContract {
             _tokenManager,
             _tokenManager.ASSIGN_ROLE()
         );
-        _createPermissionForVoting(
+        _createPermission(
             _acl,
             _tokenManager,
             _tokenManager.ASSIGN_ROLE(),
-            _voting
+            entity
         );
     }
 
@@ -979,22 +954,22 @@ contract CatalistTemplate is IsContract {
 
     function _transferRootPermissionsFromTemplateAndFinalizeDAO(
         Kernel _dao,
-        address _voting
+        address entity
     ) private {
         ACL _acl = ACL(_dao.acl());
         _transferPermissionFromTemplate(
             _acl,
             _dao,
-            _voting,
+            entity,
             _dao.APP_MANAGER_ROLE(),
-            _voting
+            entity
         );
         _transferPermissionFromTemplate(
             _acl,
             _acl,
-            _voting,
+            entity,
             _acl.CREATE_PERMISSIONS_ROLE(),
-            _voting
+            entity
         );
         console.log("Transfering permissions");
     }
