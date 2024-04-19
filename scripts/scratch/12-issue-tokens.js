@@ -38,23 +38,23 @@ async function issueTokens({ web3, artifacts }) {
   const holders = pairs.map((p) => p[0])
   const amounts = pairs.map((p) => p[1])
 
-  log(`Using vesting settings:`)
-  log(`  Start:`, chalk.yellow(formatDate(vesting.start)))
-  log(`  Cliff:`, chalk.yellow(formatDate(vesting.cliff)))
-  log(`  End:`, chalk.yellow(formatDate(vesting.end)))
-  log(`  Revokable:`, chalk.yellow(vesting.revokable))
+  // log(`Using vesting settings:`)
+  // log(`  Start:`, chalk.yellow(formatDate(vesting.start)))
+  // log(`  Cliff:`, chalk.yellow(formatDate(vesting.cliff)))
+  // log(`  End:`, chalk.yellow(formatDate(vesting.end)))
+  // log(`  Revokable:`, chalk.yellow(vesting.revokable))
 
   const totalSupply = bigSum(amounts, vesting.unvestedTokensAmount)
 
-  log(`  Total supply:`, chalk.yellow(web3.utils.fromWei(totalSupply.toString(), 'ether')))
-  log(`  Unvested tokens amount:`, chalk.yellow(web3.utils.fromWei(vesting.unvestedTokensAmount, 'ether')))
-  log(`  Token receivers (total ${chalk.yellow(holders.length)}):`)
+  // log(`  Total supply:`, chalk.yellow(web3.utils.fromWei(totalSupply.toString(), 'ether')))
+  // log(`  Unvested tokens amount:`, chalk.yellow(web3.utils.fromWei(vesting.unvestedTokensAmount, 'ether')))
+  // log(`  Token receivers (total ${chalk.yellow(holders.length)}):`)
 
-  holders.forEach((addr, i) => {
-    const amount = amounts[i]
-    const percentage = +new BN(amount).muln(10000).div(totalSupply) / 100
-    log(`    ${addr}: ${chalk.yellow(web3.utils.fromWei(amount, 'ether'))} (${percentage}%)`)
-  })
+  // holders.forEach((addr, i) => {
+  //   const amount = amounts[i]
+  //   const percentage = +new BN(amount).muln(10000).div(totalSupply) / 100
+  //   log(`    ${addr}: ${chalk.yellow(web3.utils.fromWei(amount, 'ether'))} (${percentage}%)`)
+  // })
 
   log.splitter()
 
@@ -73,7 +73,8 @@ async function issueTokens({ web3, artifacts }) {
     endTotalSupply.iadd(bigSum(iAmounts))
 
     await makeTx(template, 'issueTokens',
-      [iHolders, iAmounts, vesting.start, vesting.cliff, vesting.end, vesting.revokable, '0x' + endTotalSupply.toString(16)]
+      []
+      // [iHolders, iAmounts, vesting.start, vesting.cliff, vesting.end, vesting.revokable, '0x' + endTotalSupply.toString(16)]
       , { from: state.deployer },
     )
   }

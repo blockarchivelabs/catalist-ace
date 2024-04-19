@@ -9,7 +9,7 @@ const { APP_NAMES } = require('../constants')
 const REQUIRED_NET_STATE = [
   'ens',
   'daoFactory',
-  'miniMeTokenFactory',
+  // 'miniMeTokenFactory',
   'aragonID',
   'apmRegistryFactory',
   'deployer'
@@ -28,7 +28,7 @@ async function deployTemplate({ web3, artifacts }) {
     state.deployer,
     state.daoFactory.address,
     state.ens.address,
-    state.miniMeTokenFactory.address,
+    // state.miniMeTokenFactory.address,
     state.aragonID.address,
     state.apmRegistryFactory.address
   ]

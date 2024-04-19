@@ -9,29 +9,33 @@ async function main() {
   console.log('Getting the deposit contract...')
   const fileName = './deployed-local.json'
   const addresses = JSON.parse(fs.readFileSync(fileName, 'utf-8'))
+  const depositContractAddress = addresses.chainSpec.depositContract
   const CatalistAddress = addresses['app:catalist'].proxy.address
-  const CatalistTemplateAddress = addresses.catalistTemplate.address
   const HashConsensusForAccountingOracleAddress = addresses.hashConsensusForAccountingOracle.address
-  const HashConsensusForValidatorsExitBusOracle = addresses.hashConsensusForValidatorsExitBusOracle.address
-  const NodeOperatorRegistryAddress = addresses['app:node-operators-registry'].proxy.address
+  const HashConsensusForForValidatorsExitBusOracle = addresses.hashConsensusForValidatorsExitBusOracle.address
   const StakingRouterAddress = addresses.stakingRouter.proxy.address
   const AccountingOracleAddress = addresses.accountingOracle.proxy.address
   const WithdrawalQueueERC721Address = addresses.withdrawalQueueERC721.proxy.address
+  const NodeOperatorRegistryAddress = addresses['app:node-operators-registry'].proxy.address
   const DepositSecurityModuleAddress = addresses.depositSecurityModule.address
-  const ValidatorsExitBusOracleAddress = addresses.validatorsExitBusOracle.proxy.address
+  const CatalistLocatorAddress = addresses.catalistLocator.proxy.address
+  const ValidatorsExitBusOracle = addresses.validatorsExitBusOracle.proxy.address
   const AragonKernelAddress = addresses['aragon-kernel'].proxy.address
   const AragonAclAddress = addresses['aragon-acl'].proxy.address
 
+  const depositContract = await ethers.getContractAt('DepositContract', depositContractAddress)
   const catalist = await ethers.getContractAt('Catalist', CatalistAddress)
-  const catalistTemplate = await ethers.getContractAt('CatalistTemplate', CatalistTemplateAddress)
+  const catalistProxy = await ethers.getContractAt('AppProxyUpgradeable', CatalistAddress)
+  const catalistAragonApp = await ethers.getContractAt('AragonApp', CatalistAddress)
   const hashConsensusForAccountingOracle = await ethers.getContractAt('HashConsensus', HashConsensusForAccountingOracleAddress)
-  const hashConsensusForValidatorsExitBusOracle = await ethers.getContractAt('HashConsensus', HashConsensusForValidatorsExitBusOracle)
+  const hashConsensusForValidatorsExitBusOracle = await ethers.getContractAt('HashConsensus', HashConsensusForForValidatorsExitBusOracle)
   const stakingRouter = await ethers.getContractAt('StakingRouter', StakingRouterAddress)
   const accountingOracle = await ethers.getContractAt('AccountingOracle', AccountingOracleAddress)
   const withdrawalQueueERC721 = await ethers.getContractAt('WithdrawalQueueERC721', WithdrawalQueueERC721Address)
   const nodeOperatorRegistry = await ethers.getContractAt('NodeOperatorsRegistry', NodeOperatorRegistryAddress)
   const depositSecurityModule = await ethers.getContractAt('DepositSecurityModule', DepositSecurityModuleAddress)
-  const validatorsExitBusOracle = await ethers.getContractAt('ValidatorsExitBusOracle', ValidatorsExitBusOracleAddress)
+  const catalistLocator = await ethers.getContractAt('CatalistLocator', CatalistLocatorAddress)
+  const validatorsExitBusOracle = await ethers.getContractAt('ValidatorsExitBusOracle', ValidatorsExitBusOracle)
   const aragonKernel = await ethers.getContractAt('Kernel', AragonKernelAddress)
   const aragonKernelProxy = await ethers.getContractAt('KernelProxy', AragonKernelAddress)
   const aragonAcl = await ethers.getContractAt('ACL', AragonAclAddress)
@@ -54,11 +58,6 @@ async function main() {
   })
   console.log()
   console.log('APP_BASES_NAMESPACE:', APP_BASES_NAMESPACE)
-  // const APP_ADDR_NAMESPACE = await aragonKernel.connect(owner).APP_ADDR_NAMESPACE({
-  //   gasLimit: 1000000,
-  //   gasPrice: 100000,
-  // })
-  // console.log('APP_ADDR_NAMESPACE:', APP_ADDR_NAMESPACE)
   const APP_MANAGER_ROLE = await aragonKernel.connect(owner).APP_MANAGER_ROLE({
     gasLimit: 1000000,
     gasPrice: 100000,
@@ -77,28 +76,12 @@ async function main() {
   console.log('- manager:', manager)
 
   console.log()
-  console.log('Grant APP_MANAGER_ROLE to owner...')
-  await aragonAcl.connect(owner).grantPermissionP(
-    owner.address,
-    AragonKernelAddress,
-    APP_MANAGER_ROLE,
-    [
-      APP_BASES_NAMESPACE,
-      CATALIST_APP_ID,
-    ],
-    {
-      gasLimit: 1000000,
-      gasPrice: 100000,
-    }
-  )
-
-  // console.log()
-  // console.log('Get name from catalist...')
-  // const beforeName = await catalist.connect(owner).name({
-  //   gasLimit: 1000000,
-  //   gasPrice: 100000,
-  // })
-  // console.log('- name:', beforeName)
+  console.log('Get name from catalist...')
+  const beforeName = await catalist.connect(owner).name({
+    gasLimit: 1000000,
+    gasPrice: 100000,
+  })
+  console.log('- name:', beforeName)
 
   console.log()
   console.log('Deploy new Catalist.sol...')
