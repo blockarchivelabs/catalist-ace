@@ -8,7 +8,7 @@ const namehash = require('eth-ens-namehash').hash
 // RPC_URL=http://20.197.13.207:8545 npx hardhat run scripts/interact/interact-ace-mainnet.js --network ace_mainnet
 async function main() {
   console.log('Getting the deposit contract...')
-  const fileName = './deployed-ace_mainnet.json'
+  const fileName = './deployed-ace-mainnet-stACE.json'
   const addresses = JSON.parse(fs.readFileSync(fileName, 'utf-8'))
   const depositContractAddress = addresses.chainSpec.depositContract
   const CatalistAddress = addresses['app:catalist'].proxy.address
@@ -56,26 +56,18 @@ async function main() {
   const ORIGIN_CATALIST_ADDRESS = '0x14Cb36737D2EA82e617E241fb32A44f652e0E8F4'
   const NEW_CATALIST_ADDRESS = '0x0665f48d1ddebF766837b771f29584eA6c23Dc43'
 
-  const APP_BASES_NAMESPACE = await aragonKernel.APP_BASES_NAMESPACE({
-    gasLimit: 1000000,
-    gasPrice: 100000,
-  })
-  console.log()
-  console.log('APP_BASES_NAMESPACE:', APP_BASES_NAMESPACE)
+  // const APP_BASES_NAMESPACE = await aragonKernel.APP_BASES_NAMESPACE({
+  //   gasLimit: 1000000,
+  //   gasPrice: 100000,
+  // })
+  // console.log()
+  // console.log('APP_BASES_NAMESPACE:', APP_BASES_NAMESPACE)
 
-  const APP_MANAGER_ROLE = await aragonKernel.APP_MANAGER_ROLE({
-    gasLimit: 1000000,
-    gasPrice: 100000,
-  })
-  console.log('APP_MANAGER_ROLE:', APP_MANAGER_ROLE)
-
-  console.log()
-  console.log('Get name from withrawalQueueERC721...')
-  const withdrawalQueueERC721Name = await withdrawalQueueERC721.name({
-    gasLimit: 1000000,
-    gasPrice: 100000,
-  })
-  console.log('- name:', withdrawalQueueERC721Name)
+  // const APP_MANAGER_ROLE = await aragonKernel.APP_MANAGER_ROLE({
+  //   gasLimit: 1000000,
+  //   gasPrice: 100000,
+  // })
+  // console.log('APP_MANAGER_ROLE:', APP_MANAGER_ROLE)
 
   // console.log()
   // console.log('Grant APP_MANAGER_ROLE to owner...')

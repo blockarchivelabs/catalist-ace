@@ -78,14 +78,10 @@ async function main() {
 
   console.log()
   console.log('Grant APP_MANAGER_ROLE to owner...')
-  await aragonAcl.connect(owner).grantPermissionP(
+  await aragonAcl.connect(owner).grantPermission(
     owner.address,
     AragonKernelAddress,
     APP_MANAGER_ROLE,
-    [
-      APP_BASES_NAMESPACE,
-      CATALIST_APP_ID,
-    ],
     {
       gasLimit: 1000000,
       gasPrice: 100000,

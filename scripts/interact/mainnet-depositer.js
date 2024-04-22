@@ -5,7 +5,7 @@ const { DSMAttestMessage } = require('../../test/helpers/signatures')
 // RPC_URL=http://20.197.13.207:8545 npx hardhat run scripts/interact/mainnet-depositer.js --network ace_mainnet
 async function main() {
   console.log('Getting the deposit contract...')
-  const addresses = JSON.parse(fs.readFileSync('./deployed-ace_mainnet.json', 'utf-8'))
+  const addresses = JSON.parse(fs.readFileSync('./deployed-ace-mainnet-stACE.json', 'utf-8'))
   const depositContractAddress = addresses.chainSpec.depositContract
   const CatalistAddress = addresses['app:catalist'].proxy.address
   const HashConsensusAddress = addresses.hashConsensusForAccountingOracle.address
@@ -31,70 +31,87 @@ async function main() {
 
   const STAKING_MODULE_ID = 1
 
-  // console.log()
-  // console.log('Querying getMaxDeposits()...')
-  // const MAX_DEPOSITS = await depositSecurityModule.getMaxDeposits({
-  //   gasLimit: 1000000,
-  //   gasPrice: 100000,
-  // })
-  // console.log('- Max Deposits:', +MAX_DEPOSITS)
+  console.log()
+  console.log('Add owner to deposit security module...')
+  await depositSecurityModule.setOwner(
+    oracleMemberAddress,
+    {
+      gasLimit: 1000000,
+      gasPrice: 100000,
+    }
+  )
 
-  // console.log()
-  // console.log('Check Deposit Security Module can deposit...')
-  // const STAKING_MODULE_ID = 1
-  // const CAN_DEPOSIT = await depositSecurityModule.canDeposit(
-  //   STAKING_MODULE_ID,
-  //   {
-  //     gasLimit: 1000000,
-  //     gasPrice: 100000,
-  //   }
-  // )
-  // console.log('- Can Deposit:', CAN_DEPOSIT)
-  // const STAKING_MODULE_STATUS = await stakingRouter.getStakingModuleIsActive(
-  //   STAKING_MODULE_ID,
-  //   {
-  //     gasLimit: 1000000,
-  //     gasPrice: 100000,
-  //   }
-  // )
-  // console.log('- Staking Module Status:', STAKING_MODULE_STATUS)
+  console.log()
+  console.log('Querying getMaxDeposits()...')
+  const MAX_DEPOSITS = await depositSecurityModule.getMaxDeposits({
+    gasLimit: 1000000,
+    gasPrice: 100000,
+  })
+  console.log('- Max Deposits:', +MAX_DEPOSITS)
 
-  // await depositSecurityModule.addGuardian(
-  //   oracleMemberAddress,
-  //   1,
-  //   {
-  //     gasLimit: 1000000,
-  //     gasPrice: 100000,
-  //   }
-  // )
+  console.log()
+  console.log('Check Deposit Security Module can deposit...')
+  const SECURITY_MODULE_CAN_DEPOSIT = await depositSecurityModule.canDeposit(
+    STAKING_MODULE_ID,
+    {
+      gasLimit: 1000000,
+      gasPrice: 100000,
+    }
+  )
+  console.log('- Can Deposit:', SECURITY_MODULE_CAN_DEPOSIT)
+  const STAKING_MODULE_STATUS = await stakingRouter.getStakingModuleIsActive(
+    STAKING_MODULE_ID,
+    {
+      gasLimit: 1000000,
+      gasPrice: 100000,
+    }
+  )
+  console.log('- Staking Module Status:', STAKING_MODULE_STATUS)
 
-  // console.log()
-  // console.log('Get Guardian Quorum...')
-  // const guardianQuorum = await depositSecurityModule.getGuardianQuorum({
-  //   gasLimit: 1000000,
-  //   gasPrice: 100000,
-  // })
-  // console.log('- Guardian Quorum:', guardianQuorum)
+  await depositSecurityModule.addGuardian(
+    oracleMemberAddress,
+    1,
+    {
+      gasLimit: 1000000,
+      gasPrice: 100000,
+    }
+  )
 
-  // console.log()
-  // console.log('Check deposit state...')
-  // const STAKING_MODULE_IS_ACTIVE = await stakingRouter.getStakingModuleIsActive(
-  //   STAKING_MODULE_ID,
-  //   {
-  //     gasLimit: 1000000,
-  //     gasPrice: 100000,
-  //   }
-  // )
-  // console.log('- Staking Module Is Active:', STAKING_MODULE_IS_ACTIVE)
+  console.log()
+  console.log('Get Guardian Quorum...')
+  const guardianQuorum = await depositSecurityModule.getGuardianQuorum({
+    gasLimit: 1000000,
+    gasPrice: 100000,
+  })
+  console.log('- Guardian Quorum:', guardianQuorum)
 
-  // const CAN_DEPOSIT = await depositSecurityModule.canDeposit(
-  //   STAKING_MODULE_ID,
-  //   {
-  //     gasLimit: 1000000,
-  //     gasPrice: 100000,
-  //   }
-  // )
-  // console.log('- Can Deposit:', CAN_DEPOSIT)
+  console.log()
+  console.log('Get guardians...')
+  const guardians = await depositSecurityModule.getGuardians({
+    gasLimit: 1000000,
+    gasPrice: 100000,
+  })
+  console.log('- Guardians:', guardians)
+
+  console.log()
+  console.log('Check deposit state...')
+  const STAKING_MODULE_IS_ACTIVE = await stakingRouter.getStakingModuleIsActive(
+    STAKING_MODULE_ID,
+    {
+      gasLimit: 1000000,
+      gasPrice: 100000,
+    }
+  )
+  console.log('- Staking Module Is Active:', STAKING_MODULE_IS_ACTIVE)
+
+  const CAN_DEPOSIT = await depositSecurityModule.canDeposit(
+    STAKING_MODULE_ID,
+    {
+      gasLimit: 1000000,
+      gasPrice: 100000,
+    }
+  )
+  console.log('- Can Deposit:', CAN_DEPOSIT)
 
   // console.log()
   // console.log('Get deposit data...')
@@ -150,8 +167,8 @@ async function main() {
   //   }
   // )
 
-  // console.log()
-  // console.log('Complete.')
+  console.log()
+  console.log('Complete.')
 }
 
 main()

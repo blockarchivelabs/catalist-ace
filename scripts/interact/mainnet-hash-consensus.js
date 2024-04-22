@@ -7,7 +7,7 @@ const { DSMAttestMessage } = require('../../test/helpers/signatures')
 // RPC_URL=http://20.197.13.207:8545 npx hardhat run scripts/interact/mainnet-hash-consensus.js --network ace_mainnet
 async function main() {
   console.log('Getting the deposit contract...')
-  const fileName = './deployed-ace_mainnet.json'
+  const fileName = './deployed-ace-mainnet-stACE.json'
   const addresses = JSON.parse(fs.readFileSync(fileName, 'utf-8'))
   const depositContractAddress = addresses.chainSpec.depositContract
   const CatalistAddress = addresses['app:catalist'].proxy.address
@@ -129,13 +129,13 @@ async function main() {
   //   }
   // )
 
-  // console.log()
-  // console.log('Get HashConsensusForAccountingOracle frame config...')
-  // const frameConfig = await hashConsensusForAccountingOracle.getFrameConfig({
-  //   gasLimit: 1000000,
-  //   gasPrice: 100000
-  // })
-  // console.log('- frame config:', frameConfig)
+  console.log()
+  console.log('Get HashConsensusForAccountingOracle frame config...')
+  const frameConfig = await hashConsensusForAccountingOracle.getFrameConfig({
+    gasLimit: 1000000,
+    gasPrice: 100000
+  })
+  console.log('- frame config:', frameConfig)
 
   // console.log()
   // console.log('Complete.')

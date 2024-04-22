@@ -62,13 +62,9 @@ async function deployDAO({ web3, artifacts }) {
     daoInitialSettings.voting.objectionPhaseDuration,
   ]
 
-  log(`Using DAO token settings:`, daoInitialSettings.token)
-  log(`Using DAO voting settings:`, daoInitialSettings.voting)
-  const receipt = await makeTx(template, 'newDAO', [
-    daoInitialSettings.token.name,
-    daoInitialSettings.token.symbol,
-    votingSettings,
-  ], { from: state.deployer })
+  // log(`Using DAO token settings:`, daoInitialSettings.token)
+  // log(`Using DAO voting settings:`, daoInitialSettings.voting)
+  const receipt = await makeTx(template, 'newDAO', [], { from: state.deployer })
   state.catalistTemplateNewDaoTx = receipt.tx
   persistNetworkState(network.name, netId, state)
 

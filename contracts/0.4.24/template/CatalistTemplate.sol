@@ -158,11 +158,15 @@ contract CatalistTemplate is IsContract {
         owner = _newOwner;
     }
 
+    function changeOwner(address _newOwner) external onlyOwner {
+        owner = _newOwner;
+    }
+
     constructor(
         address _owner,
         DAOFactory _daoFactory,
         ENS _ens,
-        MiniMeTokenFactory _miniMeFactory,
+        // MiniMeTokenFactory _miniMeFactory,
         IFIFSResolvingRegistrar _aragonID,
         APMRegistryFactory _apmRegistryFactory
     ) public {
@@ -172,10 +176,10 @@ contract CatalistTemplate is IsContract {
             ERROR_DAO_FACTORY_NOT_CONTRACT
         );
         require(isContract(address(_ens)), ERROR_ENS_NOT_CONTRACT);
-        require(
-            isContract(address(_miniMeFactory)),
-            ERROR_MINIME_FACTORY_NOT_CONTRACT
-        );
+        // require(
+        //     isContract(address(_miniMeFactory)),
+        //     ERROR_MINIME_FACTORY_NOT_CONTRACT
+        // );
         require(isContract(address(_aragonID)), ERROR_ARAGON_ID_NOT_CONTRACT);
         require(
             isContract(address(_apmRegistryFactory)),
@@ -185,7 +189,7 @@ contract CatalistTemplate is IsContract {
         owner = _owner;
         daoFactory = _daoFactory;
         ens = _ens;
-        miniMeFactory = _miniMeFactory;
+        // miniMeFactory = _miniMeFactory;
         aragonID = _aragonID;
         apmRegistryFactory = _apmRegistryFactory;
     }
@@ -197,7 +201,7 @@ contract CatalistTemplate is IsContract {
             address _owner,
             address _daoFactory,
             address _ens,
-            address _miniMeFactory,
+            // address _miniMeFactory,
             address _aragonID,
             address _apmRegistryFactory
         )
@@ -206,7 +210,7 @@ contract CatalistTemplate is IsContract {
             owner,
             daoFactory,
             ens,
-            miniMeFactory,
+            // miniMeFactory,
             aragonID,
             apmRegistryFactory
         );
@@ -357,11 +361,12 @@ contract CatalistTemplate is IsContract {
         emit TmplReposCreated();
     }
 
-    function newDAO(
-        string _tokenName,
-        string _tokenSymbol,
-        uint64[4] _votingSettings
-    ) external onlyOwner {
+    // function newDAO(
+    //     string _tokenName,
+    //     string _tokenSymbol,
+    //     uint64[4] _votingSettings
+    // ) external onlyOwner {
+    function newDAO() external onlyOwner {
         DeployState memory state = deployState;
 
         require(
@@ -370,38 +375,38 @@ contract CatalistTemplate is IsContract {
         );
         require(state.dao == address(0), ERROR_DAO_ALREADY_DEPLOYED);
 
-        state.token = _createToken(_tokenName, _tokenSymbol, TOKEN_DECIMALS);
+        // state.token = _createToken(_tokenName, _tokenSymbol, TOKEN_DECIMALS);
         (state.dao, state.acl) = _createDAO();
 
-        state.agent = _installAgentApp(
-            state.catalistRegistryEnsNode,
-            state.dao
-        );
+        // state.agent = _installAgentApp(
+        //     state.catalistRegistryEnsNode,
+        //     state.dao
+        // );
 
-        state.finance = _installFinanceApp(
-            state.catalistRegistryEnsNode,
-            state.dao,
-            state.agent,
-            DEFAULT_FINANCE_PERIOD
-        );
+        // state.finance = _installFinanceApp(
+        //     state.catalistRegistryEnsNode,
+        //     state.dao,
+        //     state.agent,
+        //     DEFAULT_FINANCE_PERIOD
+        // );
 
-        state.tokenManager = _installTokenManagerApp(
-            state.catalistRegistryEnsNode,
-            state.dao,
-            state.token,
-            TOKEN_TRANSFERABLE,
-            TOKEN_MAX_PER_ACCOUNT
-        );
+        // state.tokenManager = _installTokenManagerApp(
+        //     state.catalistRegistryEnsNode,
+        //     state.dao,
+        //     state.token,
+        //     TOKEN_TRANSFERABLE,
+        //     TOKEN_MAX_PER_ACCOUNT
+        // );
 
-        state.voting = _installVotingApp(
-            state.catalistRegistryEnsNode,
-            state.dao,
-            state.token,
-            _votingSettings[0], // support
-            _votingSettings[1], // acceptance
-            _votingSettings[2], // duration
-            _votingSettings[3] // objectionPhaseDuration
-        );
+        // state.voting = _installVotingApp(
+        //     state.catalistRegistryEnsNode,
+        //     state.dao,
+        //     state.token,
+        //     _votingSettings[0], // support
+        //     _votingSettings[1], // acceptance
+        //     _votingSettings[2], // duration
+        //     _votingSettings[3] // objectionPhaseDuration
+        // );
 
         bytes memory noInit = new bytes(0);
 
@@ -432,45 +437,46 @@ contract CatalistTemplate is IsContract {
             )
         );
 
-        // used for issuing vested tokens in the next step
-        _createTokenManagerPermissionsForTemplate(
-            state.acl,
-            state.tokenManager
-        );
+        // // used for issuing vested tokens in the next step
+        // _createTokenManagerPermissionsForTemplate(
+        //     state.acl,
+        //     state.tokenManager
+        // );
 
         emit TmplDAOAndTokenDeployed(address(state.dao), address(state.token));
 
         deployState = state;
     }
 
-    function issueTokens(
-        address[] _holders,
-        uint256[] _amounts,
-        uint64 _vestingStart,
-        uint64 _vestingCliff,
-        uint64 _vestingEnd,
-        bool _vestingRevokable,
-        uint256 _expectedFinalTotalSupply
-    ) external onlyOwner {
-        require(_holders.length > 0, ERROR_EMPTY_HOLDERS);
-        require(_holders.length == _amounts.length, ERROR_BAD_AMOUNTS_LEN);
+    // function issueTokens(
+    //     address[] _holders,
+    //     uint256[] _amounts,
+    //     uint64 _vestingStart,
+    //     uint64 _vestingCliff,
+    //     uint64 _vestingEnd,
+    //     bool _vestingRevokable,
+    //     uint256 _expectedFinalTotalSupply
+    // ) external onlyOwner {
+    function issueTokens() external onlyOwner {
+        // require(_holders.length > 0, ERROR_EMPTY_HOLDERS);
+        // require(_holders.length == _amounts.length, ERROR_BAD_AMOUNTS_LEN);
 
-        TokenManager tokenManager = deployState.tokenManager;
-        require(tokenManager != address(0), ERROR_DAO_NOT_DEPLOYED);
+        // TokenManager tokenManager = deployState.tokenManager;
+        // require(tokenManager != address(0), ERROR_DAO_NOT_DEPLOYED);
 
-        uint256 totalAmount = _issueTokens(
-            tokenManager,
-            deployState.token,
-            _holders,
-            _amounts,
-            _vestingStart,
-            _vestingCliff,
-            _vestingEnd,
-            _vestingRevokable,
-            _expectedFinalTotalSupply
-        );
+        // uint256 totalAmount = _issueTokens(
+        //     tokenManager,
+        //     deployState.token,
+        //     _holders,
+        //     _amounts,
+        //     _vestingStart,
+        //     _vestingCliff,
+        //     _vestingEnd,
+        //     _vestingRevokable,
+        //     _expectedFinalTotalSupply
+        // );
 
-        emit TmplTokensIssued(totalAmount);
+        emit TmplTokensIssued(0);
     }
 
     function finalizeDAO(
@@ -489,8 +495,8 @@ contract CatalistTemplate is IsContract {
 
         if (_unvestedTokensAmount != 0) {
             // using issue + assign to avoid setting the additional MINT_ROLE for the template
-            state.tokenManager.issue(_unvestedTokensAmount);
-            state.tokenManager.assign(state.agent, _unvestedTokensAmount);
+            // state.tokenManager.issue(_unvestedTokensAmount);
+            // state.tokenManager.assign(state.agent, _unvestedTokensAmount);
             emit TmplTokensIssued(_unvestedTokensAmount);
         }
 
@@ -690,12 +696,12 @@ contract CatalistTemplate is IsContract {
         ACL acl = _state.acl;
         Voting voting = _state.voting;
 
-        _createAgentPermissions(acl, _state.agent, msg.sender);
-        _createVaultPermissions(acl, _state.agent, _state.finance, msg.sender);
-        _createFinancePermissions(acl, _state.finance, msg.sender);
-        _createEvmScriptsRegistryPermissions(acl, msg.sender);
-        _createVotingPermissions(acl, voting, _state.tokenManager);
-        _configureTokenManagerPermissions(acl, _state.tokenManager, msg.sender);
+        // _createAgentPermissions(acl, _state.agent, msg.sender);
+        // _createVaultPermissions(acl, _state.agent, _state.finance, msg.sender);
+        // _createFinancePermissions(acl, _state.finance, msg.sender);
+        // _createEvmScriptsRegistryPermissions(acl, msg.sender);
+        // _createVotingPermissions(acl, voting, _state.tokenManager);
+        // _configureTokenManagerPermissions(acl, _state.tokenManager, msg.sender);
 
         // APM
 
@@ -739,21 +745,21 @@ contract CatalistTemplate is IsContract {
         // APM repos
 
         // using loops to save contract size
-        Repo[10] memory repoAddresses;
+        Repo[6] memory repoAddresses;
         repoAddresses[0] = _repos.catalist;
         repoAddresses[1] = _repos.oracle;
         repoAddresses[2] = _repos.nodeOperatorsRegistry;
-        repoAddresses[3] = _repos.aragonAgent;
-        repoAddresses[4] = _repos.aragonFinance;
-        repoAddresses[5] = _repos.aragonTokenManager;
-        repoAddresses[6] = _repos.aragonVoting;
-        repoAddresses[7] = _resolveRepo(
+        // repoAddresses[3] = _repos.aragonAgent;
+        // repoAddresses[4] = _repos.aragonFinance;
+        // repoAddresses[5] = _repos.aragonTokenManager;
+        // repoAddresses[6] = _repos.aragonVoting;
+        repoAddresses[3] = _resolveRepo(
             _getAppId(APM_APP_NAME, _state.catalistRegistryEnsNode)
         );
-        repoAddresses[8] = _resolveRepo(
+        repoAddresses[4] = _resolveRepo(
             _getAppId(APM_REPO_APP_NAME, _state.catalistRegistryEnsNode)
         );
-        repoAddresses[9] = _resolveRepo(
+        repoAddresses[5] = _resolveRepo(
             _getAppId(APM_ENSSUB_APP_NAME, _state.catalistRegistryEnsNode)
         );
         for (uint256 i = 0; i < repoAddresses.length; ++i) {

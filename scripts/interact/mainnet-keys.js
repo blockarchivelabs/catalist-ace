@@ -7,7 +7,7 @@ const { DSMAttestMessage } = require('../../test/helpers/signatures')
 // RPC_URL=http://20.197.13.207:8545 npx hardhat run scripts/interact/mainnet-keys.js --network ace_mainnet
 async function main() {
   console.log('Getting the deposit contract...')
-  const addresses = JSON.parse(fs.readFileSync('./deployed-ace_mainnet.json', 'utf-8'))
+  const addresses = JSON.parse(fs.readFileSync('./deployed-ace-mainnet-stACE.json', 'utf-8'))
   const depositContractAddress = addresses.chainSpec.depositContract
   const CatalistAddress = addresses['app:catalist'].proxy.address
   const HashConsensusAddress = addresses.hashConsensusForAccountingOracle.address
@@ -69,19 +69,19 @@ async function main() {
   //   }
   // );
 
-  // console.log('Querying get singing keys...')
-  // const startIdx = 0
-  // const endIdx = 5
-  // const signingKeys = await nodeOperatorRegistry.getSigningKeys(
-  //   operatorId,
-  //   startIdx,
-  //   endIdx, 
-  //   {
-  //     gasLimit: 1000000,
-  //     gasPrice: 100000,
-  //   }
-  // )
-  // console.log('Signing Keys:', signingKeys)
+  console.log('Querying get singing keys...')
+  const startIdx = 0
+  const endIdx = 5
+  const signingKeys = await nodeOperatorRegistry.getSigningKeys(
+    operatorId,
+    startIdx,
+    endIdx, 
+    {
+      gasLimit: 1000000,
+      gasPrice: 100000,
+    }
+  )
+  console.log('Signing Keys:', signingKeys)
 }
 
 main()
