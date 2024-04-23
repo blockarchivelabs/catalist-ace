@@ -7,7 +7,7 @@ const { DSMAttestMessage } = require('../../test/helpers/signatures')
 // RPC_URL=http://20.197.13.207:8545 npx hardhat run scripts/interact/mainnet-staking.js --network ace_mainnet
 async function main() {
   console.log('Getting the deposit contract...')
-  const addresses = JSON.parse(fs.readFileSync('./deployed-ace_mainnet.json', 'utf-8'))
+  const addresses = JSON.parse(fs.readFileSync('./deployed-ace-mainnet-stACE.json', 'utf-8'))
   const depositContractAddress = addresses.chainSpec.depositContract
   const CatalistAddress = addresses['app:catalist'].proxy.address
   const HashConsensusAddress = addresses.hashConsensusForAccountingOracle.address
@@ -30,6 +30,102 @@ async function main() {
   const deployerPrivateKey = 'f11a771308f235a1331b098d0212db69ac049e56c9f1e0da739a39e8b743363c'
   const oracleMemberAddress = '0xB458c332C242247C46e065Cf987a05bAf7612904'
   const testerAddress = '0x26AC28D33EcBf947951d6B7d8a1e6569eE73d076'
+
+  const STAKING_MODULE_ID = 1
+  const NODE_OPERATOR_ID = 0
+
+  console.log()
+  console.log('StakingRouter.getStakingModuleMaxDepositsCount()...')
+  const depositableACE = await catalist.getDepositableAce({
+    gasLimit: 1000000,
+    gasPrice: 100000,
+  })
+  console.log('- Depositable ACE:', +depositableACE)
+  const maxDepositsCount = await stakingRouter.getStakingModuleMaxDepositsCount(
+    STAKING_MODULE_ID,
+    depositableACE,
+    {
+      gasLimit: 1000000,
+      gasPrice: 100000,
+    }
+  )
+  console.log('- Max Deposits Count:', +maxDepositsCount)
+
+  console.log()
+  console.log('Get staking module summary...')
+  const stakingModuleSummary = await stakingRouter.getStakingModuleSummary(
+    STAKING_MODULE_ID,
+    {
+      gasLimit: 1000000,
+      gasPrice: 100000,
+    }
+  )
+  console.log('- Staking Module Summary:', stakingModuleSummary)
+
+  console.log()
+  console.log('Get node operator summary...')
+  const nodeOperatorSummary = await stakingRouter.getNodeOperatorSummary(
+    STAKING_MODULE_ID,
+    NODE_OPERATOR_ID,
+    {
+      gasLimit: 1000000,
+      gasPrice: 100000,
+    }
+  )
+  console.log('- Node Operator Summary:', nodeOperatorSummary)
+
+  console.log()
+  console.log('Get node operator...')
+  const nodeOperator = await nodeOperatorRegistry.getNodeOperator(
+    NODE_OPERATOR_ID,
+    true,
+    {
+      gasLimit: 1000000,
+      gasPrice: 100000,
+    }
+  )
+  console.log('- Node Operator:', nodeOperator)
+
+  console.log()
+  console.log('Get deposits allocation...')
+  const depositsAllocation = await stakingRouter.getDepositsAllocation(
+    depositableACE,
+    {
+      gasLimit: 1000000,
+      gasPrice: 100000,
+    }
+  )
+  console.log('- Deposits Allocation:', depositsAllocation)
+
+  console.log()
+  console.log('Is operator penalized...')
+  const isOperatorPenalized = await nodeOperatorRegistry.isOperatorPenalized(
+    NODE_OPERATOR_ID,
+    {
+      gasLimit: 1000000,
+      gasPrice: 100000,
+    }
+  )
+  console.log('- Is Operator Penalized:', isOperatorPenalized)
+
+  console.log()
+  console.log('Get stuck penalty delay...')
+  const stuckPenaltyDelay = await nodeOperatorRegistry.getStuckPenaltyDelay({
+    gasLimit: 1000000,
+    gasPrice: 100000,
+  })
+  console.log('- Stuck Penalty Delay:', stuckPenaltyDelay)
+
+  // console.log()
+  // console.log('Clear node operator penalty...')
+  // const cleared = await nodeOperatorRegistry.clearNodeOperatorPenalty(
+  //   NODE_OPERATOR_ID,
+  //   {
+  //     gasLimit: 1000000,
+  //     gasPrice: 100000,
+  //   }
+  // )
+  // console.log('- Cleared:', cleared)
 
   // console.log()
   // const beforeBalance = await catalist.balanceOf(

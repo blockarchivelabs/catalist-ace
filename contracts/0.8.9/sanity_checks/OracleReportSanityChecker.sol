@@ -645,12 +645,13 @@ contract OracleReportSanityChecker is AccessControlEnumerable {
         if (_timeElapsed == 0) {
             _timeElapsed = DEFAULT_TIME_ELAPSED;
         }
-
+        // 32.0115 - 32.0002 = 0.0113 = balanceIncrease
         uint256 balanceIncrease = _postCLBalance - _preCLBalance;
+        // annualBalanceIncrease = 31536000 * 10000 * 0.0113 / 32.0002 / 23040 = 4,833.3682289486
         uint256 annualBalanceIncrease = ((365 days *
             MAX_BASIS_POINTS *
             balanceIncrease) / _preCLBalance) / _timeElapsed;
-
+        // annualBalanceIncreaseBPLimit = 1000
         if (annualBalanceIncrease > _limitsList.annualBalanceIncreaseBPLimit) {
             revert IncorrectCLBalanceIncrease(annualBalanceIncrease);
         }

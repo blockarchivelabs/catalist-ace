@@ -58,11 +58,12 @@ async function main() {
   const NEW_CATALIST_ADDRESS = '0x0665f48d1ddebF766837b771f29584eA6c23Dc43'
 
   // 추적할 컨트랙트, 이벤트 정보 입력
+  console.log('event logs for DepositedValidatorsChanged')
   const filter = {
-    address: ValidatorsExitBusOracle,
+    address: CatalistAddress,
     fromBlock: 0,
     toBlock: 10000000,
-    topics: [validatorsExitBusOracle.filters.ValidatorExitRequest().topics] //Transfer().topics 이런식으로 활용
+    topics: [catalist.filters.DepositedValidatorsChanged().topics] //Transfer().topics 이런식으로 활용
   };
 
   const logs = await ethers.provider.getLogs(filter);
@@ -70,10 +71,9 @@ async function main() {
   console.log(logs)
 
   // abi 불러오기
-  console.log()
   const dir = path.resolve(
     __dirname,
-    "../../lib/abi/ValidatorsExitBusOracle.json"
+    "../../lib/abi/Catalist.json"
   )
   const file = fs.readFileSync(dir, "utf8")
   const json = JSON.parse(file)
@@ -83,8 +83,9 @@ async function main() {
   const iface = new ethers.utils.Interface(abi);  
   logs.forEach((log) => {
     console.log()
-    console.log("decoded event");
-    console.log(iface.decodeEventLog("ValidatorExitRequest", log.data, log.topics));
+    console.log("decoded event index:", log.logIndex);
+    console.log("- transaction hash:", log.transactionHash);
+    console.log("- data:", iface.decodeEventLog("DepositedValidatorsChanged", log.data, log.topics));
   })
 }
 

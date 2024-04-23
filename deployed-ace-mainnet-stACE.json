@@ -299,7 +299,7 @@
     },
     "implementation": {
       "contract": "contracts/0.8.9/CatalistLocator.sol",
-      "address": "0x8f744ECF16293801cFB28B4f063D7267cD7541F1",
+      "address": "0xE49e01a89320559118D96fAf0eE06320590b7167",
       "constructorArgs": [
         [
           "0xAC9d01Fa37A9492876Ead645D95011795e07bFEE",
