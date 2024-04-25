@@ -48,12 +48,17 @@ async function main() {
   const CATALIST_APP_ID = '0xfe7e515193fc7331eedd97433fad4b507d16473770a68882c43677c8f27ebcd8'
   // const NEW_CATALIST_ADDRESS = '0xDF4A425efAF188E94ae443E58101C3CE44b80D9c'
 
+  console.log()
+  console.log('Resume Catalist...')
+  // await catalist.resume({gasLimit: 1000000, gasPrice: 100000})
+  const isStakingPaused = await catalist.isStakingPaused({gasLimit: 1000000, gasPrice: 100000})
+  console.log('- Staking Paused:', isStakingPaused)
 
   console.log()
   console.log('Get node operator summary...')
   const nodeOperatorSummary = await stakingRouter.connect(owner).getNodeOperatorSummary(
     1,
-    1,
+    0,
     {
       gasLimit: 1000000,
       gasPrice: 100000,

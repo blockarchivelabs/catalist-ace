@@ -34,6 +34,11 @@ async function main() {
   const NODE_OPERATOR_ID = 0
   const STAKING_MODULE_ID = 1
 
+  const GAS_INFO = {
+    gasLimit: 1000000,
+    gasPrice: 100000,
+  }
+
   // console.log()
   // console.log('Querying add signing keys...')
   // const keyCount = 5
@@ -52,10 +57,7 @@ async function main() {
   //     'b611d17db6a918b8c277ba8e1951673044085aa3089c56bd1a635353c547bd933eaa17eaf7466a73ca548dfd0f425acc04ad241334f190b8a8592ebdcd7c02d65fee1f549e032e42390866d757d7dc9211f37bae48bae6747abea4efa505f0e6',
   //     '8de5c0216fcf872b780835bef9b48f2f0d8173d13fc4348f56e79f77b0335eaebdfa0219a5b6f66c4d4f04f3fbb30ed4109e5bdf85bfcc4b8fde07bdf87941a788f017db181e015ecb42131487d08fcf43dcf8d93753a5e7d5bb06797074d375',
   //     'b513f2a6a947f1c640c19a3bd6242be9801583ab187bc584130bbb8f437988e5c02e3c37e6c2293daf79238f70c2a7ec11c2aed187862efbf5b07b22b81a9f37ec97bd946b5d47310c9890b3f1fecabe853104f93a3e43ba1b329f872c1cc208'),
-  //   {
-  //     gasLimit: 1000000,
-  //     gasPrice: 100000,
-  //   }
+  //   GAS_INFO
   // );
 
   // console.log()
@@ -64,10 +66,7 @@ async function main() {
   //   NODE_OPERATOR_ID, 
   //   0, 
   //   5, 
-  //   {
-  //     gasLimit: 1000000,
-  //     gasPrice: 100000,
-  //   }
+  //   GAS_INFO
   // );
 
   // console.log()
@@ -75,10 +74,7 @@ async function main() {
   // await nodeOperatorRegistry.setNodeOperatorRewardAddress(
   //   NODE_OPERATOR_ID,
   //   deployerAddress,
-  //   {
-  //     gasLimit: 1000000,
-  //     gasPrice: 100000,
-  //   }
+  //   GAS_INFO
   // )
 
   // console.log()
@@ -87,10 +83,7 @@ async function main() {
   //   NODE_OPERATOR_ID,
   //   2,
   //   3,
-  //   {
-  //     gasLimit: 1000000,
-  //     gasPrice: 100000,
-  //   }
+  //   GAS_INFO
   // )
 
   console.log()
@@ -101,37 +94,9 @@ async function main() {
     NODE_OPERATOR_ID,
     startIdx,
     endIdx, 
-    {
-      gasLimit: 1000000,
-      gasPrice: 100000,
-    }
+    GAS_INFO
   )
   console.log('Signing Keys:', signingKeys)
-
-  // console.log()
-  // console.log('Grant UNSAFE_SET_EXITED_VALIDATORS_ROLE to deployer in StakingRouter...')
-  // const UNSAFE_SET_EXITED_VALIDATORS_ROLE = 
-  //   await stakingRouter.UNSAFE_SET_EXITED_VALIDATORS_ROLE({gasLimit: 1000000, gasPrice: 100000})
-  // await stakingRouter.grantRole(
-  //   UNSAFE_SET_EXITED_VALIDATORS_ROLE,
-  //   deployerAddress,
-  //   {
-  //     gasLimit: 1000000,
-  //     gasPrice: 100000
-  //   }
-  // )
-
-  // console.log()
-  // console.log('StakingRouter.unsafeSetExitedValidatorsCount()...')
-  // const correction = {
-
-  // }
-  // await stakingRouter.unsafeSetExitedValidatorsCount(
-  //   STAKING_MODULE_ID,
-  //   NODE_OPERATOR_ID,
-  //   true,
-
-  // )
 }
 
 main()

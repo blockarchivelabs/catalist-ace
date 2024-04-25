@@ -31,23 +31,22 @@ async function main() {
   const oracleMemberAddress = '0xB458c332C242247C46e065Cf987a05bAf7612904'
   const testerAddress = '0x26AC28D33EcBf947951d6B7d8a1e6569eE73d076'
 
+  const GAS_INFO = {
+    gasLimit: 1000000,
+    gasPrice: 100000,
+  }
+
   const STAKING_MODULE_ID = 1
   const NODE_OPERATOR_ID = 0
 
   console.log()
   console.log('StakingRouter.getStakingModuleMaxDepositsCount()...')
-  const depositableACE = await catalist.getDepositableAce({
-    gasLimit: 1000000,
-    gasPrice: 100000,
-  })
+  const depositableACE = await catalist.getDepositableAce(GAS_INFO)
   console.log('- Depositable ACE:', +depositableACE)
   const maxDepositsCount = await stakingRouter.getStakingModuleMaxDepositsCount(
     STAKING_MODULE_ID,
     depositableACE,
-    {
-      gasLimit: 1000000,
-      gasPrice: 100000,
-    }
+    GAS_INFO
   )
   console.log('- Max Deposits Count:', +maxDepositsCount)
 
@@ -55,10 +54,7 @@ async function main() {
   console.log('Get staking module summary...')
   const stakingModuleSummary = await stakingRouter.getStakingModuleSummary(
     STAKING_MODULE_ID,
-    {
-      gasLimit: 1000000,
-      gasPrice: 100000,
-    }
+    GAS_INFO
   )
   console.log('- Staking Module Summary:', stakingModuleSummary)
 
@@ -67,10 +63,7 @@ async function main() {
   const nodeOperatorSummary = await stakingRouter.getNodeOperatorSummary(
     STAKING_MODULE_ID,
     NODE_OPERATOR_ID,
-    {
-      gasLimit: 1000000,
-      gasPrice: 100000,
-    }
+    GAS_INFO
   )
   console.log('- Node Operator Summary:', nodeOperatorSummary)
 
@@ -79,10 +72,7 @@ async function main() {
   const nodeOperator = await nodeOperatorRegistry.getNodeOperator(
     NODE_OPERATOR_ID,
     true,
-    {
-      gasLimit: 1000000,
-      gasPrice: 100000,
-    }
+    GAS_INFO
   )
   console.log('- Node Operator:', nodeOperator)
 
@@ -90,10 +80,7 @@ async function main() {
   console.log('Get deposits allocation...')
   const depositsAllocation = await stakingRouter.getDepositsAllocation(
     depositableACE,
-    {
-      gasLimit: 1000000,
-      gasPrice: 100000,
-    }
+    GAS_INFO
   )
   console.log('- Deposits Allocation:', depositsAllocation)
 
@@ -101,19 +88,13 @@ async function main() {
   console.log('Is operator penalized...')
   const isOperatorPenalized = await nodeOperatorRegistry.isOperatorPenalized(
     NODE_OPERATOR_ID,
-    {
-      gasLimit: 1000000,
-      gasPrice: 100000,
-    }
+    GAS_INFO
   )
   console.log('- Is Operator Penalized:', isOperatorPenalized)
 
   console.log()
   console.log('Get stuck penalty delay...')
-  const stuckPenaltyDelay = await nodeOperatorRegistry.getStuckPenaltyDelay({
-    gasLimit: 1000000,
-    gasPrice: 100000,
-  })
+  const stuckPenaltyDelay = await nodeOperatorRegistry.getStuckPenaltyDelay(GAS_INFO)
   console.log('- Stuck Penalty Delay:', stuckPenaltyDelay)
 
   // console.log()
@@ -126,28 +107,6 @@ async function main() {
   //   }
   // )
   // console.log('- Cleared:', cleared)
-
-  // console.log()
-  // const beforeBalance = await catalist.balanceOf(
-  //   testerAddress,
-  //   {
-  //     gasLimit: 1000000,
-  //     gasPrice: 100000,
-  //   }
-  // )
-  // console.log('Before Balance: ', beforeBalance.toString())
-
-  // console.log()
-  // console.log('Staking 1ACE...')
-  // await catalist.submit(deployerAddress, {
-  //   value: parseEther('0.01'),
-  //   gasLimit: 1000000,
-  //   gasPrice: 100000,
-  // })
-
-  // console.log()
-  // const afterBalance = await catalist.balanceOf(deployerAddress)
-  // console.log('After Balance: ', afterBalance.toString())
 }
 
 main()

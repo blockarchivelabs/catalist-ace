@@ -37,74 +37,49 @@ async function main() {
   const oracleMemberAddress = '0xB458c332C242247C46e065Cf987a05bAf7612904'
   const testerAddress = '0x26AC28D33EcBf947951d6B7d8a1e6569eE73d076'
 
+  const GAS_INFO = {
+    gasLimit: 1000000,
+    gasPrice: 100000,
+  }
+
   console.log()
   console.log('AccountingOracle Proxy Info')
-  const accountingOracleAdmin = await accountingOracleProxy.proxy__getAdmin({
-    gasLimit: 1000000,
-    gasPrice: 100000,
-  })
+  const accountingOracleAdmin = await accountingOracleProxy.proxy__getAdmin(GAS_INFO)
   console.log('- admin:', accountingOracleAdmin)
 
-  const accountingOracleImpl = await accountingOracleProxy.proxy__getImplementation({
-    gasLimit: 1000000,
-    gasPrice: 100000,
-  })
+  const accountingOracleImpl = await accountingOracleProxy.proxy__getImplementation(GAS_INFO)
   console.log('- impl:', accountingOracleImpl)
 
   console.log()
   console.log('CatalistLocator Proxy Info')
-  const catalistLocatorAdmin = await catalistLocatorProxy.proxy__getAdmin({
-    gasLimit: 1000000,
-    gasPrice: 100000,
-  })
+  const catalistLocatorAdmin = await catalistLocatorProxy.proxy__getAdmin(GAS_INFO)
   console.log('- admin:', catalistLocatorAdmin)
 
-  const catalistLocatorImpl = await catalistLocatorProxy.proxy__getImplementation({
-    gasLimit: 1000000,
-    gasPrice: 100000,
-  })
+  const catalistLocatorImpl = await catalistLocatorProxy.proxy__getImplementation(GAS_INFO)
   console.log('- impl:', catalistLocatorImpl)
 
   console.log()
   console.log('StakingRouter Proxy Info')
-  const stakingRouterAdmin = await stakingRouterProxy.proxy__getAdmin({
-    gasLimit: 1000000,
-    gasPrice: 100000,
-  })
+  const stakingRouterAdmin = await stakingRouterProxy.proxy__getAdmin(GAS_INFO)
   console.log('- admin:', stakingRouterAdmin)
 
-  const stakingRouterImpl = await stakingRouterProxy.proxy__getImplementation({
-    gasLimit: 1000000,
-    gasPrice: 100000,
-  })
+  const stakingRouterImpl = await stakingRouterProxy.proxy__getImplementation(GAS_INFO)
   console.log('- impl:', stakingRouterImpl)
 
   console.log()
   console.log('WithdrawalQueueERC721 Proxy Info')
-  const withdrawalQueueERC721Admin = await WithdrawalQueueERC721Proxy.proxy__getAdmin({
-    gasLimit: 1000000,
-    gasPrice: 100000,
-  })
+  const withdrawalQueueERC721Admin = await WithdrawalQueueERC721Proxy.proxy__getAdmin(GAS_INFO)
   console.log('- admin:', withdrawalQueueERC721Admin)
 
-  const withdrawalQueueERC721Impl = await WithdrawalQueueERC721Proxy.proxy__getImplementation({
-    gasLimit: 1000000,
-    gasPrice: 100000,
-  })
+  const withdrawalQueueERC721Impl = await WithdrawalQueueERC721Proxy.proxy__getImplementation(GAS_INFO)
   console.log('- impl:', withdrawalQueueERC721Impl)
 
   console.log()
   console.log('WithdrawalVault Proxy Info')
-  const withdrawalVaultAdmin = await withdrawalVaultProxy.proxy_getAdmin({
-    gasLimit: 1000000,
-    gasPrice: 100000,
-  })
+  const withdrawalVaultAdmin = await withdrawalVaultProxy.proxy_getAdmin(GAS_INFO)
   console.log('- admin:', withdrawalVaultAdmin)
 
-  const withdrawalVaultImpl = await withdrawalVaultProxy.implementation({
-    gasLimit: 1000000,
-    gasPrice: 100000,
-  })
+  const withdrawalVaultImpl = await withdrawalVaultProxy.implementation(GAS_INFO)
   console.log('- impl:', withdrawalVaultImpl)
 }
 

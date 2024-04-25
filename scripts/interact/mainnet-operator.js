@@ -58,25 +58,30 @@ async function main() {
   const oracleMemberAddress = '0xB458c332C242247C46e065Cf987a05bAf7612904';
   const testerAddress = '0x26AC28D33EcBf947951d6B7d8a1e6569eE73d076';
 
-  // console.log();
-  // console.log('Querying add node operator...');
-  // const operatorId = await nodeOperatorRegistry.addNodeOperator(
-  //   'test-operator',
-  //   deployerAddress
-  // );
-  // console.log('Operator ID:', operatorId);
+  const GAS_INFO = {
+    gasLimit: 1000000,
+    gasPrice: 100000,
+  }
 
-  // console.log();
-  // console.log('Querying setNodeOperatorStakingLimit()...');
-  // const stakingLimit = 1000000000;
-  // await nodeOperatorRegistry.setNodeOperatorStakingLimit(
-  //   operatorId,
-  //   stakingLimit,
-  //   {
-  //     gasLimit: 1000000,
-  //     gasPrice: 100000,
-  //   }
-  // );
+  console.log();
+  console.log('Add node operator...');
+  const OPERATOR_NAME = 'test-operator'
+  const REWARD_ADDRESS = deployerAddress
+  const operatorId = await nodeOperatorRegistry.addNodeOperator(
+    OPERATOR_NAME,
+    REWARD_ADDRESS,
+    GAS_INFO
+  );
+  console.log('Operator ID:', operatorId);
+
+  console.log();
+  console.log('setNodeOperatorStakingLimit()...');
+  const stakingLimit = 1000000000;
+  await nodeOperatorRegistry.setNodeOperatorStakingLimit(
+    operatorId,
+    stakingLimit,
+    GAS_INFO
+  );
 
   // console.log();
   // console.log('Get active node operators count...');
