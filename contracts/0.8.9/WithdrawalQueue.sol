@@ -246,10 +246,10 @@ abstract contract WithdrawalQueue is
         }
     }
 
-    /// @notice Returns amount of ether available for claim for each provided request id
+    /// @notice Returns amount of ace available for claim for each provided request id
     /// @param _requestIds array of request ids
     /// @param _hints checkpoint hints. can be found with `findCheckpointHints(_requestIds, 1, getLastCheckpointIndex())`
-    /// @return claimableAceValues amount of claimable ether for each request, amount is equal to 0 if request
+    /// @return claimableAceValues amount of claimable ace for each request, amount is equal to 0 if request
     ///  is not finalized or already claimed
     function getClaimableAce(
         uint256[] calldata _requestIds,
@@ -261,10 +261,10 @@ abstract contract WithdrawalQueue is
         }
     }
 
-    /// @notice Claim a batch of withdrawal requests if they are finalized sending ether to `_recipient`
+    /// @notice Claim a batch of withdrawal requests if they are finalized sending ace to `_recipient`
     /// @param _requestIds array of request ids to claim
     /// @param _hints checkpoint hint for each id. Can be obtained with `findCheckpointHints()`
-    /// @param _recipient address where claimed ether will be sent to
+    /// @param _recipient address where claimed ace will be sent to
     /// @dev
     ///  Reverts if recipient is equal to zero
     ///  Reverts if requestIds and hints arrays length differs
@@ -287,7 +287,7 @@ abstract contract WithdrawalQueue is
         }
     }
 
-    /// @notice Claim a batch of withdrawal requests if they are finalized sending locked ether to the owner
+    /// @notice Claim a batch of withdrawal requests if they are finalized sending locked ace to the owner
     /// @param _requestIds array of request ids to claim
     /// @param _hints checkpoint hint for each id. Can be obtained with `findCheckpointHints()`
     /// @dev
@@ -309,7 +309,7 @@ abstract contract WithdrawalQueue is
         }
     }
 
-    /// @notice Claim one`_requestId` request once finalized sending locked ether to the owner
+    /// @notice Claim one`_requestId` request once finalized sending locked ace to the owner
     /// @param _requestId request id to claim
     /// @dev use unbounded loop to find a hint, which can lead to OOG
     /// @dev
@@ -474,7 +474,7 @@ abstract contract WithdrawalQueue is
         }
     }
 
-    /// @notice returns claimable ether under the request. Returns 0 if request is not finalized or claimed
+    /// @notice returns claimable ace under the request. Returns 0 if request is not finalized or claimed
     function _getClaimableAce(
         uint256 _requestId,
         uint256 _hint

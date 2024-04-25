@@ -356,11 +356,11 @@ contract OracleReportSanityChecker is AccessControlEnumerable {
     /// @param _withdrawalVaultBalance withdrawal vault balance on Execution Layer for the report calculation moment
     /// @param _elRewardsVaultBalance elRewards vault balance on Execution Layer for the report calculation moment
     /// @param _sharesRequestedToBurn shares requested to burn through Burner for the report calculation moment
-    /// @param _etherToLockForWithdrawals ether to lock on withdrawals queue contract
+    /// @param _aceToLockForWithdrawals ace to lock on withdrawals queue contract
     /// @param _newSharesToBurnForWithdrawals new shares to burn due to withdrawal request finalization
     /// @return withdrawals ACE amount allowed to be taken from the withdrawals vault
     /// @return elRewards ACE amount allowed to be taken from the EL rewards vault
-    /// @return simulatedSharesToBurn simulated amount to be burnt (if no ether locked on withdrawals)
+    /// @return simulatedSharesToBurn simulated amount to be burnt (if no ace locked on withdrawals)
     /// @return sharesToBurn amount to be burnt (accounting for withdrawals finalization)
     function smoothenTokenRebase(
         uint256 _preTotalPooledAce,
@@ -370,7 +370,7 @@ contract OracleReportSanityChecker is AccessControlEnumerable {
         uint256 _withdrawalVaultBalance,
         uint256 _elRewardsVaultBalance,
         uint256 _sharesRequestedToBurn,
-        uint256 _etherToLockForWithdrawals,
+        uint256 _aceToLockForWithdrawals,
         uint256 _newSharesToBurnForWithdrawals
     )
         external
@@ -409,8 +409,8 @@ contract OracleReportSanityChecker is AccessControlEnumerable {
             _sharesRequestedToBurn
         );
 
-        // remove ether to lock for withdrawals from total pooled ether
-        tokenRebaseLimiter.decreaseAce(_etherToLockForWithdrawals);
+        // remove ace to lock for withdrawals from total pooled ace
+        tokenRebaseLimiter.decreaseAce(_aceToLockForWithdrawals);
         // re-evaluate shares to burn after TVL was updated due to withdrawals finalization
         sharesToBurn = Math256.min(
             tokenRebaseLimiter.getSharesToBurnLimit(),
@@ -555,26 +555,26 @@ contract OracleReportSanityChecker is AccessControlEnumerable {
     }
 
     /// @notice Applies sanity checks to the simulated share rate for withdrawal requests finalization
-    /// @param _postTotalPooledAce total pooled ether after report applied
+    /// @param _postTotalPooledAce total pooled ace after report applied
     /// @param _postTotalShares total shares after report applied
-    /// @param _etherLockedOnWithdrawalQueue ether locked on withdrawal queue for the current oracle report
+    /// @param _aceLockedOnWithdrawalQueue ace locked on withdrawal queue for the current oracle report
     /// @param _sharesBurntDueToWithdrawals shares burnt due to withdrawals finalization
     /// @param _simulatedShareRate share rate provided with the oracle report (simulated via off-chain "eth_call")
     function checkSimulatedShareRate(
         uint256 _postTotalPooledAce,
         uint256 _postTotalShares,
-        uint256 _etherLockedOnWithdrawalQueue,
+        uint256 _aceLockedOnWithdrawalQueue,
         uint256 _sharesBurntDueToWithdrawals,
         uint256 _simulatedShareRate
     ) external view {
         LimitsList memory limitsList = _limits.unpack();
 
         // Pretending that withdrawals were not processed
-        // virtually return locked ether back to `_postTotalPooledAce`
+        // virtually return locked ace back to `_postTotalPooledAce`
         // virtually return burnt just finalized withdrawals shares back to `_postTotalShares`
         _checkSimulatedShareRate(
             limitsList,
-            _postTotalPooledAce + _etherLockedOnWithdrawalQueue,
+            _postTotalPooledAce + _aceLockedOnWithdrawalQueue,
             _postTotalShares + _sharesBurntDueToWithdrawals,
             _simulatedShareRate
         );
@@ -706,11 +706,11 @@ contract OracleReportSanityChecker is AccessControlEnumerable {
         }
 
         // the simulated share rate can be either higher or lower than the actual one
-        // in case of new user-submitted ether & minted `bACE` between the oracle reference slot
+        // in case of new user-submitted ace & minted `bACE` between the oracle reference slot
         // and the actual report delivery slot
         //
         // it happens because the oracle daemon snapshots rewards or losses at the reference slot,
-        // and then calculates simulated share rate, but if new ether was submitted together with minting new `bACE`
+        // and then calculates simulated share rate, but if new ace was submitted together with minting new `bACE`
         // after the reference slot passed, the oracle daemon still submits the same amount of rewards or losses,
         // which now is applicable to more 'shareholders', lowering the impact per a single share
         // (i.e, changing the actual share rate)
@@ -720,7 +720,7 @@ contract OracleReportSanityChecker is AccessControlEnumerable {
         //
         // Given that:
         // 1) CL one-off balance decrease ≤ token rebase ≤ max positive token rebase
-        // 2) user-submitted ether & minted `bACE` don't exceed the current staking rate limit
+        // 2) user-submitted ace & minted `bACE` don't exceed the current staking rate limit
         // (see Catalist.getCurrentStakeLimit())
         //
         // can conclude that `simulatedShareRateDeviationBPLimit` (L) should be set as follows:

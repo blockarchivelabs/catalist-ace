@@ -122,7 +122,7 @@ contract DepositSecurityModule {
             abi.encodePacked(
                 // keccak256("catalist.DepositSecurityModule.ATTEST_MESSAGE")
                 bytes32(
-                    0x1085395a994e25b1b3d0ea7937b7395495fb405b31c7d22dbc3976a6bd01f2bf
+                    0xd5b82250000f4cb0efe995e24221711dadc72320678ab0fa0534057dab32a9e9
                 ),
                 block.chainid,
                 address(this)
@@ -133,7 +133,7 @@ contract DepositSecurityModule {
             abi.encodePacked(
                 // keccak256("catalist.DepositSecurityModule.PAUSE_MESSAGE")
                 bytes32(
-                    0x9c4c40205558f12027f21204d6218b8006985b7a6359bcab15404bcc3e3fa122
+                    0x8ddd2af6017f7cf1d273c53da3f52829e49638af882cae15a0cabd6109c9f4ac
                 ),
                 block.chainid,
                 address(this)
@@ -154,7 +154,6 @@ contract DepositSecurityModule {
     }
 
     modifier onlyOwner() {
-        // console.log(OWNER_ADDRESS_POSITION.getStorageAddress());
         require(owners[msg.sender], "NOT_OWNER");
         _;
     }
@@ -173,24 +172,6 @@ contract DepositSecurityModule {
         owners[owner] = false;
         emit OwnerRemoved(owner);
     }
-
-    // modifier onlyOwner() {
-    //     if (msg.sender != owner) revert NotAnOwner(msg.sender);
-    //     _;
-    // }
-
-    // /**
-    //  * Sets new owner. Only callable by the current owner.
-    //  */
-    // function setOwner(address newValue) external onlyOwner {
-    //     _setOwner(newValue);
-    // }
-
-    // function _setOwner(address _newOwner) internal {
-    //     if (_newOwner == address(0)) revert ZeroAddress("_newOwner");
-    //     owner = _newOwner;
-    //     emit OwnerChanged(_newOwner);
-    // }
 
     /**
      * Returns current `pauseIntentValidityPeriodBlocks` contract parameter (see `pauseDeposits`).
@@ -479,25 +460,17 @@ contract DepositSecurityModule {
      *
      * | ATTEST_MESSAGE_PREFIX | blockNumber | blockHash | depositRoot | stakingModuleId | nonce |
      */
-    // function depositBufferedAce(
-    //     uint256 blockNumber,
-    //     bytes32 blockHash,
-    //     bytes32 depositRoot,
-    //     uint256 stakingModuleId,
-    //     uint256 nonce,
-    //     bytes calldata depositCalldata,
-    //     Signature[] calldata sortedGuardianSignatures
-    // ) external onlyOwner {
     function depositBufferedAce(
         uint256 blockNumber,
         bytes32 blockHash,
         bytes32 depositRoot,
         uint256 stakingModuleId,
         uint256 nonce,
-        bytes calldata depositCalldata
-    ) external onlyOwner {
-        // if (quorum == 0 || sortedGuardianSignatures.length < quorum)
-        //     revert DepositNoQuorum();
+        bytes calldata depositCalldata,
+        Signature[] calldata sortedGuardianSignatures
+    ) external {
+        if (quorum == 0 || sortedGuardianSignatures.length < quorum)
+            revert DepositNoQuorum();
 
         bytes32 onchainDepositRoot = IDepositContract(DEPOSIT_CONTRACT)
             .get_deposit_root();
@@ -518,14 +491,14 @@ contract DepositSecurityModule {
         );
         if (nonce != onchainNonce) revert DepositNonceChanged();
 
-        // _verifySignatures(
-        //     depositRoot,
-        //     blockNumber,
-        //     blockHash,
-        //     stakingModuleId,
-        //     nonce,
-        //     sortedGuardianSignatures
-        // );
+        _verifySignatures(
+            depositRoot,
+            blockNumber,
+            blockHash,
+            stakingModuleId,
+            nonce,
+            sortedGuardianSignatures
+        );
 
         CATALIST.deposit(maxDepositsPerBlock, stakingModuleId, depositCalldata);
     }

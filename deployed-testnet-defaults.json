@@ -15,34 +15,17 @@
     "depositContract": null
   },
   "daoInitialSettings": {
-    "voting": {
-      "minSupportRequired": "500000000000000000",
-      "minAcceptanceQuorum": "50000000000000000",
-      "voteDuration": 900,
-      "objectionPhaseDuration": 300
-    },
     "fee": {
       "totalPercent": 10,
       "treasuryPercent": 50,
       "nodeOperatorsPercent": 50
-    },
-    "token": {
-      "name": "TEST DAO Token",
-      "symbol": "TDT"
     }
   },
   "vestingParams": {
     "unvestedTokensAmount": "0",
     "holders": {
-      "0xCD1f9954330AF39a74Fd6e7B25781B4c24ee373f": "820000000000000000000000",
-      "0xaa6bfBCD634EE744CB8FE522b29ADD23124593D3": "60000000000000000000000",
-      "0xBA59A84C6440E8cccfdb5448877E26F1A431Fc8B": "60000000000000000000000",
-      "catalist-aragon-agent-placeholder": "60000000000000000000000"
-    },
-    "start": 0,
-    "cliff": 0,
-    "end": 0,
-    "revokable": false
+      "0xCD1f9954330AF39a74Fd6e7B25781B4c24ee373f": "820000000000000000000000"
+    }
   },
   "burner": {
     "deployParameters": {
@@ -58,7 +41,7 @@
   "hashConsensusForAccountingOracle": {
     "deployParameters": {
       "fastLaneLengthSlots": 10,
-      "epochsPerFrame": 5
+      "epochsPerFrame": 56
     }
   },
   "accountingOracle": {
@@ -69,7 +52,7 @@
   "hashConsensusForValidatorsExitBusOracle": {
     "deployParameters": {
       "fastLaneLengthSlots": 10,
-      "epochsPerFrame": 4
+      "epochsPerFrame": 56
     }
   },
   "validatorsExitBusOracle": {
@@ -88,7 +71,7 @@
     "deployParameters": {
       "churnValidatorsPerDayLimit": 1500,
       "oneOffCLBalanceDecreaseBPLimit": 500,
-      "annualBalanceIncreaseBPLimit": 1000,
+      "annualBalanceIncreaseBPLimit": 2000,
       "simulatedShareRateDeviationBPLimit": 250,
       "maxValidatorExitRequestsPerReport": 2000,
       "maxAccountingExtraDataListItemsCount": 100,
@@ -113,7 +96,7 @@
   "nodeOperatorsRegistry": {
     "deployParameters": {
       "stakingModuleTypeId": "curated-onchain-v1",
-      "stuckPenaltyDelay": 172800
+      "stuckPenaltyDelay": 0
     }
   },
   "withdrawalQueueERC721": {

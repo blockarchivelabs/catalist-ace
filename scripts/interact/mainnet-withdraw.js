@@ -38,6 +38,15 @@ async function main() {
   // })
   // console.log('- Unfinalized BACE:', +unfinalizedBACE)
 
+  /*
+  *                       1713776532
+  * report timestamp2   = 1713904212
+  * report timestamp    = 1713858132
+  * withdraw1 timestamp = 1713858300
+  * withdraw2 timestamp = 1713859092
+  * 즉, 리포트 timestamp가 앞선 상태였기 때문에 withdraw 요청이 반영 안된거다
+  */
+
   console.log()
   console.log('Querying getWithdrawalRequests()...')
   const account = testerAddress

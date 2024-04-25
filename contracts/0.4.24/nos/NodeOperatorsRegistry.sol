@@ -201,7 +201,6 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
     mapping(address => bool) private nodeOperatorAddress;
 
     modifier onlyOwner() {
-        // console.log(OWNER_ADDRESS_POSITION.getStorageAddress());
         require(owners[msg.sender], "NOT_OWNER");
         _;
     }
@@ -405,13 +404,12 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
     function addNodeOperator(
         string _name,
         address _rewardAddress
-    ) external onlyOwner returns (uint256 id) {
+    ) external returns (uint256 id) {
         _onlyValidNodeOperatorName(_name);
         _onlyValidRewardAddress(_rewardAddress);
 
-        // MANAGE_SIGNING_KEYS 권한 대체 코드
         addNodeOperatorAddress(_rewardAddress, true);
-        // _auth(MANAGE_NODE_OPERATOR_ROLE);
+        _auth(MANAGE_NODE_OPERATOR_ROLE);
 
         id = getNodeOperatorsCount();
         require(id < MAX_NODE_OPERATORS_COUNT, "MAX_OPERATORS_COUNT_EXCEEDED");
@@ -434,9 +432,9 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
 
     /// @notice Activates deactivated node operator with given id
     /// @param _nodeOperatorId Node operator id to activate
-    function activateNodeOperator(uint256 _nodeOperatorId) external onlyOwner {
+    function activateNodeOperator(uint256 _nodeOperatorId) {
         _onlyExistedNodeOperator(_nodeOperatorId);
-        // _auth(MANAGE_NODE_OPERATOR_ROLE);
+        _auth(MANAGE_NODE_OPERATOR_ROLE);
 
         _onlyCorrectNodeOperatorState(
             !getNodeOperatorIsActive(_nodeOperatorId)
@@ -454,11 +452,9 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
 
     /// @notice Deactivates active node operator with given id
     /// @param _nodeOperatorId Node operator id to deactivate
-    function deactivateNodeOperator(
-        uint256 _nodeOperatorId
-    ) external onlyOwner {
+    function deactivateNodeOperator(uint256 _nodeOperatorId) external {
         _onlyExistedNodeOperator(_nodeOperatorId);
-        // _auth(MANAGE_NODE_OPERATOR_ROLE);
+        _auth(MANAGE_NODE_OPERATOR_ROLE);
 
         _onlyCorrectNodeOperatorState(getNodeOperatorIsActive(_nodeOperatorId));
 
@@ -506,10 +502,10 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
     function setNodeOperatorName(
         uint256 _nodeOperatorId,
         string _name
-    ) external onlyOwner {
+    ) external {
         _onlyValidNodeOperatorName(_name);
         _onlyExistedNodeOperator(_nodeOperatorId);
-        // _auth(MANAGE_NODE_OPERATOR_ROLE);
+        _auth(MANAGE_NODE_OPERATOR_ROLE);
 
         _requireNotSameValue(
             keccak256(bytes(_nodeOperators[_nodeOperatorId].name)) !=
@@ -525,10 +521,10 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
     function setNodeOperatorRewardAddress(
         uint256 _nodeOperatorId,
         address _rewardAddress
-    ) external onlyOwner {
+    ) external {
         _onlyValidRewardAddress(_rewardAddress);
         _onlyExistedNodeOperator(_nodeOperatorId);
-        // _auth(MANAGE_NODE_OPERATOR_ROLE);
+        _auth(MANAGE_NODE_OPERATOR_ROLE);
 
         _requireNotSameValue(
             _nodeOperators[_nodeOperatorId].rewardAddress != _rewardAddress
@@ -548,10 +544,10 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
         uint64 _vettedSigningKeysCount
     ) external onlyOwner {
         _onlyExistedNodeOperator(_nodeOperatorId);
-        // _authP(
-        //     SET_NODE_OPERATOR_LIMIT_ROLE,
-        //     arr(uint256(_nodeOperatorId), uint256(_vettedSigningKeysCount))
-        // );
+        _authP(
+            SET_NODE_OPERATOR_LIMIT_ROLE,
+            arr(uint256(_nodeOperatorId), uint256(_vettedSigningKeysCount))
+        );
         _onlyCorrectNodeOperatorState(getNodeOperatorIsActive(_nodeOperatorId));
 
         Packed64x4.Packed
@@ -1021,8 +1017,8 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
     function invalidateReadyToDepositKeysRange(
         uint256 _indexFrom,
         uint256 _indexTo
-    ) external onlyOwner {
-        // _auth(MANAGE_NODE_OPERATOR_ROLE);
+    ) external {
+        _auth(MANAGE_NODE_OPERATOR_ROLE);
         _invalidateReadyToDepositKeysRange(_indexFrom, _indexTo);
     }
 
@@ -2032,9 +2028,8 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
         return STUCK_PENALTY_DELAY_POSITION.getStorageUint256();
     }
 
-    function setStuckPenaltyDelay(uint256 _delay) external onlyOwner {
-        // _auth(MANAGE_NODE_OPERATOR_ROLE);
-
+    function setStuckPenaltyDelay(uint256 _delay) external {
+        _auth(MANAGE_NODE_OPERATOR_ROLE);
         _setStuckPenaltyDelay(_delay);
     }
 

@@ -8,25 +8,39 @@ async function main() {
   console.log('Getting the deposit contract...')
   const fileName = './deployed-local.json'
   const addresses = JSON.parse(fs.readFileSync(fileName, 'utf-8'))
+  const depositContractAddress = addresses.chainSpec.depositContract
   const CatalistAddress = addresses['app:catalist'].proxy.address
   const HashConsensusForAccountingOracleAddress = addresses.hashConsensusForAccountingOracle.address
-  const HashConsensusForValidatorsExitBusOracle = addresses.hashConsensusForValidatorsExitBusOracle.address
-  const NodeOperatorRegistryAddress = addresses['app:node-operators-registry'].proxy.address
+  const HashConsensusForForValidatorsExitBusOracle = addresses.hashConsensusForValidatorsExitBusOracle.address
   const StakingRouterAddress = addresses.stakingRouter.proxy.address
   const AccountingOracleAddress = addresses.accountingOracle.proxy.address
   const WithdrawalQueueERC721Address = addresses.withdrawalQueueERC721.proxy.address
+  const NodeOperatorRegistryAddress = addresses['app:node-operators-registry'].proxy.address
   const DepositSecurityModuleAddress = addresses.depositSecurityModule.address
+  const CatalistLocatorAddress = addresses.catalistLocator.proxy.address
   const ValidatorsExitBusOracleAddress = addresses.validatorsExitBusOracle.proxy.address
+  const AragonKernelAddress = addresses['aragon-kernel'].proxy.address
+  const AragonAclAddress = addresses['aragon-acl'].proxy.address
+  const OracleReportSanityCheckerAddress = addresses.oracleReportSanityChecker.address
 
+  const depositContract = await ethers.getContractAt('DepositContract', depositContractAddress)
   const catalist = await ethers.getContractAt('Catalist', CatalistAddress)
+  const catalistProxy = await ethers.getContractAt('AppProxyUpgradeable', CatalistAddress)
+  const catalistAragonApp = await ethers.getContractAt('AragonApp', CatalistAddress)
   const hashConsensusForAccountingOracle = await ethers.getContractAt('HashConsensus', HashConsensusForAccountingOracleAddress)
-  const hashConsensusForValidatorsExitBusOracle = await ethers.getContractAt('HashConsensus', HashConsensusForValidatorsExitBusOracle)
+  const hashConsensusForValidatorsExitBusOracle = await ethers.getContractAt('HashConsensus', HashConsensusForForValidatorsExitBusOracle)
   const stakingRouter = await ethers.getContractAt('StakingRouter', StakingRouterAddress)
   const accountingOracle = await ethers.getContractAt('AccountingOracle', AccountingOracleAddress)
   const withdrawalQueueERC721 = await ethers.getContractAt('WithdrawalQueueERC721', WithdrawalQueueERC721Address)
   const nodeOperatorRegistry = await ethers.getContractAt('NodeOperatorsRegistry', NodeOperatorRegistryAddress)
   const depositSecurityModule = await ethers.getContractAt('DepositSecurityModule', DepositSecurityModuleAddress)
+  const catalistLocator = await ethers.getContractAt('CatalistLocator', CatalistLocatorAddress)
+  const catalistLocatorProxy = await ethers.getContractAt('OssifiableProxy', CatalistLocatorAddress)
   const validatorsExitBusOracle = await ethers.getContractAt('ValidatorsExitBusOracle', ValidatorsExitBusOracleAddress)
+  const aragonKernel = await ethers.getContractAt('Kernel', AragonKernelAddress)
+  const aragonKernelProxy = await ethers.getContractAt('KernelProxy', AragonKernelAddress)
+  const aragonAcl = await ethers.getContractAt('ACL', AragonAclAddress)
+  const oracleReportSanityChecker = await ethers.getContractAt('OracleReportSanityChecker', OracleReportSanityCheckerAddress)
 
   const chainSpec = JSON.parse(fs.readFileSync(fileName, 'utf-8')).chainSpec
   const GENESIS_TIME = chainSpec.genesisTime
@@ -36,6 +50,22 @@ async function main() {
   const [owner, ad1] = await ethers.getSigners()
   const deployerAddress = owner.address
   const oracleMemberAddress = ad1.address
+
+  console.log()
+  console.log('Grant RESUME_ROLE to owner...')
+  const RESUME_ROLE = await catalist.RESUME_ROLE({
+    gasLimit: 1000000,
+    gasPrice: 100000,
+  })
+  await aragonAcl.connect(owner).grantPermission(
+    owner.address,
+    CatalistAddress,
+    RESUME_ROLE,
+    {
+      gasLimit: 1000000, 
+      gasPrice: 100000
+    }
+  )
 
   console.log()
   console.log('Querying resume staking...')
@@ -143,6 +173,35 @@ async function main() {
   //     gasPrice: 100000,
   //   }
   // )
+
+  console.log()
+  console.log('Grant MANAGE_NODE_OPERATOR_ROLE to owner...')
+  const MANAGE_NODE_OPERATOR_ROLE = await nodeOperatorRegistry.connect(owner).MANAGE_NODE_OPERATOR_ROLE({
+    gasLimit: 1000000, 
+    gasPrice: 100000
+  })
+  await aragonAcl.connect(owner).grantPermission(
+    owner.address,
+    NodeOperatorRegistryAddress,
+    MANAGE_NODE_OPERATOR_ROLE,
+    {
+      gasLimit: 1000000, 
+      gasPrice: 100000
+    }
+  )
+  
+  console.log()
+  console.log('Create test operator...')
+  const operatorId = await nodeOperatorRegistry.connect(owner).addNodeOperator(
+    'test-operator',
+    owner.address,
+    {
+      gasLimit: 1000000, 
+      gasPrice: 100000
+    }
+  );
+  console.log('- Operator ID:', operatorId);
+
 
   console.log()
   console.log('Complete.')

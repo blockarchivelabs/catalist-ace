@@ -12,10 +12,6 @@ async function deployAragonStdApps({ web3, artifacts, }) {
   assertRequiredNetworkState(state, REQUIRED_NET_STATE)
 
   const deployer = state.deployer
-  // await deployImplementation("app:aragon-agent", "Agent", deployer)
-  // await deployImplementation("app:aragon-finance", "Finance", deployer)
-  // await deployImplementation("app:aragon-token-manager", "TokenManager", deployer)
-  // await deployImplementation("app:aragon-voting", "Voting", deployer)
 
   await TotalGasCounter.incrementTotalGasUsedInStateFile()
 }

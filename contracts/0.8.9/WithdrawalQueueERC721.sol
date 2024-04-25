@@ -174,7 +174,7 @@ contract WithdrawalQueueERC721 is IERC721Metadata, IERC4906, WithdrawalQueue {
     }
 
     /// @notice Finalize requests from last finalized one up to `_lastRequestIdToBeFinalized`
-    /// @dev ether to finalize all the requests should be calculated using `prefinalize()` and sent along
+    /// @dev ace to finalize all the requests should be calculated using `prefinalize()` and sent along
     function finalize(
         uint256 _lastRequestIdToBeFinalized,
         uint256 _maxShareRate

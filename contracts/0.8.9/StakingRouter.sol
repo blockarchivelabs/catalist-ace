@@ -4,16 +4,16 @@
 /* See contracts/COMPILERS.md */
 pragma solidity 0.8.9;
 
-import { AccessControlEnumerable } from "./utils/access/AccessControlEnumerable.sol";
+import {AccessControlEnumerable} from "./utils/access/AccessControlEnumerable.sol";
 
-import { IStakingModule } from "./interfaces/IStakingModule.sol";
+import {IStakingModule} from "./interfaces/IStakingModule.sol";
 
-import { Math256 } from "../common/lib/Math256.sol";
-import { UnstructuredStorage } from "./lib/UnstructuredStorage.sol";
-import { MinFirstAllocationStrategy } from "../common/lib/MinFirstAllocationStrategy.sol";
+import {Math256} from "../common/lib/Math256.sol";
+import {UnstructuredStorage} from "./lib/UnstructuredStorage.sol";
+import {MinFirstAllocationStrategy} from "../common/lib/MinFirstAllocationStrategy.sol";
 
-import { BeaconChainDepositor } from "./BeaconChainDepositor.sol";
-import { Versioned } from "./utils/Versioned.sol";
+import {BeaconChainDepositor} from "./BeaconChainDepositor.sol";
+import {Versioned} from "./utils/Versioned.sol";
 
 contract StakingRouter is
     AccessControlEnumerable,
@@ -95,7 +95,7 @@ contract StakingRouter is
         uint256 currentNodeOpExitedValidatorsCount,
         uint256 currentNodeOpStuckValidatorsCount
     );
-    error InvalidDepositsValue(uint256 etherValue, uint256 depositsCount);
+    error InvalidDepositsValue(uint256 aceValue, uint256 depositsCount);
     error StakingModuleAddressExists();
     error ArraysLengthMismatch(
         uint256 firstArrayLength,
@@ -1132,7 +1132,7 @@ contract StakingRouter is
     /// @dev calculate the max count of deposits which the staking module can provide data for based
     ///     on the passed `_maxDepositsValue` amount
     /// @param _stakingModuleId id of the staking module to be deposited
-    /// @param _maxDepositsValue max amount of ether that might be used for deposits count calculation
+    /// @param _maxDepositsValue max amount of ace that might be used for deposits count calculation
     /// @return max number of deposits might be done using the given staking module
     function getStakingModuleMaxDepositsCount(
         uint256 _stakingModuleId,
@@ -1365,18 +1365,18 @@ contract StakingRouter is
             ) = IStakingModule(stakingModule.stakingModuleAddress)
                     .obtainDepositData(_depositsCount, _depositCalldata);
 
-            uint256 etherBalanceBeforeDeposits = address(this).balance;
+            uint256 aceBalanceBeforeDeposits = address(this).balance;
             _makeBeaconChainDeposits32ACE(
                 _depositsCount,
                 abi.encodePacked(withdrawalCredentials),
                 publicKeysBatch,
                 signaturesBatch
             );
-            uint256 etherBalanceAfterDeposits = address(this).balance;
+            uint256 aceBalanceAfterDeposits = address(this).balance;
 
             /// @dev all sent ACE must be deposited and self balance stay the same
             assert(
-                etherBalanceBeforeDeposits - etherBalanceAfterDeposits ==
+                aceBalanceBeforeDeposits - aceBalanceAfterDeposits ==
                     depositsValue
             );
         }

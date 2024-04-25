@@ -48,105 +48,105 @@ async function main() {
   const CATALIST_APP_ID = '0xfe7e515193fc7331eedd97433fad4b507d16473770a68882c43677c8f27ebcd8'
   // const NEW_CATALIST_ADDRESS = '0xDF4A425efAF188E94ae443E58101C3CE44b80D9c'
 
-  const APP_BASES_NAMESPACE = await aragonKernel.connect(owner).APP_BASES_NAMESPACE({
-    gasLimit: 1000000,
-    gasPrice: 100000,
-  })
+
   console.log()
-  console.log('APP_BASES_NAMESPACE:', APP_BASES_NAMESPACE)
-  // const APP_ADDR_NAMESPACE = await aragonKernel.connect(owner).APP_ADDR_NAMESPACE({
+  console.log('Get node operator summary...')
+  const nodeOperatorSummary = await stakingRouter.connect(owner).getNodeOperatorSummary(
+    1,
+    1,
+    {
+      gasLimit: 1000000,
+      gasPrice: 100000,
+    }
+  )
+  console.log('- Node Operator Summary:', nodeOperatorSummary)
+
+  // const APP_BASES_NAMESPACE = await aragonKernel.connect(owner).APP_BASES_NAMESPACE({
   //   gasLimit: 1000000,
   //   gasPrice: 100000,
   // })
-  // console.log('APP_ADDR_NAMESPACE:', APP_ADDR_NAMESPACE)
-  const APP_MANAGER_ROLE = await aragonKernel.connect(owner).APP_MANAGER_ROLE({
-    gasLimit: 1000000,
-    gasPrice: 100000,
-  })
-
-  console.log()
-  console.log('Get permission manager...')
-  const manager = await aragonAcl.connect(owner).getPermissionManager(
-    AragonKernelAddress,
-    APP_MANAGER_ROLE,
-    {
-      gasLimit: 1000000,
-      gasPrice: 100000,
-    }
-  )
-  console.log('- manager:', manager)
-
-  console.log()
-  console.log('Grant APP_MANAGER_ROLE to owner...')
-  await aragonAcl.connect(owner).grantPermission(
-    owner.address,
-    AragonKernelAddress,
-    APP_MANAGER_ROLE,
-    {
-      gasLimit: 1000000,
-      gasPrice: 100000,
-    }
-  )
+  // console.log()
+  // console.log('APP_BASES_NAMESPACE:', APP_BASES_NAMESPACE)
+  // const APP_MANAGER_ROLE = await aragonKernel.connect(owner).APP_MANAGER_ROLE({
+  //   gasLimit: 1000000,
+  //   gasPrice: 100000,
+  // })
 
   // console.log()
-  // console.log('Get name from catalist...')
-  // const beforeName = await catalist.connect(owner).name({
+  // console.log('Get permission manager...')
+  // const manager = await aragonAcl.connect(owner).getPermissionManager(
+  //   AragonKernelAddress,
+  //   APP_MANAGER_ROLE,
+  //   {
+  //     gasLimit: 1000000,
+  //     gasPrice: 100000,
+  //   }
+  // )
+  // console.log('- manager:', manager)
+
+  // console.log()
+  // console.log('Grant APP_MANAGER_ROLE to owner...')
+  // await aragonAcl.connect(owner).grantPermission(
+  //   owner.address,
+  //   AragonKernelAddress,
+  //   APP_MANAGER_ROLE,
+  //   {
+  //     gasLimit: 1000000,
+  //     gasPrice: 100000,
+  //   }
+  // )
+
+  // console.log()
+  // console.log('Deploy new Catalist.sol...')
+  // const catalistFactory = await ethers.getContractFactory('Catalist')
+  // const newCatalist = await catalistFactory.deploy()
+  // await newCatalist.deployed()
+  // console.log('- New Catalist deployed to:', newCatalist.address)
+
+  // console.log()
+  // console.log('Get address from kernel...')
+  // const beforeAddress = await aragonKernel.connect(owner).getApp(
+  //   APP_BASES_NAMESPACE,
+  //   CATALIST_APP_ID,
+  //   {
+  //     gasLimit: 1000000,
+  //     gasPrice: 100000,
+  //   }
+  // )
+  // console.log('- address:', beforeAddress)
+
+  // console.log()
+  // console.log('Set app from kernel...')
+  // const changedAppId = await aragonKernel.connect(owner).setApp(
+  //   APP_BASES_NAMESPACE,
+  //   CATALIST_APP_ID,
+  //   newCatalist.address,
+  //   {
+  //     gasLimit: 1000000,
+  //     gasPrice: 100000,
+  //   }
+  // )
+  // console.log('- changedAppId:', changedAppId)
+
+  // console.log()
+  // console.log('Get address from kernel...')
+  // const afterAddress = await aragonKernel.connect(owner).getApp(
+  //   APP_BASES_NAMESPACE,
+  //   CATALIST_APP_ID,
+  //   {
+  //     gasLimit: 1000000,
+  //     gasPrice: 100000,
+  //   }
+  // )
+  // console.log('- address:', afterAddress)
+
+  // console.log()
+  // console.log('Get name from upgraded catalist...')
+  // const afterName = await catalist.connect(owner).name({
   //   gasLimit: 1000000,
   //   gasPrice: 100000,
   // })
-  // console.log('- name:', beforeName)
-
-  console.log()
-  console.log('Deploy new Catalist.sol...')
-  const catalistFactory = await ethers.getContractFactory('Catalist')
-  const newCatalist = await catalistFactory.deploy()
-  await newCatalist.deployed()
-  console.log('- New Catalist deployed to:', newCatalist.address)
-
-  console.log()
-  console.log('Get address from kernel...')
-  const beforeAddress = await aragonKernel.connect(owner).getApp(
-    APP_BASES_NAMESPACE,
-    CATALIST_APP_ID,
-    {
-      gasLimit: 1000000,
-      gasPrice: 100000,
-    }
-  )
-  console.log('- address:', beforeAddress)
-
-  console.log()
-  console.log('Set app from kernel...')
-  const changedAppId = await aragonKernel.connect(owner).setApp(
-    APP_BASES_NAMESPACE,
-    CATALIST_APP_ID,
-    newCatalist.address,
-    {
-      gasLimit: 1000000,
-      gasPrice: 100000,
-    }
-  )
-  console.log('- changedAppId:', changedAppId)
-
-  console.log()
-  console.log('Get address from kernel...')
-  const afterAddress = await aragonKernel.connect(owner).getApp(
-    APP_BASES_NAMESPACE,
-    CATALIST_APP_ID,
-    {
-      gasLimit: 1000000,
-      gasPrice: 100000,
-    }
-  )
-  console.log('- address:', afterAddress)
-
-  console.log()
-  console.log('Get name from upgraded catalist...')
-  const afterName = await catalist.connect(owner).name({
-    gasLimit: 1000000,
-    gasPrice: 100000,
-  })
-  console.log('- name:', afterName)
+  // console.log('- name:', afterName)
 
   // console.log()
   // console.log('Querying get member...')

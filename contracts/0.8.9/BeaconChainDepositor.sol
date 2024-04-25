@@ -4,7 +4,7 @@
 // See contracts/COMPILERS.md
 pragma solidity 0.8.9;
 
-import { MemUtils } from "../common/lib/MemUtils.sol";
+import {MemUtils} from "../common/lib/MemUtils.sol";
 
 interface IDepositContract {
     function get_deposit_root() external view returns (bytes32 rootHash);
@@ -23,7 +23,7 @@ contract BeaconChainDepositor {
     uint256 internal constant DEPOSIT_SIZE = 32 ether;
 
     /// @dev deposit amount 32eth in gweis converted to little endian uint64
-    /// DEPOSIT_SIZE_IN_GWEI_LE64 = toLittleEndian64(32 ether / 1 gwei)
+    /// DEPOSIT_SIZE_IN_GWEI_LE64 = toLittleEndian64(32 ace / 1 gwei)
     uint64 internal constant DEPOSIT_SIZE_IN_GWEI_LE64 = 0x0040597307000000;
 
     IDepositContract public immutable DEPOSIT_CONTRACT;
@@ -78,7 +78,7 @@ contract BeaconChainDepositor {
                 SIGNATURE_LENGTH
             );
 
-            DEPOSIT_CONTRACT.deposit{ value: DEPOSIT_SIZE }(
+            DEPOSIT_CONTRACT.deposit{value: DEPOSIT_SIZE}(
                 publicKey,
                 _withdrawalCredentials,
                 signature,

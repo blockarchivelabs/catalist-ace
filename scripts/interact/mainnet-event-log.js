@@ -1,11 +1,6 @@
-const { parseEther } = require('ethers/lib/utils')
 const { ethers } = require('hardhat')
-const { hexConcat, pad, ETH, e27, e18, toBN } = require('./utils')
 const fs = require('fs')
 const path = require("path")
-const { DSMAttestMessage } = require('../../test/helpers/signatures')
-const { log } = require('console')
-const namehash = require('eth-ens-namehash').hash
 
 // RPC_URL=http://20.197.13.207:8545 npx hardhat run scripts/interact/mainnet-event-log.js --network ace_mainnet
 async function main() {
@@ -22,7 +17,7 @@ async function main() {
   const NodeOperatorRegistryAddress = addresses['app:node-operators-registry'].proxy.address
   const DepositSecurityModuleAddress = addresses.depositSecurityModule.address
   const CatalistLocatorAddress = addresses.catalistLocator.proxy.address
-  const ValidatorsExitBusOracle = addresses.validatorsExitBusOracle.proxy.address
+  const ValidatorsExitBusOracleAddress = addresses.validatorsExitBusOracle.proxy.address
   const AragonKernelAddress = addresses['aragon-kernel'].proxy.address
   const AragonAclAddress = addresses['aragon-acl'].proxy.address
 
@@ -38,7 +33,7 @@ async function main() {
   const nodeOperatorRegistry = await ethers.getContractAt('NodeOperatorsRegistry', NodeOperatorRegistryAddress)
   const depositSecurityModule = await ethers.getContractAt('DepositSecurityModule', DepositSecurityModuleAddress)
   const catalistLocator = await ethers.getContractAt('CatalistLocator', CatalistLocatorAddress)
-  const validatorsExitBusOracle = await ethers.getContractAt('ValidatorsExitBusOracle', ValidatorsExitBusOracle)
+  const validatorsExitBusOracle = await ethers.getContractAt('ValidatorsExitBusOracle', ValidatorsExitBusOracleAddress)
   const aragonKernel = await ethers.getContractAt('Kernel', AragonKernelAddress)
   const aragonKernelProxy = await ethers.getContractAt('KernelProxy', AragonKernelAddress)
   const aragonAcl = await ethers.getContractAt('ACL', AragonAclAddress)
@@ -53,31 +48,31 @@ async function main() {
   const SLOTS_PER_EPOCH = chainSpec.slotsPerEpoch
   const SECONDS_PER_SLOT = chainSpec.secondsPerSlot
 
-  const CATALIST_APP_ID = '0xfe7e515193fc7331eedd97433fad4b507d16473770a68882c43677c8f27ebcd8'
-  const ORIGIN_CATALIST_ADDRESS = '0x14Cb36737D2EA82e617E241fb32A44f652e0E8F4'
-  const NEW_CATALIST_ADDRESS = '0x0665f48d1ddebF766837b771f29584eA6c23Dc43'
-
   // 추적할 컨트랙트, 이벤트 정보 입력
-  console.log('event logs for DepositedValidatorsChanged')
-  const filter = {
-    address: CatalistAddress,
-    fromBlock: 0,
-    toBlock: 10000000,
-    topics: [catalist.filters.DepositedValidatorsChanged().topics] //Transfer().topics 이런식으로 활용
-  };
+  const EVENT = 'ValidatorExitRequest'
+  const CONTRACT = validatorsExitBusOracle
+  const CONTRACT_NAME = 'ValidatorsExitBusOracle'
+  const CONTRACT_ADDRESS = ValidatorsExitBusOracleAddress
 
-  const logs = await ethers.provider.getLogs(filter);
-  console.log()
-  console.log(logs)
 
   // abi 불러오기
   const dir = path.resolve(
     __dirname,
-    "../../lib/abi/Catalist.json"
+    "../../lib/abi/" + CONTRACT_NAME + ".json"
   )
   const file = fs.readFileSync(dir, "utf8")
-  const json = JSON.parse(file)
-  const abi = json
+  const abi = JSON.parse(file)
+  const filter = {
+    address: CONTRACT_ADDRESS,
+    fromBlock: 0,
+    toBlock: 10000000,
+    topics: [CONTRACT.filters[EVENT]().topics]
+  };
+  
+  const logs = await ethers.provider.getLogs(filter);
+  console.log()
+  console.log('event logs for', EVENT)
+  console.log(logs)
 
   console.log()
   const iface = new ethers.utils.Interface(abi);  
@@ -85,7 +80,7 @@ async function main() {
     console.log()
     console.log("decoded event index:", log.logIndex);
     console.log("- transaction hash:", log.transactionHash);
-    console.log("- data:", iface.decodeEventLog("DepositedValidatorsChanged", log.data, log.topics));
+    console.log("- data:", iface.decodeEventLog(EVENT, log.data, log.topics));
   })
 }
 

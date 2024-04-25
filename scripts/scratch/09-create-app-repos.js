@@ -18,10 +18,6 @@ const REQUIRED_NET_STATE = [
   `app:${APP_NAMES.CATALIST}`,
   `app:${APP_NAMES.ORACLE}`,
   `app:${APP_NAMES.NODE_OPERATORS_REGISTRY}`,
-  // `app:${APP_NAMES.ARAGON_AGENT}`,
-  // `app:${APP_NAMES.ARAGON_FINANCE}`,
-  // `app:${APP_NAMES.ARAGON_TOKEN_MANAGER}`,
-  // `app:${APP_NAMES.ARAGON_VOTING}`,
 ]
 
 async function createAppRepos({ web3, artifacts }) {
@@ -66,17 +62,6 @@ async function createAppRepos({ web3, artifacts }) {
 
   const catalistAppsReceipt = await makeTx(template, 'createRepos', createReposArguments, { from })
   console.log(`=== Aragon Catalist Apps Repos (Catalist, AccountingOracle, NodeOperatorsRegistry deployed: ${catalistAppsReceipt.tx} ===`)
-
-  // const createStdAragonReposArguments = [
-  //   state['app:aragon-agent'].implementation.address,
-  //   state['app:aragon-finance'].implementation.address,
-  //   state['app:aragon-token-manager'].implementation.address,
-  //   state['app:aragon-voting'].implementation.address,
-  // ]
-
-  // const aragonStdAppsReceipt = await makeTx(template, 'createStdAragonRepos', createStdAragonReposArguments, { from })
-  // console.log(`=== Aragon Std Apps Repos (Agent, Finance, TokenManager, Voting deployed: ${aragonStdAppsReceipt.tx} ===`)
-  // state.catalistTemplateCreateStdAppReposTx = aragonStdAppsReceipt.tx
 
   logSplitter()
   persistNetworkState(network.name, netId, state)

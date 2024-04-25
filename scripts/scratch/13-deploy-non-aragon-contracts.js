@@ -9,9 +9,6 @@ const DEPLOYER = process.env.DEPLOYER || ''
 const REQUIRED_NET_STATE = [
   `app:${APP_NAMES.CATALIST}`,
   `app:${APP_NAMES.ORACLE}`,
-  // "app:aragon-agent",
-  // "app:aragon-voting",
-  "daoInitialSettings",
   "oracleReportSanityChecker",
   "burner",
   "hashConsensusForAccountingOracle",
@@ -27,23 +24,21 @@ async function deployNewContracts({ web3, artifacts }) {
   assertRequiredNetworkState(state, REQUIRED_NET_STATE)
   const catalistAddress = state["app:catalist"].proxy.address
   const legacyOracleAddress = state["app:oracle"].proxy.address
-  // const votingAddress = state["app:aragon-voting"].proxy.address
-  // const agentAddress = state["app:aragon-agent"].proxy.address
-  // const treasuryAddress = agentAddress
   const chainSpec = state["chainSpec"]
   const depositSecurityModuleParams = state["depositSecurityModule"].deployParameters
   const burnerParams = state["burner"].deployParameters
   const hashConsensusForAccountingParams = state["hashConsensusForAccountingOracle"].deployParameters
   const hashConsensusForExitBusParams = state["hashConsensusForValidatorsExitBusOracle"].deployParameters
   const withdrawalQueueERC721Params = state["withdrawalQueueERC721"].deployParameters
-
+  
   if (!DEPLOYER) {
     throw new Error('Deployer is not specified')
   }
-
+  
   const proxyContractsOwner = DEPLOYER
   const admin = DEPLOYER
   const deployer = DEPLOYER
+  const treasuryAddress = DEPLOYER
 
   const sanityChecks = state["oracleReportSanityChecker"].deployParameters
   logWideSplitter()
@@ -130,7 +125,7 @@ async function deployNewContracts({ web3, artifacts }) {
   //
   // === WithdrawalVault ===
   //
-  const withdrawalVaultImpl = await deployImplementation("withdrawalVault", "WithdrawalVault", deployer, [catalistAddress, deployer])
+  const withdrawalVaultImpl = await deployImplementation("withdrawalVault", "WithdrawalVault", deployer, [catalistAddress, treasuryAddress])
   state = readNetworkState(network.name, netId)
   const withdrawalsManagerProxyConstructorArgs = [deployer, withdrawalVaultImpl.address]
   const withdrawalsManagerProxy = await deployContract("WithdrawalsManagerProxy", withdrawalsManagerProxyConstructorArgs, deployer)
@@ -151,7 +146,7 @@ async function deployNewContracts({ web3, artifacts }) {
   // === CatalistExecutionLayerRewardsVault ===
   //
   const elRewardsVaultAddress = await deployWithoutProxy(
-    "executionLayerRewardsVault", "CatalistExecutionLayerRewardsVault", deployer, [catalistAddress, deployer]
+    "executionLayerRewardsVault", "CatalistExecutionLayerRewardsVault", deployer, [catalistAddress, treasuryAddress]
   )
   logWideSplitter()
 
@@ -239,7 +234,7 @@ async function deployNewContracts({ web3, artifacts }) {
   //
   const burnerArgs = [
     admin,
-    deployer,
+    treasuryAddress,
     catalistAddress,
     burnerParams.totalCoverSharesBurnt,
     burnerParams.totalNonCoverSharesBurnt,
@@ -261,7 +256,7 @@ async function deployNewContracts({ web3, artifacts }) {
     postTokenRebaseReceiver,
     burnerAddress,
     stakingRouterAddress,
-    deployer,
+    treasuryAddress,
     validatorsExitBusOracleAddress,
     withdrawalQueueERC721Address,
     withdrawalVaultAddress,
