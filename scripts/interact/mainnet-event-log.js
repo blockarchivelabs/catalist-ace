@@ -14,7 +14,7 @@ async function main() {
   const StakingRouterAddress = addresses.stakingRouter.proxy.address
   const AccountingOracleAddress = addresses.accountingOracle.proxy.address
   const WithdrawalQueueERC721Address = addresses.withdrawalQueueERC721.proxy.address
-  const NodeOperatorRegistryAddress = addresses['app:node-operators-registry'].proxy.address
+  const NodeOperatorsRegistryAddress = addresses['app:node-operators-registry'].proxy.address
   const DepositSecurityModuleAddress = addresses.depositSecurityModule.address
   const CatalistLocatorAddress = addresses.catalistLocator.proxy.address
   const ValidatorsExitBusOracleAddress = addresses.validatorsExitBusOracle.proxy.address
@@ -30,7 +30,7 @@ async function main() {
   const stakingRouter = await ethers.getContractAt('StakingRouter', StakingRouterAddress)
   const accountingOracle = await ethers.getContractAt('AccountingOracle', AccountingOracleAddress)
   const withdrawalQueueERC721 = await ethers.getContractAt('WithdrawalQueueERC721', WithdrawalQueueERC721Address)
-  const nodeOperatorRegistry = await ethers.getContractAt('NodeOperatorsRegistry', NodeOperatorRegistryAddress)
+  const nodeOperatorsRegistry = await ethers.getContractAt('NodeOperatorsRegistry', NodeOperatorsRegistryAddress)
   const depositSecurityModule = await ethers.getContractAt('DepositSecurityModule', DepositSecurityModuleAddress)
   const catalistLocator = await ethers.getContractAt('CatalistLocator', CatalistLocatorAddress)
   const validatorsExitBusOracle = await ethers.getContractAt('ValidatorsExitBusOracle', ValidatorsExitBusOracleAddress)
@@ -49,10 +49,10 @@ async function main() {
   const SECONDS_PER_SLOT = chainSpec.secondsPerSlot
 
   // 추적할 컨트랙트, 이벤트 정보 입력
-  const EVENT = 'ValidatorExitRequest'
-  const CONTRACT = validatorsExitBusOracle
-  const CONTRACT_NAME = 'ValidatorsExitBusOracle'
-  const CONTRACT_ADDRESS = ValidatorsExitBusOracleAddress
+  const EVENT = 'DepositedSigningKeysCountChanged'
+  const CONTRACT = nodeOperatorsRegistry
+  const CONTRACT_NAME = 'NodeOperatorsRegistry'
+  const CONTRACT_ADDRESS = NodeOperatorsRegistryAddress
 
 
   // abi 불러오기

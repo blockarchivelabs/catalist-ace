@@ -26,18 +26,18 @@ async function main() {
   const depositSecurityModule = await ethers.getContractAt('DepositSecurityModule', DepositSecurityModuleAddress)
   const validatorsExitBusOracle = await ethers.getContractAt('ValidatorsExitBusOracle', ValidatorsExitBusOracle)
 
-  const deployerAddress = '0x63cac65c5eb17E6Dd47D9313e23169f79d1Ab058'
-  const oracleMemberAddress = '0xB458c332C242247C46e065Cf987a05bAf7612904'
+  const GAS_INFO = {
+    gasLimit: 1000000,
+    gasPrice: 100000,
+  }
 
   const chainSpec = JSON.parse(fs.readFileSync(fileName, 'utf-8')).chainSpec
   const GENESIS_TIME = chainSpec.genesisTime
   const SLOTS_PER_EPOCH = chainSpec.slotsPerEpoch
   const SECONDS_PER_SLOT = chainSpec.secondsPerSlot
 
-  const GAS_INFO = {
-    gasLimit: 1000000,
-    gasPrice: 100000,
-  }
+  const deployerAddress = '0x63cac65c5eb17E6Dd47D9313e23169f79d1Ab058'
+  const oracleMemberAddress = '0xB458c332C242247C46e065Cf987a05bAf7612904'
 
   // 최초 배포시 초기화 코드
 

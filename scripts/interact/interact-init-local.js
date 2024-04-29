@@ -68,6 +68,22 @@ async function main() {
   )
 
   console.log()
+  console.log('Grant STAKING_CONTROL_ROLE to owner in Catalist...')
+  const STAKING_CONTROL_ROLE = await catalist.STAKING_CONTROL_ROLE({
+    gasLimit: 1000000,
+    gasPrice: 1000000000,
+  })
+  await aragonAcl.connect(owner).grantPermission(
+    owner.address,
+    CatalistAddress,
+    STAKING_CONTROL_ROLE,
+    {
+      gasLimit: 1000000,
+      gasPrice: 1000000000,
+    }
+  )
+
+  console.log()
   console.log('Querying resume staking...')
   await catalist.connect(owner).resume({
     gasLimit: 1000000,

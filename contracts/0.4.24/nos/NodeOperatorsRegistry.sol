@@ -198,7 +198,6 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
         0xc7e4f0db3aacc0f4459a7ba3f502527b72b0c1415ede72230244c98b8c28c1f4;
 
     mapping(address => bool) private owners;
-    mapping(address => bool) private nodeOperatorAddress;
 
     modifier onlyOwner() {
         require(owners[msg.sender], "NOT_OWNER");
@@ -207,15 +206,6 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
 
     function setOwner(address adr, bool status) external onlyOwner {
         owners[adr] = status;
-    }
-
-    modifier onlyNodeOperator() {
-        require(nodeOperatorAddress[msg.sender], "NOT_NODE_OPERATOR");
-        _;
-    }
-
-    function addNodeOperatorAddress(address adr, bool status) public onlyOwner {
-        nodeOperatorAddress[adr] = status;
     }
 
     //
@@ -404,11 +394,10 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
     function addNodeOperator(
         string _name,
         address _rewardAddress
-    ) external returns (uint256 id) {
+    ) external onlyOwner returns (uint256 id) {
         _onlyValidNodeOperatorName(_name);
         _onlyValidRewardAddress(_rewardAddress);
 
-        addNodeOperatorAddress(_rewardAddress, true);
         _auth(MANAGE_NODE_OPERATOR_ROLE);
 
         id = getNodeOperatorsCount();
@@ -544,10 +533,6 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
         uint64 _vettedSigningKeysCount
     ) external onlyOwner {
         _onlyExistedNodeOperator(_nodeOperatorId);
-        _authP(
-            SET_NODE_OPERATOR_LIMIT_ROLE,
-            arr(uint256(_nodeOperatorId), uint256(_vettedSigningKeysCount))
-        );
         _onlyCorrectNodeOperatorState(getNodeOperatorIsActive(_nodeOperatorId));
 
         Packed64x4.Packed
@@ -1502,7 +1487,7 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
         uint256 _keysCount,
         bytes _publicKeys,
         bytes _signatures
-    ) external onlyNodeOperator {
+    ) external onlyOwner {
         _addSigningKeys(_nodeOperatorId, _keysCount, _publicKeys, _signatures);
     }
 
@@ -1521,7 +1506,7 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
         uint256 _keysCount,
         bytes _publicKeys,
         bytes _signatures
-    ) external {
+    ) external onlyOwner {
         _addSigningKeys(_nodeOperatorId, _keysCount, _publicKeys, _signatures);
     }
 
@@ -1581,7 +1566,7 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
     function removeSigningKey(
         uint256 _nodeOperatorId,
         uint256 _index
-    ) external {
+    ) external onlyOwner {
         _removeUnusedSigningKeys(_nodeOperatorId, _index, 1);
     }
 
@@ -1593,7 +1578,7 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
         uint256 _nodeOperatorId,
         uint256 _fromIndex,
         uint256 _keysCount
-    ) external {
+    ) external onlyOwner {
         _removeUnusedSigningKeys(_nodeOperatorId, _fromIndex, _keysCount);
     }
 
@@ -1604,7 +1589,7 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
     function removeSigningKeyOperatorBH(
         uint256 _nodeOperatorId,
         uint256 _index
-    ) external {
+    ) external onlyOwner {
         _removeUnusedSigningKeys(_nodeOperatorId, _index, 1);
     }
 
@@ -1617,7 +1602,7 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
         uint256 _nodeOperatorId,
         uint256 _fromIndex,
         uint256 _keysCount
-    ) external onlyNodeOperator {
+    ) external onlyOwner {
         _removeUnusedSigningKeys(_nodeOperatorId, _fromIndex, _keysCount);
     }
 
@@ -2121,10 +2106,6 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
         _requireAuth(canPerform(msg.sender, _role, new uint256[](0)));
     }
 
-    function _authP(bytes32 _role, uint256[] _params) internal view {
-        _requireAuth(canPerform(msg.sender, _role, _params));
-    }
-
     function _onlyNodeOperatorManager(
         address _sender,
         uint256 _nodeOperatorId
@@ -2136,10 +2117,6 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
             isRewardAddress && isActive,
             "NOT_REWARD_ADDRESS_OR_NOT_ACTIVE"
         );
-        // _requireAuth(
-        //     (isRewardAddress && isActive) ||
-        //         canPerform(_sender, MANAGE_SIGNING_KEYS, arr(_nodeOperatorId))
-        // );
     }
 
     function _onlyExistedNodeOperator(uint256 _nodeOperatorId) internal view {
