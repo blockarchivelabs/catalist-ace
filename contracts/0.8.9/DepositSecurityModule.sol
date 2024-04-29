@@ -1,10 +1,10 @@
-// SPDX-FileCopyrightText: 2023 Catalist <info@catalist.fi>
+// SPDX-FileCopyrightText: 2023 Lido <info@lido.fi>
 // SPDX-License-Identifier: GPL-3.0
 
 /* See contracts/COMPILERS.md */
 pragma solidity 0.8.9;
 
-import { ECDSA } from "../common/lib/ECDSA.sol";
+import {ECDSA} from "../common/lib/ECDSA.sol";
 
 interface ICatalist {
     function deposit(
@@ -48,7 +48,9 @@ contract DepositSecurityModule {
         bytes32 vs;
     }
 
-    event OwnerChanged(address newValue);
+    event OwnerAdded(address newOwner);
+    event OwnerRemoved(address owner);
+    // event OwnerChanged(address newValue);
     event PauseIntentValidityPeriodBlocksChanged(uint256 newValue);
     event MaxDepositsChanged(uint256 newValue);
     event MinDepositBlockDistanceChanged(uint256 newValue);
@@ -92,7 +94,8 @@ contract DepositSecurityModule {
     uint256 internal minDepositBlockDistance;
     uint256 internal pauseIntentValidityPeriodBlocks;
 
-    address internal owner;
+    // address internal owner;
+    mapping(address => bool) private owners;
 
     uint256 internal quorum;
     address[] internal guardians;
@@ -119,7 +122,7 @@ contract DepositSecurityModule {
             abi.encodePacked(
                 // keccak256("catalist.DepositSecurityModule.ATTEST_MESSAGE")
                 bytes32(
-                    0x1085395a994e25b1b3d0ea7937b7395495fb405b31c7d22dbc3976a6bd01f2bf
+                    0xd5b82250000f4cb0efe995e24221711dadc72320678ab0fa0534057dab32a9e9
                 ),
                 block.chainid,
                 address(this)
@@ -130,7 +133,7 @@ contract DepositSecurityModule {
             abi.encodePacked(
                 // keccak256("catalist.DepositSecurityModule.PAUSE_MESSAGE")
                 bytes32(
-                    0x9c4c40205558f12027f21204d6218b8006985b7a6359bcab15404bcc3e3fa122
+                    0x8ddd2af6017f7cf1d273c53da3f52829e49638af882cae15a0cabd6109c9f4ac
                 ),
                 block.chainid,
                 address(this)
@@ -146,26 +149,28 @@ contract DepositSecurityModule {
     /**
      * Returns the owner address.
      */
-    function getOwner() external view returns (address) {
-        return owner;
+    function isOwner(address adr) external view returns (bool) {
+        return owners[adr];
     }
 
     modifier onlyOwner() {
-        if (msg.sender != owner) revert NotAnOwner(msg.sender);
+        require(owners[msg.sender], "NOT_OWNER");
         _;
     }
 
-    /**
-     * Sets new owner. Only callable by the current owner.
-     */
-    function setOwner(address newValue) external onlyOwner {
-        _setOwner(newValue);
+    function setOwner(address newOwner) external onlyOwner {
+        _setOwner(newOwner);
     }
 
-    function _setOwner(address _newOwner) internal {
-        if (_newOwner == address(0)) revert ZeroAddress("_newOwner");
-        owner = _newOwner;
-        emit OwnerChanged(_newOwner);
+    function _setOwner(address newOwner) internal {
+        require(newOwner != address(0), "ZERO_ADDRESS");
+        owners[newOwner] = true;
+        emit OwnerAdded(newOwner);
+    }
+
+    function removeOwner(address owner) external onlyOwner {
+        owners[owner] = false;
+        emit OwnerRemoved(owner);
     }
 
     /**
@@ -434,7 +439,7 @@ contract DepositSecurityModule {
             .getStakingModuleLastDepositBlock(stakingModuleId);
         bool isCatalistCanDeposit = CATALIST.canDeposit();
         return (isModuleActive &&
-            quorum > 0 &&
+            // quorum > 0 &&
             block.number - lastDepositBlock >= minDepositBlockDistance &&
             isCatalistCanDeposit);
     }

@@ -1,39 +1,39 @@
-// SPDX-FileCopyrightText: 2023 Catalist <info@catalist.fi>
+// SPDX-FileCopyrightText: 2023 Lido <info@lido.fi>
 // SPDX-License-Identifier: GPL-3.0
 
 /* See contracts/COMPILERS.md */
 pragma solidity 0.8.9;
 
-import { WithdrawalQueueBase } from "./WithdrawalQueueBase.sol";
+import {WithdrawalQueueBase} from "./WithdrawalQueueBase.sol";
 
-import { IERC20 } from "@openzeppelin/contracts-v4.4/token/ERC20/IERC20.sol";
-import { IERC20Permit } from "@openzeppelin/contracts-v4.4/token/ERC20/extensions/draft-IERC20Permit.sol";
-import { EnumerableSet } from "@openzeppelin/contracts-v4.4/utils/structs/EnumerableSet.sol";
-import { AccessControlEnumerable } from "./utils/access/AccessControlEnumerable.sol";
-import { UnstructuredStorage } from "./lib/UnstructuredStorage.sol";
-import { PausableUntil } from "./utils/PausableUntil.sol";
+import {IERC20} from "@openzeppelin/contracts-v4.4/token/ERC20/IERC20.sol";
+import {IERC20Permit} from "@openzeppelin/contracts-v4.4/token/ERC20/extensions/draft-IERC20Permit.sol";
+import {EnumerableSet} from "@openzeppelin/contracts-v4.4/utils/structs/EnumerableSet.sol";
+import {AccessControlEnumerable} from "./utils/access/AccessControlEnumerable.sol";
+import {UnstructuredStorage} from "./lib/UnstructuredStorage.sol";
+import {PausableUntil} from "./utils/PausableUntil.sol";
 
-import { Versioned } from "./utils/Versioned.sol";
+import {Versioned} from "./utils/Versioned.sol";
 
 /// @notice Interface defining a Catalist liquid staking pool
 /// @dev see also [Catalist liquid staking pool core contract](https://docs.catalist.fi/contracts/catalist)
-interface IStACE is IERC20, IERC20Permit {
+interface IBACE is IERC20, IERC20Permit {
     function getSharesByPooledAce(
         uint256 _pooledAceAmount
     ) external view returns (uint256);
 }
 
 /// @notice Interface defining a Catalist liquid staking pool wrapper
-/// @dev see WstACE.sol for full docs
-interface IWstACE is IERC20, IERC20Permit {
-    function unwrap(uint256 _wstACEAmount) external returns (uint256);
-    function getStACEByWstACE(
-        uint256 _wstACEAmount
+/// @dev see WbACE.sol for full docs
+interface IWbACE is IERC20, IERC20Permit {
+    function unwrap(uint256 _wbACEAmount) external returns (uint256);
+    function getBACEByWbACE(
+        uint256 _wbACEAmount
     ) external view returns (uint256);
-    function stACE() external view returns (IStACE);
+    function bACE() external view returns (IBACE);
 }
 
-/// @title A contract for handling stACE withdrawal request queue within the Catalist protocol
+/// @title A contract for handling bACE withdrawal request queue within the Catalist protocol
 /// @author folkyatina
 abstract contract WithdrawalQueue is
     AccessControlEnumerable,
@@ -57,26 +57,26 @@ abstract contract WithdrawalQueue is
     bytes32 public constant FINALIZE_ROLE = keccak256("FINALIZE_ROLE");
     bytes32 public constant ORACLE_ROLE = keccak256("ORACLE_ROLE");
 
-    /// @notice minimal amount of stACE that is possible to withdraw
-    uint256 public constant MIN_STACE_WITHDRAWAL_AMOUNT = 100;
+    /// @notice minimal amount of bACE that is possible to withdraw
+    uint256 public constant MIN_BACE_WITHDRAWAL_AMOUNT = 100;
 
-    /// @notice maximum amount of stACE that is possible to withdraw by a single request
+    /// @notice maximum amount of bACE that is possible to withdraw by a single request
     /// Prevents accumulating too much funds per single request fulfillment in the future.
     /// @dev To withdraw larger amounts, it's recommended to split it to several requests
-    uint256 public constant MAX_STACE_WITHDRAWAL_AMOUNT = 1000 * 1e18;
+    uint256 public constant MAX_BACE_WITHDRAWAL_AMOUNT = 1000 * 1e18;
 
-    /// @notice Catalist stACE token address
-    IStACE public immutable STACE;
-    /// @notice Catalist wstACE token address
-    IWstACE public immutable WSTACE;
+    /// @notice Catalist bACE token address
+    IBACE public immutable BACE;
+    /// @notice Catalist wbACE token address
+    IWbACE public immutable WBACE;
 
     event InitializedV1(address _admin);
     event BunkerModeEnabled(uint256 _sinceTimestamp);
     event BunkerModeDisabled();
 
     error AdminZeroAddress();
-    error RequestAmountTooSmall(uint256 _amountOfStACE);
-    error RequestAmountTooLarge(uint256 _amountOfStACE);
+    error RequestAmountTooSmall(uint256 _amountOfBACE);
+    error RequestAmountTooLarge(uint256 _amountOfBACE);
     error InvalidReportTimestamp();
     error RequestIdsNotSorted();
     error ZeroRecipient();
@@ -85,11 +85,11 @@ abstract contract WithdrawalQueue is
         uint256 _secondArrayLength
     );
 
-    /// @param _wstACE address of WstACE contract
-    constructor(IWstACE _wstACE) {
+    /// @param _wbACE address of WbACE contract
+    constructor(IWbACE _wbACE) {
         // init immutables
-        WSTACE = _wstACE;
-        STACE = WSTACE.stACE();
+        WBACE = _wbACE;
+        BACE = WBACE.bACE();
     }
 
     /// @notice Initialize the contract storage explicitly.
@@ -130,8 +130,8 @@ abstract contract WithdrawalQueue is
         _pauseUntil(_pauseUntilInclusive);
     }
 
-    /// @notice Request the batch of stACE for withdrawal. Approvals for the passed amounts should be done before.
-    /// @param _amounts an array of stACE amount values.
+    /// @notice Request the batch of bACE for withdrawal. Approvals for the passed amounts should be done before.
+    /// @param _amounts an array of bACE amount values.
     ///  The standalone withdrawal request will be created for each item in the passed list.
     /// @param _owner address that will be able to manage the created requests.
     ///  If `address(0)` is passed, `msg.sender` will be used as owner.
@@ -149,13 +149,13 @@ abstract contract WithdrawalQueue is
         }
     }
 
-    /// @notice Request the batch of wstACE for withdrawal. Approvals for the passed amounts should be done before.
-    /// @param _amounts an array of wstACE amount values.
+    /// @notice Request the batch of wbACE for withdrawal. Approvals for the passed amounts should be done before.
+    /// @param _amounts an array of wbACE amount values.
     ///  The standalone withdrawal request will be created for each item in the passed list.
     /// @param _owner address that will be able to manage the created requests.
     ///  If `address(0)` is passed, `msg.sender` will be used as an owner.
     /// @return requestIds an array of the created withdrawal request ids
-    function requestWithdrawalsWstACE(
+    function requestWithdrawalsWbACE(
         uint256[] calldata _amounts,
         address _owner
     ) public returns (uint256[] memory requestIds) {
@@ -163,7 +163,7 @@ abstract contract WithdrawalQueue is
         if (_owner == address(0)) _owner = msg.sender;
         requestIds = new uint256[](_amounts.length);
         for (uint256 i = 0; i < _amounts.length; ++i) {
-            requestIds[i] = _requestWithdrawalWstACE(_amounts[i], _owner);
+            requestIds[i] = _requestWithdrawalWbACE(_amounts[i], _owner);
         }
     }
 
@@ -175,19 +175,19 @@ abstract contract WithdrawalQueue is
         bytes32 s;
     }
 
-    /// @notice Request the batch of stACE for withdrawal using EIP-2612 Permit
-    /// @param _amounts an array of stACE amount values
+    /// @notice Request the batch of bACE for withdrawal using EIP-2612 Permit
+    /// @param _amounts an array of bACE amount values
     ///  The standalone withdrawal request will be created for each item in the passed list.
     /// @param _owner address that will be able to manage the created requests.
     ///  If `address(0)` is passed, `msg.sender` will be used as an owner.
-    /// @param _permit data required for the stACE.permit() method to set the allowance
+    /// @param _permit data required for the bACE.permit() method to set the allowance
     /// @return requestIds an array of the created withdrawal request ids
     function requestWithdrawalsWithPermit(
         uint256[] calldata _amounts,
         address _owner,
         PermitInput calldata _permit
     ) external returns (uint256[] memory requestIds) {
-        STACE.permit(
+        BACE.permit(
             msg.sender,
             address(this),
             _permit.value,
@@ -199,19 +199,19 @@ abstract contract WithdrawalQueue is
         return requestWithdrawals(_amounts, _owner);
     }
 
-    /// @notice Request the batch of wstACE for withdrawal using EIP-2612 Permit
-    /// @param _amounts an array of wstACE amount values
+    /// @notice Request the batch of wbACE for withdrawal using EIP-2612 Permit
+    /// @param _amounts an array of wbACE amount values
     ///  The standalone withdrawal request will be created for each item in the passed list.
     /// @param _owner address that will be able to manage the created requests.
     ///  If `address(0)` is passed, `msg.sender` will be used as an owner.
     /// @param _permit data required for the wtACE.permit() method to set the allowance
     /// @return requestIds an array of the created withdrawal request ids
-    function requestWithdrawalsWstACEWithPermit(
+    function requestWithdrawalsWbACEWithPermit(
         uint256[] calldata _amounts,
         address _owner,
         PermitInput calldata _permit
     ) external returns (uint256[] memory requestIds) {
-        WSTACE.permit(
+        WBACE.permit(
             msg.sender,
             address(this),
             _permit.value,
@@ -220,7 +220,7 @@ abstract contract WithdrawalQueue is
             _permit.r,
             _permit.s
         );
-        return requestWithdrawalsWstACE(_amounts, _owner);
+        return requestWithdrawalsWbACE(_amounts, _owner);
     }
 
     /// @notice Returns all withdrawal requests that belongs to the `_owner` address
@@ -246,10 +246,10 @@ abstract contract WithdrawalQueue is
         }
     }
 
-    /// @notice Returns amount of ether available for claim for each provided request id
+    /// @notice Returns amount of ace available for claim for each provided request id
     /// @param _requestIds array of request ids
     /// @param _hints checkpoint hints. can be found with `findCheckpointHints(_requestIds, 1, getLastCheckpointIndex())`
-    /// @return claimableAceValues amount of claimable ether for each request, amount is equal to 0 if request
+    /// @return claimableAceValues amount of claimable ace for each request, amount is equal to 0 if request
     ///  is not finalized or already claimed
     function getClaimableAce(
         uint256[] calldata _requestIds,
@@ -261,10 +261,10 @@ abstract contract WithdrawalQueue is
         }
     }
 
-    /// @notice Claim a batch of withdrawal requests if they are finalized sending ether to `_recipient`
+    /// @notice Claim a batch of withdrawal requests if they are finalized sending ace to `_recipient`
     /// @param _requestIds array of request ids to claim
     /// @param _hints checkpoint hint for each id. Can be obtained with `findCheckpointHints()`
-    /// @param _recipient address where claimed ether will be sent to
+    /// @param _recipient address where claimed ace will be sent to
     /// @dev
     ///  Reverts if recipient is equal to zero
     ///  Reverts if requestIds and hints arrays length differs
@@ -287,7 +287,7 @@ abstract contract WithdrawalQueue is
         }
     }
 
-    /// @notice Claim a batch of withdrawal requests if they are finalized sending locked ether to the owner
+    /// @notice Claim a batch of withdrawal requests if they are finalized sending locked ace to the owner
     /// @param _requestIds array of request ids to claim
     /// @param _hints checkpoint hint for each id. Can be obtained with `findCheckpointHints()`
     /// @dev
@@ -309,7 +309,7 @@ abstract contract WithdrawalQueue is
         }
     }
 
-    /// @notice Claim one`_requestId` request once finalized sending locked ether to the owner
+    /// @notice Claim one`_requestId` request once finalized sending locked ace to the owner
     /// @param _requestId request id to claim
     /// @dev use unbounded loop to find a hint, which can lead to OOG
     /// @dev
@@ -428,15 +428,15 @@ abstract contract WithdrawalQueue is
     }
 
     function _requestWithdrawal(
-        uint256 _amountOfStACE,
+        uint256 _amountOfBACE,
         address _owner
     ) internal returns (uint256 requestId) {
-        STACE.transferFrom(msg.sender, address(this), _amountOfStACE);
+        BACE.transferFrom(msg.sender, address(this), _amountOfBACE);
 
-        uint256 amountOfShares = STACE.getSharesByPooledAce(_amountOfStACE);
+        uint256 amountOfShares = BACE.getSharesByPooledAce(_amountOfBACE);
 
         requestId = _enqueue(
-            uint128(_amountOfStACE),
+            uint128(_amountOfBACE),
             uint128(amountOfShares),
             _owner
         );
@@ -444,18 +444,18 @@ abstract contract WithdrawalQueue is
         _emitTransfer(address(0), _owner, requestId);
     }
 
-    function _requestWithdrawalWstACE(
-        uint256 _amountOfWstACE,
+    function _requestWithdrawalWbACE(
+        uint256 _amountOfWbACE,
         address _owner
     ) internal returns (uint256 requestId) {
-        WSTACE.transferFrom(msg.sender, address(this), _amountOfWstACE);
-        uint256 amountOfStACE = WSTACE.unwrap(_amountOfWstACE);
-        _checkWithdrawalRequestAmount(amountOfStACE);
+        WBACE.transferFrom(msg.sender, address(this), _amountOfWbACE);
+        uint256 amountOfBACE = WBACE.unwrap(_amountOfWbACE);
+        _checkWithdrawalRequestAmount(amountOfBACE);
 
-        uint256 amountOfShares = STACE.getSharesByPooledAce(amountOfStACE);
+        uint256 amountOfShares = BACE.getSharesByPooledAce(amountOfBACE);
 
         requestId = _enqueue(
-            uint128(amountOfStACE),
+            uint128(amountOfBACE),
             uint128(amountOfShares),
             _owner
         );
@@ -464,17 +464,17 @@ abstract contract WithdrawalQueue is
     }
 
     function _checkWithdrawalRequestAmount(
-        uint256 _amountOfStACE
+        uint256 _amountOfBACE
     ) internal pure {
-        if (_amountOfStACE < MIN_STACE_WITHDRAWAL_AMOUNT) {
-            revert RequestAmountTooSmall(_amountOfStACE);
+        if (_amountOfBACE < MIN_BACE_WITHDRAWAL_AMOUNT) {
+            revert RequestAmountTooSmall(_amountOfBACE);
         }
-        if (_amountOfStACE > MAX_STACE_WITHDRAWAL_AMOUNT) {
-            revert RequestAmountTooLarge(_amountOfStACE);
+        if (_amountOfBACE > MAX_BACE_WITHDRAWAL_AMOUNT) {
+            revert RequestAmountTooLarge(_amountOfBACE);
         }
     }
 
-    /// @notice returns claimable ether under the request. Returns 0 if request is not finalized or claimed
+    /// @notice returns claimable ace under the request. Returns 0 if request is not finalized or claimed
     function _getClaimableAce(
         uint256 _requestId,
         uint256 _hint

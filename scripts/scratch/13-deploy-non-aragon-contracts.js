@@ -9,9 +9,6 @@ const DEPLOYER = process.env.DEPLOYER || ''
 const REQUIRED_NET_STATE = [
   `app:${APP_NAMES.CATALIST}`,
   `app:${APP_NAMES.ORACLE}`,
-  "app:aragon-agent",
-  "app:aragon-voting",
-  "daoInitialSettings",
   "oracleReportSanityChecker",
   "burner",
   "hashConsensusForAccountingOracle",
@@ -27,23 +24,21 @@ async function deployNewContracts({ web3, artifacts }) {
   assertRequiredNetworkState(state, REQUIRED_NET_STATE)
   const catalistAddress = state["app:catalist"].proxy.address
   const legacyOracleAddress = state["app:oracle"].proxy.address
-  const votingAddress = state["app:aragon-voting"].proxy.address
-  const agentAddress = state["app:aragon-agent"].proxy.address
-  const treasuryAddress = agentAddress
   const chainSpec = state["chainSpec"]
   const depositSecurityModuleParams = state["depositSecurityModule"].deployParameters
   const burnerParams = state["burner"].deployParameters
   const hashConsensusForAccountingParams = state["hashConsensusForAccountingOracle"].deployParameters
   const hashConsensusForExitBusParams = state["hashConsensusForValidatorsExitBusOracle"].deployParameters
   const withdrawalQueueERC721Params = state["withdrawalQueueERC721"].deployParameters
-
+  
   if (!DEPLOYER) {
     throw new Error('Deployer is not specified')
   }
-
+  
   const proxyContractsOwner = DEPLOYER
   const admin = DEPLOYER
   const deployer = DEPLOYER
+  const treasuryAddress = DEPLOYER
 
   const sanityChecks = state["oracleReportSanityChecker"].deployParameters
   logWideSplitter()
@@ -103,22 +98,22 @@ async function deployNewContracts({ web3, artifacts }) {
   logWideSplitter()
 
   //
-  // === EIP712StACE ===
+  // === EIP712BACE ===
   //
-  await deployWithoutProxy("eip712StACE", "EIP712StACE", deployer, [catalistAddress])
+  await deployWithoutProxy("eip712BACE", "EIP712BACE", deployer, [catalistAddress])
   logWideSplitter()
 
   //
-  // === WstACE ===
+  // === WbACE ===
   //
-  const wstACEAddress = await deployWithoutProxy("wstACE", "WstACE", deployer, [catalistAddress])
+  const wbACEAddress = await deployWithoutProxy("wbACE", "WbACE", deployer, [catalistAddress])
   logWideSplitter()
 
   //
   // === WithdrawalQueueERC721 ===
   //
   const withdrawalQueueERC721Args = [
-    wstACEAddress,
+    wbACEAddress,
     withdrawalQueueERC721Params.name,
     withdrawalQueueERC721Params.symbol,
   ]
@@ -132,7 +127,7 @@ async function deployNewContracts({ web3, artifacts }) {
   //
   const withdrawalVaultImpl = await deployImplementation("withdrawalVault", "WithdrawalVault", deployer, [catalistAddress, treasuryAddress])
   state = readNetworkState(network.name, netId)
-  const withdrawalsManagerProxyConstructorArgs = [votingAddress, withdrawalVaultImpl.address]
+  const withdrawalsManagerProxyConstructorArgs = [deployer, withdrawalVaultImpl.address]
   const withdrawalsManagerProxy = await deployContract("WithdrawalsManagerProxy", withdrawalsManagerProxyConstructorArgs, deployer)
   const withdrawalVaultAddress = withdrawalsManagerProxy.address
   state.withdrawalVault = {

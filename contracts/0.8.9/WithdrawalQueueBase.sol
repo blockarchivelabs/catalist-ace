@@ -1,11 +1,11 @@
-// SPDX-FileCopyrightText: 2023 Lido <info@catalist.fi>
+// SPDX-FileCopyrightText: 2023 Lido <info@lido.fi>
 // SPDX-License-Identifier: GPL-3.0
 
 /* See contracts/COMPILERS.md */
 pragma solidity 0.8.9;
 
 import "@openzeppelin/contracts-v4.4/utils/structs/EnumerableSet.sol";
-import { UnstructuredStorage } from "./lib/UnstructuredStorage.sol";
+import {UnstructuredStorage} from "./lib/UnstructuredStorage.sol";
 
 /// @title Queue to store and manage WithdrawalRequests.
 /// @dev Use an optimizations to store max share rates for finalized requests heavily inspired
@@ -40,7 +40,7 @@ abstract contract WithdrawalQueueBase {
     bytes32 internal constant LAST_CHECKPOINT_INDEX_POSITION =
         keccak256("catalist.WithdrawalQueue.lastCheckpointIndex");
     /// @dev amount of eth locked on contract for further claiming
-    bytes32 internal constant LOCKED_ACEER_AMOUNT_POSITION =
+    bytes32 internal constant LOCKED_ACE_AMOUNT_POSITION =
         keccak256("catalist.WithdrawalQueue.lockedAceAmount");
     /// @dev withdrawal requests mapped to the owners
     bytes32 internal constant REQUEST_BY_OWNER_POSITION =
@@ -51,8 +51,8 @@ abstract contract WithdrawalQueueBase {
 
     /// @notice structure representing a request for withdrawal
     struct WithdrawalRequest {
-        /// @notice sum of the all stACE submitted for withdrawals including this request
-        uint128 cumulativeStACE;
+        /// @notice sum of the all bACE submitted for withdrawals including this request
+        uint128 cumulativeBACE;
         /// @notice sum of the all shares locked for withdrawal including this request
         uint128 cumulativeShares;
         /// @notice address that can claim or transfer the request
@@ -73,9 +73,9 @@ abstract contract WithdrawalQueueBase {
 
     /// @notice output format struct for `_getWithdrawalStatus()` method
     struct WithdrawalRequestStatus {
-        /// @notice stACE token amount that was locked on withdrawal queue for this request
-        uint256 amountOfStACE;
-        /// @notice amount of stACE shares locked on withdrawal queue for this request
+        /// @notice bACE token amount that was locked on withdrawal queue for this request
+        uint256 amountOfBACE;
+        /// @notice amount of bACE shares locked on withdrawal queue for this request
         uint256 amountOfShares;
         /// @notice address that can claim or transfer this request
         address owner;
@@ -87,12 +87,12 @@ abstract contract WithdrawalQueueBase {
         bool isClaimed;
     }
 
-    /// @dev Contains both stACE token amount and its corresponding shares amount
+    /// @dev Contains both bACE token amount and its corresponding shares amount
     event WithdrawalRequested(
         uint256 indexed requestId,
         address indexed requestor,
         address indexed owner,
-        uint256 amountOfStACE,
+        uint256 amountOfBACE,
         uint256 amountOfShares
     );
     event WithdrawalsFinalized(
@@ -139,7 +139,7 @@ abstract contract WithdrawalQueueBase {
 
     /// @notice amount of ACE on this contract balance that is locked for withdrawal and available to claim
     function getLockedAceAmount() public view returns (uint256) {
-        return LOCKED_ACEER_AMOUNT_POSITION.getStorageUint256();
+        return LOCKED_ACE_AMOUNT_POSITION.getStorageUint256();
     }
 
     /// @notice length of the checkpoint array. Last possible value for the hint.
@@ -153,11 +153,11 @@ abstract contract WithdrawalQueueBase {
         return getLastRequestId() - getLastFinalizedRequestId();
     }
 
-    /// @notice Returns the amount of stACE in the queue yet to be finalized
-    function unfinalizedStACE() external view returns (uint256) {
+    /// @notice Returns the amount of bACE in the queue yet to be finalized
+    function unfinalizedBACE() external view returns (uint256) {
         return
-            _getQueue()[getLastRequestId()].cumulativeStACE -
-            _getQueue()[getLastFinalizedRequestId()].cumulativeStACE;
+            _getQueue()[getLastRequestId()].cumulativeBACE -
+            _getQueue()[getLastFinalizedRequestId()].cumulativeBACE;
     }
 
     //
@@ -165,7 +165,7 @@ abstract contract WithdrawalQueueBase {
     //
     // Process when protocol is fixing the withdrawal request value and lock the required amount of ACE.
     // The value of a request after finalization can be:
-    //  - nominal (when the amount of eth locked for this request are equal to the request's stACE)
+    //  - nominal (when the amount of eth locked for this request are equal to the request's bACE)
     //  - discounted (when the amount of eth will be lower, because the protocol share rate dropped
     //   before request is finalized, so it will be equal to `request's shares` * `protocol share rate`)
     // The parameters that are required for finalization are:
@@ -192,7 +192,7 @@ abstract contract WithdrawalQueueBase {
     /// @notice transient state that is used to pass intermediate results between several `calculateFinalizationBatches`
     //   invocations
     struct BatchesCalculationState {
-        /// @notice amount of ether available in the protocol that can be used to finalize withdrawal requests
+        /// @notice amount of ace available in the protocol that can be used to finalize withdrawal requests
         ///  Will decrease on each call and will be equal to the remainder when calculation is finished
         ///  Should be set before the first call
         uint256 remainingAceBudget;
@@ -286,10 +286,10 @@ abstract contract WithdrawalQueueBase {
                 // so we're taking requests that are placed during the same report
                 // as equal even if their actual share rate are different
                 prevRequest.reportTimestamp == request.reportTimestamp ||
-                // both requests are below the line
+                    // both requests are below the line
                     (prevRequestShareRate <= _maxShareRate &&
                         requestShareRate <= _maxShareRate) ||
-                // both requests are above the line
+                    // both requests are above the line
                     (prevRequestShareRate > _maxShareRate &&
                         requestShareRate > _maxShareRate))
             ) {
@@ -317,10 +317,10 @@ abstract contract WithdrawalQueueBase {
         return _state;
     }
 
-    /// @notice Checks finalization batches, calculates required ether and the amount of shares to burn
+    /// @notice Checks finalization batches, calculates required ace and the amount of shares to burn
     /// @param _batches finalization batches calculated offchain using `calculateFinalizationBatches()`
     /// @param _maxShareRate max share rate that will be used for request finalization (1e27 precision)
-    /// @return ethToLock amount of ether that should be sent with `finalize()` method
+    /// @return ethToLock amount of ace that should be sent with `finalize()` method
     /// @return sharesToBurn amount of shares that belongs to requests that will be finalized
     function prefinalize(
         uint256[] calldata _batches,
@@ -346,18 +346,17 @@ abstract contract WithdrawalQueueBase {
 
             WithdrawalRequest memory batchEnd = _getQueue()[batchEndRequestId];
 
-            (
-                uint256 batchShareRate,
-                uint256 stACE,
-                uint256 shares
-            ) = _calcBatch(prevBatchEnd, batchEnd);
+            (uint256 batchShareRate, uint256 bACE, uint256 shares) = _calcBatch(
+                prevBatchEnd,
+                batchEnd
+            );
 
             if (batchShareRate > _maxShareRate) {
                 // discounted
                 ethToLock += (shares * _maxShareRate) / E27_PRECISION_BASE;
             } else {
                 // nominal
-                ethToLock += stACE;
+                ethToLock += bACE;
             }
             sharesToBurn += shares;
 
@@ -389,10 +388,10 @@ abstract contract WithdrawalQueueBase {
             _lastRequestIdToBeFinalized
         ];
 
-        uint128 stACEToFinalize = requestToFinalize.cumulativeStACE -
-            lastFinalizedRequest.cumulativeStACE;
-        if (_amountOfACE > stACEToFinalize)
-            revert TooMuchAceToFinalize(_amountOfACE, stACEToFinalize);
+        uint128 bACEToFinalize = requestToFinalize.cumulativeBACE -
+            lastFinalizedRequest.cumulativeBACE;
+        if (_amountOfACE > bACEToFinalize)
+            revert TooMuchAceToFinalize(_amountOfACE, bACEToFinalize);
 
         uint256 firstRequestIdToFinalize = lastFinalizedRequestId + 1;
         uint256 lastCheckpointIndex = getLastCheckpointIndex();
@@ -420,7 +419,7 @@ abstract contract WithdrawalQueueBase {
     /// @dev creates a new `WithdrawalRequest` in the queue
     ///  Emits WithdrawalRequested event
     function _enqueue(
-        uint128 _amountOfStACE,
+        uint128 _amountOfBACE,
         uint128 _amountOfShares,
         address _owner
     ) internal returns (uint256 requestId) {
@@ -429,14 +428,14 @@ abstract contract WithdrawalQueueBase {
 
         uint128 cumulativeShares = lastRequest.cumulativeShares +
             _amountOfShares;
-        uint128 cumulativeStACE = lastRequest.cumulativeStACE + _amountOfStACE;
+        uint128 cumulativeBACE = lastRequest.cumulativeBACE + _amountOfBACE;
 
         requestId = lastRequestId + 1;
 
         _setLastRequestId(requestId);
 
         WithdrawalRequest memory newRequest = WithdrawalRequest(
-            cumulativeStACE,
+            cumulativeBACE,
             cumulativeShares,
             _owner,
             uint40(block.timestamp),
@@ -450,7 +449,7 @@ abstract contract WithdrawalQueueBase {
             requestId,
             msg.sender,
             _owner,
-            _amountOfStACE,
+            _amountOfBACE,
             _amountOfShares
         );
     }
@@ -466,7 +465,7 @@ abstract contract WithdrawalQueueBase {
         WithdrawalRequest memory previousRequest = _getQueue()[_requestId - 1];
 
         status = WithdrawalRequestStatus(
-            request.cumulativeStACE - previousRequest.cumulativeStACE,
+            request.cumulativeBACE - previousRequest.cumulativeBACE,
             request.cumulativeShares - previousRequest.cumulativeShares,
             request.owner,
             request.timestamp,
@@ -532,11 +531,11 @@ abstract contract WithdrawalQueueBase {
         return min;
     }
 
-    /// @dev Claim the request and transfer locked ether to `_recipient`.
+    /// @dev Claim the request and transfer locked ace to `_recipient`.
     ///  Emits WithdrawalClaimed event
     /// @param _requestId id of the request to claim
     /// @param _hint hint the checkpoint to use. Can be obtained by calling `findCheckpointHint()`
-    /// @param _recipient address to send ether to
+    /// @param _recipient address to send ace to
     function _claim(
         uint256 _requestId,
         uint256 _hint,
@@ -560,7 +559,7 @@ abstract contract WithdrawalQueueBase {
             _requestId,
             _hint
         );
-        // because of the stACE rounding issue
+        // because of the bACE rounding issue
         // (issue: https://github.com/catalistfinance/catalist-dao/issues/442 )
         // some dust (1-2 wei per request) will be accumulated upon claiming
         _setLockedAceAmount(getLockedAceAmount() - ethWithDiscount);
@@ -574,7 +573,7 @@ abstract contract WithdrawalQueueBase {
         );
     }
 
-    /// @dev Calculates ether value for the request using the provided hint. Checks if hint is valid
+    /// @dev Calculates ace value for the request using the provided hint. Checks if hint is valid
     /// @return claimableAce discounted eth for `_requestId`
     function _calculateClaimableAce(
         WithdrawalRequest storage _request,
@@ -632,21 +631,21 @@ abstract contract WithdrawalQueueBase {
         if (address(this).balance < _amount) revert NotEnoughAce();
 
         // solhint-disable-next-line
-        (bool success, ) = _recipient.call{ value: _amount }("");
+        (bool success, ) = _recipient.call{value: _amount}("");
         if (!success) revert CantSendValueRecipientMayHaveReverted();
     }
 
-    /// @dev calculate batch stats (shareRate, stACE and shares) for the range of `(_preStartRequest, _endRequest]`
+    /// @dev calculate batch stats (shareRate, bACE and shares) for the range of `(_preStartRequest, _endRequest]`
     function _calcBatch(
         WithdrawalRequest memory _preStartRequest,
         WithdrawalRequest memory _endRequest
-    ) internal pure returns (uint256 shareRate, uint256 stACE, uint256 shares) {
-        stACE = _endRequest.cumulativeStACE - _preStartRequest.cumulativeStACE;
+    ) internal pure returns (uint256 shareRate, uint256 bACE, uint256 shares) {
+        bACE = _endRequest.cumulativeBACE - _preStartRequest.cumulativeBACE;
         shares =
             _endRequest.cumulativeShares -
             _preStartRequest.cumulativeShares;
 
-        shareRate = (stACE * E27_PRECISION_BASE) / shares;
+        shareRate = (bACE * E27_PRECISION_BASE) / shares;
     }
 
     //
@@ -708,7 +707,7 @@ abstract contract WithdrawalQueueBase {
     }
 
     function _setLockedAceAmount(uint256 _lockedAceAmount) internal {
-        LOCKED_ACEER_AMOUNT_POSITION.setStorageUint256(_lockedAceAmount);
+        LOCKED_ACE_AMOUNT_POSITION.setStorageUint256(_lockedAceAmount);
     }
 
     function _setLastReportTimestamp(uint256 _lastReportTimestamp) internal {

@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2023 Catalist <info@catalist.fi>
+// SPDX-FileCopyrightText: 2023 Lido <info@lido.fi>
 // SPDX-License-Identifier: GPL-3.0
 
 /* See contracts/COMPILERS.md */
@@ -8,7 +8,7 @@ import "@openzeppelin/contracts-v4.4/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts-v4.4/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts-v4.4/token/ERC20/utils/SafeERC20.sol";
 
-import { Versioned } from "./utils/Versioned.sol";
+import {Versioned} from "./utils/Versioned.sol";
 
 interface ICatalist {
     /**
@@ -57,7 +57,7 @@ contract WithdrawalVault is Versioned {
     error ZeroAmount();
 
     /**
-     * @param _catalist the Catalist token (stACE) address
+     * @param _catalist the Catalist token (bACE) address
      * @param _treasury the Catalist treasury address (see ERC20/ERC721-recovery interfaces)
      */
     constructor(ICatalist _catalist, address _treasury) {
@@ -98,7 +98,7 @@ contract WithdrawalVault is Versioned {
             revert NotEnoughAce(_amount, balance);
         }
 
-        CATALIST.receiveWithdrawals{ value: _amount }();
+        CATALIST.receiveWithdrawals{value: _amount}();
     }
 
     /**

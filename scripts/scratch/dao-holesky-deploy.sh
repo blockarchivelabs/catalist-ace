@@ -2,6 +2,10 @@
 set -e +u
 set -o pipefail
 
+export DEPLOYER=0x63cac65c5eb17E6Dd47D9313e23169f79d1Ab058
+export RPC_URL=https://holesky.drpc.org
+export GATE_SEAL_FACTORY=0x0000000000000000000000000000000000000000
+
 if [[ -z "$DEPLOYER" ]]; then
     echo "Must set DEPLOYER env variable" 1>&2
     exit 1
