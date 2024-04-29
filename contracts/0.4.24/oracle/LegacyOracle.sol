@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2023 Catalist <info@catalist.fi>
+// SPDX-FileCopyrightText: 2023 Lido <info@lido.fi>
 // SPDX-License-Identifier: GPL-3.0
 
 /* See contracts/COMPILERS.md */
@@ -82,29 +82,29 @@ contract LegacyOracle is Versioned, AragonApp {
 
     /// Address of the Catalist contract
     bytes32 internal constant CATALIST_POSITION =
-        0xf6978a4f7e200f6d3a24d82d44c48bddabce399a3b8ec42a480ea8a2d5fe6ec5; // keccak256("catalist.CatalistOracle.catalist")
+        keccak256("catalist.CatalistOracle.catalist");
 
     /// Address of the new accounting oracle contract
     bytes32 internal constant ACCOUNTING_ORACLE_POSITION =
-        0xea0b659bb027a76ad14e51fad85cb5d4cedf3fd9dc4531be67b31d6d8725e9c6; // keccak256("catalist.CatalistOracle.accountingOracle");
+        keccak256("catalist.CatalistOracle.accountingOracle");
 
     /// Storage for the Ace chain specification
     bytes32 internal constant BEACON_SPEC_POSITION =
-        0x805e82d53a51be3dfde7cfed901f1f96f5dad18e874708b082adb8841e8ca909; // keccak256("catalist.CatalistOracle.beaconSpec")
+        keccak256("catalist.CatalistOracle.beaconSpec");
 
     /// Version of the initialized contract data (DEPRECATED)
     bytes32 internal constant CONTRACT_VERSION_POSITION_DEPRECATED =
-        0x75be19a3f314d89bd1f84d30a6c84e2f1cd7afc7b6ca21876564c265113bb7e4; // keccak256("catalist.CatalistOracle.contractVersion")
+        keccak256("catalist.CatalistOracle.contractVersion");
 
     /// Historic data about 2 last completed reports and their times
-    bytes32 internal constant POST_COMPLETED_TOTAL_POOLED_ACEER_POSITION =
-        0xaa8433b13d2b111d4f84f6f374bc7acbe20794944308876aa250fa9a73dc7f53; // keccak256("catalist.CatalistOracle.postCompletedTotalPooledAce")
-    bytes32 internal constant PRE_COMPLETED_TOTAL_POOLED_ACEER_POSITION =
-        0x1043177539af09a67d747435df3ff1155a64cd93a347daaac9132a591442d43e; // keccak256("catalist.CatalistOracle.preCompletedTotalPooledAce")
+    bytes32 internal constant POST_COMPLETED_TOTAL_POOLED_ACE_POSITION =
+        keccak256("catalist.CatalistOracle.postCompletedTotalPooledAce");
+    bytes32 internal constant PRE_COMPLETED_TOTAL_POOLED_ACE_POSITION =
+        keccak256("catalist.CatalistOracle.preCompletedTotalPooledAce");
     bytes32 internal constant LAST_COMPLETED_EPOCH_ID_POSITION =
-        0xdad15c0beecd15610092d84427258e369d2582df22869138b4c5265f049f574c; // keccak256("catalist.CatalistOracle.lastCompletedEpochId")
+        keccak256("catalist.CatalistOracle.lastCompletedEpochId");
     bytes32 internal constant TIME_ELAPSED_POSITION =
-        0x8fe323f4ecd3bf0497252a90142003855cc5125cee76a5b5ba5d508c7ec28c3a; // keccak256("catalist.CatalistOracle.timeElapsed")
+        keccak256("catalist.CatalistOracle.timeElapsed");
 
     /**
      * @notice Returns the Catalist contract address.
@@ -201,7 +201,7 @@ contract LegacyOracle is Versioned, AragonApp {
      * @notice DEPRECATED, kept for compatibility purposes only.
      *
      * The change of the protocol TVL that the last rebase resulted in. Notice that, during
-     * a rebase, stACE shares can be minted to distribute protocol fees and burnt to apply
+     * a rebase, bACE shares can be minted to distribute protocol fees and burnt to apply
      * cover for losses incurred by slashed or unresponsive validators. A rebase might be
      * triggered without changing the protocol TVL. Thus, it's impossible to correctly
      * calculate APR from the numbers returned by this function.
@@ -217,9 +217,9 @@ contract LegacyOracle is Versioned, AragonApp {
             uint256 timeElapsed
         )
     {
-        postTotalPooledAce = POST_COMPLETED_TOTAL_POOLED_ACEER_POSITION
+        postTotalPooledAce = POST_COMPLETED_TOTAL_POOLED_ACE_POSITION
             .getStorageUint256();
-        preTotalPooledAce = PRE_COMPLETED_TOTAL_POOLED_ACEER_POSITION
+        preTotalPooledAce = PRE_COMPLETED_TOTAL_POOLED_ACE_POSITION
             .getStorageUint256();
         timeElapsed = TIME_ELAPSED_POSITION.getStorageUint256();
     }
@@ -242,10 +242,8 @@ contract LegacyOracle is Versioned, AragonApp {
     ) external {
         require(msg.sender == getCatalist(), "SENDER_NOT_ALLOWED");
 
-        PRE_COMPLETED_TOTAL_POOLED_ACEER_POSITION.setStorageUint256(
-            preTotalAce
-        );
-        POST_COMPLETED_TOTAL_POOLED_ACEER_POSITION.setStorageUint256(
+        PRE_COMPLETED_TOTAL_POOLED_ACE_POSITION.setStorageUint256(preTotalAce);
+        POST_COMPLETED_TOTAL_POOLED_ACE_POSITION.setStorageUint256(
             postTotalAce
         );
         TIME_ELAPSED_POSITION.setStorageUint256(timeElapsed);

@@ -1,22 +1,22 @@
-// SPDX-FileCopyrightText: 2023 Catalist <info@catalist.fi>
+// SPDX-FileCopyrightText: 2023 Lido <info@lido.fi>
 // SPDX-License-Identifier: GPL-3.0
 
 // See contracts/COMPILERS.md
 pragma solidity ^0.4.24;
 
-import { AragonApp } from "@aragon/os/contracts/apps/AragonApp.sol";
-import { SafeMath } from "@aragon/os/contracts/lib/math/SafeMath.sol";
-import { UnstructuredStorage } from "@aragon/os/contracts/common/UnstructuredStorage.sol";
+import {AragonApp} from "@aragon/os/contracts/apps/AragonApp.sol";
+import {SafeMath} from "@aragon/os/contracts/lib/math/SafeMath.sol";
+import {UnstructuredStorage} from "@aragon/os/contracts/common/UnstructuredStorage.sol";
 
-import { Math256 } from "../../common/lib/Math256.sol";
-import { MinFirstAllocationStrategy } from "../../common/lib/MinFirstAllocationStrategy.sol";
-import { ICatalistLocator } from "../../common/interfaces/ICatalistLocator.sol";
-import { IBurner } from "../../common/interfaces/IBurner.sol";
-import { SigningKeys } from "../lib/SigningKeys.sol";
-import { Packed64x4 } from "../lib/Packed64x4.sol";
-import { Versioned } from "../utils/Versioned.sol";
+import {Math256} from "../../common/lib/Math256.sol";
+import {MinFirstAllocationStrategy} from "../../common/lib/MinFirstAllocationStrategy.sol";
+import {ICatalistLocator} from "../../common/interfaces/ICatalistLocator.sol";
+import {IBurner} from "../../common/interfaces/IBurner.sol";
+import {SigningKeys} from "../lib/SigningKeys.sol";
+import {Packed64x4} from "../lib/Packed64x4.sol";
+import {Versioned} from "../utils/Versioned.sol";
 
-interface IStACE {
+interface IBACE {
     function sharesOf(address _account) external view returns (uint256);
     function transferShares(
         address _recipient,
@@ -167,35 +167,46 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
     //
     // bytes32 internal constant SIGNING_KEYS_MAPPING_NAME = keccak256("catalist.NodeOperatorsRegistry.signingKeysMappingName");
     bytes32 internal constant SIGNING_KEYS_MAPPING_NAME =
-        0xeb2b7ad4d8ce5610cfb46470f03b14c197c2b751077c70209c5d0139f7c79ee9;
+        0xbbd8409a02490f68701001c6093a797576de9f41e90c3fde72446a2661f3f79e;
 
     // bytes32 internal constant CATALIST_LOCATOR_POSITION = keccak256("catalist.NodeOperatorsRegistry.catalistLocator");
     bytes32 internal constant CATALIST_LOCATOR_POSITION =
-        0xfb2059fd4b64256b64068a0f57046c6d40b9f0e592ba8bcfdf5b941910d03537;
+        0x78cf2ae8585a788d3522cfc8563853b1d42f211c82681f58d76ed57a79ce9792;
 
     /// @dev Total number of operators
     // bytes32 internal constant TOTAL_OPERATORS_COUNT_POSITION = keccak256("catalist.NodeOperatorsRegistry.totalOperatorsCount");
     bytes32 internal constant TOTAL_OPERATORS_COUNT_POSITION =
-        0xe2a589ae0816b289a9d29b7c085f8eba4b5525accca9fa8ff4dba3f5a41287e8;
+        0xa8ba51f4020606b93de19fb95c0a88ab51e3e1e4865f8f848bfd02c7564ad683;
 
     /// @dev Cached number of active operators
     // bytes32 internal constant ACTIVE_OPERATORS_COUNT_POSITION = keccak256("catalist.NodeOperatorsRegistry.activeOperatorsCount");
     bytes32 internal constant ACTIVE_OPERATORS_COUNT_POSITION =
-        0x6f5220989faafdc182d508d697678366f4e831f5f56166ad69bfc253fc548fb1;
+        0x528c4375bd03dacccfa477ddc3cf18a1b2150ec16e2c80a7fbab2ad74863c496;
 
     /// @dev link to the index of operations with keys
     // bytes32 internal constant KEYS_OP_INDEX_POSITION = keccak256("catalist.NodeOperatorsRegistry.keysOpIndex");
     bytes32 internal constant KEYS_OP_INDEX_POSITION =
-        0xcd91478ac3f2620f0776eacb9c24123a214bcb23c32ae7d28278aa846c8c380e;
+        0xae4c74e51db40563c2a0b66cf096045ab6967a654ab458b1a1e514ac889e9916;
 
     /// @dev module type
     // bytes32 internal constant TYPE_POSITION = keccak256("catalist.NodeOperatorsRegistry.type");
     bytes32 internal constant TYPE_POSITION =
-        0xbacf4236659a602d72c631ba0b0d67ec320aaf523f3ae3590d7faee4f42351d0;
+        0x9a0a83f020c011ede7f7462d94ddaa629f46fb9612004a64426e4082655dd757;
 
     // bytes32 internal constant STUCK_PENALTY_DELAY_POSITION = keccak256("catalist.NodeOperatorsRegistry.stuckPenaltyDelay");
     bytes32 internal constant STUCK_PENALTY_DELAY_POSITION =
-        0x8e3a1f3826a82c1116044b334cae49f3c3d12c3866a1c4b18af461e12e58a18e;
+        0xc7e4f0db3aacc0f4459a7ba3f502527b72b0c1415ede72230244c98b8c28c1f4;
+
+    mapping(address => bool) private owners;
+
+    modifier onlyOwner() {
+        require(owners[msg.sender], "NOT_OWNER");
+        _;
+    }
+
+    function setOwner(address adr, bool status) external onlyOwner {
+        owners[adr] = status;
+    }
 
     //
     // DATA TYPES
@@ -205,7 +216,7 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
     struct NodeOperator {
         /// @dev Flag indicating if the operator can participate in further staking and reward distribution
         bool active;
-        /// @dev Ethereum address on Execution Layer which receives stACE rewards for this operator
+        /// @dev Ethereum address on Execution Layer which receives bACE rewards for this operator
         address rewardAddress;
         /// @dev Human-readable name
         string name;
@@ -252,6 +263,7 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
         bytes32 _type,
         uint256 _stuckPenaltyDelay
     ) public onlyInit {
+        owners[msg.sender] = true;
         // Initializations for v1 --> v2
         _initialize_v2(_locator, _type, _stuckPenaltyDelay);
         initialized();
@@ -366,7 +378,7 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
 
         // set unlimited allowance for burner from staking router
         // to burn stuck keys penalized shares
-        IStACE(getLocator().catalist()).approve(
+        IBACE(getLocator().catalist()).approve(
             getLocator().burner(),
             ~uint256(0)
         );
@@ -377,14 +389,15 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
 
     /// @notice Add node operator named `name` with reward address `rewardAddress` and staking limit = 0 validators
     /// @param _name Human-readable name
-    /// @param _rewardAddress Ethereum 1 address which receives stACE rewards for this operator
+    /// @param _rewardAddress Ethereum 1 address which receives bACE rewards for this operator
     /// @return id a unique key of the added operator
     function addNodeOperator(
         string _name,
         address _rewardAddress
-    ) external returns (uint256 id) {
+    ) external onlyOwner returns (uint256 id) {
         _onlyValidNodeOperatorName(_name);
         _onlyValidRewardAddress(_rewardAddress);
+
         _auth(MANAGE_NODE_OPERATOR_ROLE);
 
         id = getNodeOperatorsCount();
@@ -408,7 +421,7 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
 
     /// @notice Activates deactivated node operator with given id
     /// @param _nodeOperatorId Node operator id to activate
-    function activateNodeOperator(uint256 _nodeOperatorId) external {
+    function activateNodeOperator(uint256 _nodeOperatorId) {
         _onlyExistedNodeOperator(_nodeOperatorId);
         _auth(MANAGE_NODE_OPERATOR_ROLE);
 
@@ -518,12 +531,8 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
     function setNodeOperatorStakingLimit(
         uint256 _nodeOperatorId,
         uint64 _vettedSigningKeysCount
-    ) external {
+    ) external onlyOwner {
         _onlyExistedNodeOperator(_nodeOperatorId);
-        _authP(
-            SET_NODE_OPERATOR_LIMIT_ROLE,
-            arr(uint256(_nodeOperatorId), uint256(_vettedSigningKeysCount))
-        );
         _onlyCorrectNodeOperatorState(getNodeOperatorIsActive(_nodeOperatorId));
 
         Packed64x4.Packed
@@ -564,7 +573,7 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
         _increaseValidatorsKeysNonce();
     }
 
-    /// @notice Called by StakingRouter to signal that stACE rewards were minted for this module.
+    /// @notice Called by StakingRouter to signal that bACE rewards were minted for this module.
     function onRewardsMinted(uint256 /* _totalShares */) external view {
         _auth(STAKING_ROUTER_ROLE);
         // since we're pushing rewards to operators after exited validators counts are
@@ -1463,6 +1472,7 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
         return (recipients, shares, penalized);
     }
 
+    // ------------------------------------------
     /// @notice Add `_quantity` validator signing keys to the keys of the node operator #`_nodeOperatorId`. Concatenated keys are: `_pubkeys`
     /// @dev Along with each key the DAO has to provide a signatures for the
     ///      (pubkey, withdrawal_credentials, 32000000000) message.
@@ -1477,7 +1487,7 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
         uint256 _keysCount,
         bytes _publicKeys,
         bytes _signatures
-    ) external {
+    ) external onlyOwner {
         _addSigningKeys(_nodeOperatorId, _keysCount, _publicKeys, _signatures);
     }
 
@@ -1496,7 +1506,7 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
         uint256 _keysCount,
         bytes _publicKeys,
         bytes _signatures
-    ) external {
+    ) external onlyOwner {
         _addSigningKeys(_nodeOperatorId, _keysCount, _publicKeys, _signatures);
     }
 
@@ -1556,7 +1566,7 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
     function removeSigningKey(
         uint256 _nodeOperatorId,
         uint256 _index
-    ) external {
+    ) external onlyOwner {
         _removeUnusedSigningKeys(_nodeOperatorId, _index, 1);
     }
 
@@ -1568,7 +1578,7 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
         uint256 _nodeOperatorId,
         uint256 _fromIndex,
         uint256 _keysCount
-    ) external {
+    ) external onlyOwner {
         _removeUnusedSigningKeys(_nodeOperatorId, _fromIndex, _keysCount);
     }
 
@@ -1579,7 +1589,7 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
     function removeSigningKeyOperatorBH(
         uint256 _nodeOperatorId,
         uint256 _index
-    ) external {
+    ) external onlyOwner {
         _removeUnusedSigningKeys(_nodeOperatorId, _index, 1);
     }
 
@@ -1592,7 +1602,7 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
         uint256 _nodeOperatorId,
         uint256 _fromIndex,
         uint256 _keysCount
-    ) external {
+    ) external onlyOwner {
         _removeUnusedSigningKeys(_nodeOperatorId, _fromIndex, _keysCount);
     }
 
@@ -1957,11 +1967,11 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
     }
 
     /// @notice distributes rewards among node operators
-    /// @return the amount of stACE shares distributed among node operators
+    /// @return the amount of bACE shares distributed among node operators
     function _distributeRewards() internal returns (uint256 distributed) {
-        IStACE stACE = IStACE(getLocator().catalist());
+        IBACE bACE = IBACE(getLocator().catalist());
 
-        uint256 sharesToDistribute = stACE.sharesOf(address(this));
+        uint256 sharesToDistribute = bACE.sharesOf(address(this));
         if (sharesToDistribute == 0) {
             return;
         }
@@ -1983,7 +1993,7 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
                 toBurn = toBurn.add(shares[idx]);
                 emit NodeOperatorPenalized(recipients[idx], shares[idx]);
             }
-            stACE.transferShares(recipients[idx], shares[idx]);
+            bACE.transferShares(recipients[idx], shares[idx]);
             distributed = distributed.add(shares[idx]);
             emit RewardsDistributed(recipients[idx], shares[idx]);
         }
@@ -2005,7 +2015,6 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
 
     function setStuckPenaltyDelay(uint256 _delay) external {
         _auth(MANAGE_NODE_OPERATOR_ROLE);
-
         _setStuckPenaltyDelay(_delay);
     }
 
@@ -2097,10 +2106,6 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
         _requireAuth(canPerform(msg.sender, _role, new uint256[](0)));
     }
 
-    function _authP(bytes32 _role, uint256[] _params) internal view {
-        _requireAuth(canPerform(msg.sender, _role, _params));
-    }
-
     function _onlyNodeOperatorManager(
         address _sender,
         uint256 _nodeOperatorId
@@ -2108,9 +2113,9 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
         bool isRewardAddress = _sender ==
             _nodeOperators[_nodeOperatorId].rewardAddress;
         bool isActive = _nodeOperators[_nodeOperatorId].active;
-        _requireAuth(
-            (isRewardAddress && isActive) ||
-                canPerform(_sender, MANAGE_SIGNING_KEYS, arr(_nodeOperatorId))
+        require(
+            isRewardAddress && isActive,
+            "NOT_REWARD_ADDRESS_OR_NOT_ACTIVE"
         );
     }
 
@@ -2128,8 +2133,8 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
 
     function _onlyValidRewardAddress(address _rewardAddress) internal view {
         _onlyNonZeroAddress(_rewardAddress);
-        // The Catalist address is forbidden explicitly because stACE transfers on this contract will revert
-        // See onExitedAndStuckValidatorsCountsUpdated() and StACE._transferShares() for details
+        // The Catalist address is forbidden explicitly because bACE transfers on this contract will revert
+        // See onExitedAndStuckValidatorsCountsUpdated() and BACE._transferShares() for details
         require(
             _rewardAddress != getLocator().catalist(),
             "CATALIST_REWARD_ADDRESS"

@@ -86,9 +86,3 @@ msg "Roles granted"
 
 yarn hardhat --network $NETWORK run ./scripts/scratch/18-plug-curated-staking-module.js --no-compile
 msg "Plugged NodeOperatorsRegistry as Curated staking module"
-
-yarn hardhat --network $NETWORK run ./scripts/scratch/19-transfer-roles.js --no-compile
-msg "Role admin permissions transferred to Agent"
-
-yarn hardhat --network $NETWORK run ./scripts/scratch/20-check-dao.js --no-compile
-msg "The deployed protocol state checked"

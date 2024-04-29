@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2023 Catalist <info@catalist.fi>
+// SPDX-FileCopyrightText: 2023 Catalist <info@lido.fi>
 // SPDX-License-Identifier: GPL-3.0
 
 /* See contracts/COMPILERS.md */
@@ -13,9 +13,11 @@ import "../common/interfaces/IBurner.sol";
 import "./lib/StakeLimitUtils.sol";
 import "../common/lib/Math256.sol";
 
-import "./StACEPermit.sol";
+import "./BACEPermit.sol";
 
 import "./utils/Versioned.sol";
+
+import "hardhat/console.sol";
 
 interface IPostTokenRebaseReceiver {
     function handlePostTokenRebase(
@@ -49,7 +51,7 @@ interface IOracleReportSanityChecker {
         uint256 _withdrawalVaultBalance,
         uint256 _elRewardsVaultBalance,
         uint256 _sharesRequestedToBurn,
-        uint256 _etherToLockForWithdrawals,
+        uint256 _aceToLockForWithdrawals,
         uint256 _newSharesToBurnForWithdrawals
     )
         external
@@ -69,7 +71,7 @@ interface IOracleReportSanityChecker {
     function checkSimulatedShareRate(
         uint256 _postTotalPooledAce,
         uint256 _postTotalShares,
-        uint256 _etherLockedOnWithdrawalQueue,
+        uint256 _aceLockedOnWithdrawalQueue,
         uint256 _sharesBurntDueToWithdrawals,
         uint256 _simulatedShareRate
     ) external view;
@@ -138,7 +140,7 @@ interface IWithdrawalQueue {
 
     function isPaused() external view returns (bool);
 
-    function unfinalizedStACE() external view returns (uint256);
+    function unfinalizedBACE() external view returns (uint256);
 
     function isBunkerModeActive() external view returns (bool);
 }
@@ -146,7 +148,7 @@ interface IWithdrawalQueue {
 /**
  * @title Liquid staking pool implementation
  *
- * Catalist is an Ace liquid staking protocol solving the problem of frozen staked ether on Consensus Layer
+ * Catalist is an Ace liquid staking protocol solving the problem of frozen staked ace on Consensus Layer
  * being unavailable for transfers and DeFi on Execution Layer.
  *
  * Since balances of all token holders change when the amount of total pooled Ace
@@ -158,14 +160,14 @@ interface IWithdrawalQueue {
  * ---
  * NB: Order of inheritance must preserve the structured storage layout of the previous versions.
  *
- * @dev Catalist is derived from `StACEPermit` that has a structured storage:
- * SLOT 0: mapping (address => uint256) private shares (`StACE`)
- * SLOT 1: mapping (address => mapping (address => uint256)) private allowances (`StACE`)
- * SLOT 2: mapping(address => uint256) internal noncesByAddress (`StACEPermit`)
+ * @dev Catalist is derived from `BACEPermit` that has a structured storage:
+ * SLOT 0: mapping (address => uint256) private shares (`BACE`)
+ * SLOT 1: mapping (address => mapping (address => uint256)) private allowances (`BACE`)
+ * SLOT 2: mapping(address => uint256) internal noncesByAddress (`BACEPermit`)
  *
  * `Versioned` and `AragonApp` both don't have the pre-allocated structured storage.
  */
-contract Catalist is Versioned, StACEPermit, AragonApp {
+contract Catalist is Versioned, BACEPermit, AragonApp {
     using SafeMath for uint256;
     using UnstructuredStorage for bytes32;
     using StakeLimitUnstructuredStorage for bytes32;
@@ -187,31 +189,31 @@ contract Catalist is Versioned, StACEPermit, AragonApp {
 
     /// @dev storage slot position for the Catalist protocol contracts locator
     bytes32 internal constant CATALIST_LOCATOR_POSITION =
-        0x9ef78dff90f100ea94042bd00ccb978430524befc391d3e510b5f55ff3166df7; // keccak256("catalist.Catalist.catalistLocator")
+        0xd846dcc6cc8271912ab22557eaae25bec80567e73e5c75846b82a81731216e41; // keccak256("catalist.Catalist.catalistLocator")
     /// @dev storage slot position of the staking rate limit structure
     bytes32 internal constant STAKING_STATE_POSITION =
-        0xa3678de4a579be090bed1177e0a24f77cc29d181ac22fd7688aca344d8938015; // keccak256("catalist.Catalist.stakeLimit");
+        0x2ac4d417d24c70eeb7ae6bacf47d2e95c6f8b69e6d6d7f68c63eb7e97785dd69; // keccak256("catalist.Catalist.stakeLimit");
     /// @dev amount of Ace (on the current Ace side) buffered on this smart contract balance
-    bytes32 internal constant BUFFERED_ACEER_POSITION =
-        0xed310af23f61f96daefbcd140b306c0bdbf8c178398299741687b90e794772b0; // keccak256("catalist.Catalist.bufferedAce");
+    bytes32 internal constant BUFFERED_ACE_POSITION =
+        0x0ed1f698562b5ad14506381442889796f8effd69ac96180bfc3ce0cd1dd537c4; // keccak256("catalist.Catalist.bufferedAce");
     /// @dev number of deposited validators (incrementing counter of deposit operations).
     bytes32 internal constant DEPOSITED_VALIDATORS_POSITION =
-        0xe6e35175eb53fc006520a2a9c3e9711a7c00de6ff2c32dd31df8c5a24cac1b5c; // keccak256("catalist.Catalist.depositedValidators");
-    /// @dev total amount of ether on Consensus Layer (sum of all the balances of Catalist validators)
+        0x88b5db98ab172fbd866e06aa9505470a0f3d8a522cf6c1de203b939b518a647f; // keccak256("catalist.Catalist.depositedValidators");
+    /// @dev total amount of ace on Consensus Layer (sum of all the balances of Catalist validators)
     // "beacon" in the `keccak256()` parameter is staying here for compatibility reason
     bytes32 internal constant CL_BALANCE_POSITION =
-        0xa66d35f054e68143c18f32c990ed5cb972bb68a68f500cd2dd3a16bbf3686483; // keccak256("catalist.Catalist.beaconBalance");
+        0xedd4d9e8b1b678bffca4c023a5d349ab9879eba62d00f79f0e8cdbcd75964289; // keccak256("catalist.Catalist.beaconBalance");
     /// @dev number of Catalist's validators available in the Consensus Layer state
     // "beacon" in the `keccak256()` parameter is staying here for compatibility reason
     bytes32 internal constant CL_VALIDATORS_POSITION =
-        0x9f70001d82b6ef54e9d3725b46581c3eb9ee3aa02b941b6aa54d678a9ca35b10; // keccak256("catalist.Catalist.beaconValidators");
+        0xeeb2882049a86d177014c5163196e50a066d763111bc283004740e8144cb259d; // keccak256("catalist.Catalist.beaconValidators");
     /// @dev Just a counter of total amount of execution layer rewards received by Catalist contract. Not used in the logic.
     bytes32 internal constant TOTAL_EL_REWARDS_COLLECTED_POSITION =
-        0xafe016039542d12eec0183bb0b1ffc2ca45b027126a494672fba4154ee77facb; // keccak256("catalist.Catalist.totalELRewardsCollected");
+        0xf4df98bbf3bf5680a5ed7048d3937043eefd93259b49953a5049481aedb19e1f; // keccak256("catalist.Catalist.totalELRewardsCollected");
 
-    // Staking was paused (don't accept user's ether submits)
+    // Staking was paused (don't accept user's ace submits)
     event StakingPaused();
-    // Staking was resumed (accept user's ether submits)
+    // Staking was resumed (accept user's ace submits)
     event StakingResumed();
     // Staking limit was set (rate limits user's submits)
     event StakingLimitSet(
@@ -264,7 +266,7 @@ contract Catalist is Versioned, StACEPermit, AragonApp {
     // Records a deposit made by a user
     event Submitted(address indexed sender, uint256 amount, address referral);
 
-    // The `amount` of ether was sent to the deposit_contract.deposit function
+    // The `amount` of ace was sent to the deposit_contract.deposit function
     event Unbuffered(uint256 amount);
 
     /**
@@ -274,14 +276,14 @@ contract Catalist is Versioned, StACEPermit, AragonApp {
      * The contract's balance must be non-zero to allow initial holder bootstrap.
      *
      * @param _catalistLocator catalist locator contract
-     * @param _eip712StACE eip712 helper contract for StACE
+     * @param _eip712BACE eip712 helper contract for BACE
      */
     function initialize(
         address _catalistLocator,
-        address _eip712StACE
+        address _eip712BACE
     ) public payable onlyInit {
         _bootstrapInitialHolder();
-        _initialize_v2(_catalistLocator, _eip712StACE);
+        _initialize_v2(_catalistLocator, _eip712BACE);
         initialized();
     }
 
@@ -290,12 +292,12 @@ contract Catalist is Versioned, StACEPermit, AragonApp {
      */
     function _initialize_v2(
         address _catalistLocator,
-        address _eip712StACE
+        address _eip712BACE
     ) internal {
         _setContractVersion(2);
 
         CATALIST_LOCATOR_POSITION.setStorageAddress(_catalistLocator);
-        _initializeEIP712StACE(_eip712StACE);
+        _initializeEIP712BACE(_eip712BACE);
 
         // set infinite allowance for burner from withdrawal queue
         // to burn finalized requests' shares
@@ -318,7 +320,7 @@ contract Catalist is Versioned, StACEPermit, AragonApp {
      */
     function finalizeUpgrade_v2(
         address _catalistLocator,
-        address _eip712StACE
+        address _eip712BACE
     ) external {
         _checkContractVersion(0);
         require(hasInitialized(), "NOT_INITIALIZED");
@@ -327,11 +329,11 @@ contract Catalist is Versioned, StACEPermit, AragonApp {
             _catalistLocator != address(0),
             "CATALIST_LOCATOR_ZERO_ADDRESS"
         );
-        require(_eip712StACE != address(0), "EIP712_STACE_ZERO_ADDRESS");
+        require(_eip712BACE != address(0), "EIP712_BACE_ZERO_ADDRESS");
 
         require(_sharesOf(INITIAL_TOKEN_HOLDER) != 0, "INITIAL_HOLDER_EXISTS");
 
-        _initialize_v2(_catalistLocator, _eip712StACE);
+        _initialize_v2(_catalistLocator, _eip712BACE);
     }
 
     /**
@@ -344,7 +346,6 @@ contract Catalist is Versioned, StACEPermit, AragonApp {
      */
     function pauseStaking() external {
         _auth(STAKING_PAUSE_ROLE);
-
         _pauseStaking();
     }
 
@@ -497,7 +498,7 @@ contract Catalist is Versioned, StACEPermit, AragonApp {
     /**
      * @notice Send funds to the pool with optional _referral parameter
      * @dev This function is alternative way to submit funds. Supports optional referral address.
-     * @return Amount of StACE shares generated
+     * @return Amount of BACE shares generated
      */
     function submit(address _referral) external payable returns (uint256) {
         return _submit(_referral);
@@ -603,7 +604,7 @@ contract Catalist is Versioned, StACEPermit, AragonApp {
      * while passing empty `_withdrawalFinalizationBatches` and `_simulatedShareRate` == 0, plugging the returned values
      * to the following formula: `_simulatedShareRate = (postTotalPooledAce * 1e27) / postTotalShares`
      *
-     * @return postRebaseAmounts[0]: `postTotalPooledAce` amount of ether in the protocol after report
+     * @return postRebaseAmounts[0]: `postTotalPooledAce` amount of ace in the protocol after report
      * @return postRebaseAmounts[1]: `postTotalShares` amount of shares in the protocol after report
      * @return postRebaseAmounts[2]: `withdrawals` withdrawn from the withdrawals vault
      * @return postRebaseAmounts[3]: `elRewards` withdrawn from the execution layer rewards vault
@@ -701,7 +702,7 @@ contract Catalist is Versioned, StACEPermit, AragonApp {
      * @notice Returns the key values related to Consensus Layer side of the contract. It historically contains beacon
      * @return depositedValidators - number of deposited validators from Catalist contract side
      * @return beaconValidators - number of Catalist validators visible on Consensus Layer, reported by oracle
-     * @return beaconBalance - total amount of ether on the Consensus Layer side (sum of all the balances of Catalist validators)
+     * @return beaconBalance - total amount of ace on the Consensus Layer side (sum of all the balances of Catalist validators)
      *
      * @dev `beacon` in naming still here for historical reasons
      */
@@ -720,7 +721,7 @@ contract Catalist is Versioned, StACEPermit, AragonApp {
     }
 
     /**
-     * @dev Check that Catalist allows depositing buffered ether to the consensus layer
+     * @dev Check that Catalist allows depositing buffered ace to the consensus layer
      * Depends on the bunker state and protocol's pause state
      */
     function canDeposit() public view returns (bool) {
@@ -728,12 +729,12 @@ contract Catalist is Versioned, StACEPermit, AragonApp {
     }
 
     /**
-     * @dev Returns depositable ether amount.
-     * Takes into account unfinalized stACE required by WithdrawalQueue
+     * @dev Returns depositable ace amount.
+     * Takes into account unfinalized bACE required by WithdrawalQueue
      */
     function getDepositableAce() public view returns (uint256) {
         uint256 bufferedAce = _getBufferedAce();
-        uint256 withdrawalReserve = _withdrawalQueue().unfinalizedStACE();
+        uint256 withdrawalReserve = _withdrawalQueue().unfinalizedBACE();
         return
             bufferedAce > withdrawalReserve
                 ? bufferedAce - withdrawalReserve
@@ -773,7 +774,7 @@ contract Catalist is Versioned, StACEPermit, AragonApp {
             depositsValue = depositsCount.mul(DEPOSIT_SIZE);
             /// @dev firstly update the local state of the contract to prevent a reentrancy attack,
             ///     even if the StakingRouter is a trusted contract.
-            BUFFERED_ACEER_POSITION.setStorageUint256(
+            BUFFERED_ACE_POSITION.setStorageUint256(
                 _getBufferedAce().sub(depositsValue)
             );
             emit Unbuffered(depositsValue);
@@ -787,9 +788,9 @@ contract Catalist is Versioned, StACEPermit, AragonApp {
             emit DepositedValidatorsChanged(newDepositedValidators);
         }
 
-        /// @dev transfer ether to StakingRouter and make a deposit at the same time. All the ether
+        /// @dev transfer ace to StakingRouter and make a deposit at the same time. All the etace
         ///     sent to StakingRouter is counted as deposited. If StakingRouter can't deposit all
-        ///     passed ether it MUST revert the whole transaction (never happens in normal circumstances)
+        ///     passed ace it MUST revert the whole transaction (never happens in normal circumstances)
         stakingRouter.deposit.value(depositsValue)(
             depositsCount,
             _stakingModuleId,
@@ -928,7 +929,7 @@ contract Catalist is Versioned, StACEPermit, AragonApp {
         uint256 _elRewardsToWithdraw,
         uint256[] _withdrawalFinalizationBatches,
         uint256 _simulatedShareRate,
-        uint256 _etherToLockOnWithdrawalQueue
+        uint256 _aceToLockOnWithdrawalQueue
     ) internal {
         // withdraw execution layer rewards and put them to the buffer
         if (_elRewardsToWithdraw > 0) {
@@ -943,12 +944,12 @@ contract Catalist is Versioned, StACEPermit, AragonApp {
             );
         }
 
-        // finalize withdrawals (send ether, assign shares for burning)
-        if (_etherToLockOnWithdrawalQueue > 0) {
+        // finalize withdrawals (send ace, assign shares for burning)
+        if (_aceToLockOnWithdrawalQueue > 0) {
             IWithdrawalQueue withdrawalQueue = IWithdrawalQueue(
                 _contracts.withdrawalQueue
             );
-            withdrawalQueue.finalize.value(_etherToLockOnWithdrawalQueue)(
+            withdrawalQueue.finalize.value(_aceToLockOnWithdrawalQueue)(
                 _withdrawalFinalizationBatches[
                     _withdrawalFinalizationBatches.length - 1
                 ],
@@ -959,7 +960,7 @@ contract Catalist is Versioned, StACEPermit, AragonApp {
         uint256 postBufferedAce = _getBufferedAce()
             .add(_elRewardsToWithdraw)
             .add(_withdrawalsToWithdraw)
-            .sub(_etherToLockOnWithdrawalQueue); // Collected from ELVault // Collected from WithdrawalVault // Sent to WithdrawalQueue
+            .sub(_aceToLockOnWithdrawalQueue); // Collected from ELVault // Collected from WithdrawalVault // Sent to WithdrawalQueue
 
         _setBufferedAce(postBufferedAce);
     }
@@ -971,7 +972,7 @@ contract Catalist is Versioned, StACEPermit, AragonApp {
     function _calculateWithdrawals(
         OracleReportContracts memory _contracts,
         OracleReportedData memory _reportedData
-    ) internal view returns (uint256 etherToLock, uint256 sharesToBurn) {
+    ) internal view returns (uint256 aceToLock, uint256 sharesToBurn) {
         IWithdrawalQueue withdrawalQueue = IWithdrawalQueue(
             _contracts.withdrawalQueue
         );
@@ -985,7 +986,7 @@ contract Catalist is Versioned, StACEPermit, AragonApp {
                     _reportedData.reportTimestamp
                 );
 
-            (etherToLock, sharesToBurn) = withdrawalQueue.prefinalize(
+            (aceToLock, sharesToBurn) = withdrawalQueue.prefinalize(
                 _reportedData.withdrawalFinalizationBatches,
                 _reportedData.simulatedShareRate
             );
@@ -1021,7 +1022,7 @@ contract Catalist is Versioned, StACEPermit, AragonApp {
     /**
      * @dev Process user deposit, mints liquid tokens and increase the pool buffer
      * @param _referral address of referral.
-     * @return amount of StACE shares generated
+     * @return amount of BACE shares generated
      */
     function _submit(address _referral) internal returns (uint256) {
         require(msg.value != 0, "ZERO_DEPOSIT");
@@ -1111,11 +1112,11 @@ contract Catalist is Versioned, StACEPermit, AragonApp {
     ) internal returns (uint256 sharesMintedAsFees) {
         // We need to take a defined percentage of the reported reward as a fee, and we do
         // this by minting new token shares and assigning them to the fee recipients (see
-        // StACE docs for the explanation of the shares mechanics). The staking rewards fee
+        // BACE docs for the explanation of the shares mechanics). The staking rewards fee
         // is defined in basis points (1 basis point is equal to 0.01%, 10000 (TOTAL_BASIS_POINTS) is 100%).
         //
         // Since we are increasing totalPooledAce by _totalRewards (totalPooledAceWithRewards),
-        // the combined cost of all holders' shares has became _totalRewards StACE tokens more,
+        // the combined cost of all holders' shares has became _totalRewards BACE tokens more,
         // effectively splitting the reward between each token holder proportionally to their token share.
         //
         // Now we want to mint new shares to the fee recipient, so that the total cost of the
@@ -1211,11 +1212,11 @@ contract Catalist is Versioned, StACEPermit, AragonApp {
      * @dev Gets the amount of Ace temporary buffered on this contract balance
      */
     function _getBufferedAce() internal view returns (uint256) {
-        return BUFFERED_ACEER_POSITION.getStorageUint256();
+        return BUFFERED_ACE_POSITION.getStorageUint256();
     }
 
     function _setBufferedAce(uint256 _newBufferedAce) internal {
-        BUFFERED_ACEER_POSITION.setStorageUint256(_newBufferedAce);
+        BUFFERED_ACE_POSITION.setStorageUint256(_newBufferedAce);
     }
 
     /// @dev Calculates and returns the total base balance (multiple of 32) of validators in transient state,
@@ -1294,7 +1295,7 @@ contract Catalist is Versioned, StACEPermit, AragonApp {
         uint256 preCLBalance;
         uint256 preTotalPooledAce;
         uint256 preTotalShares;
-        uint256 etherToLockOnWithdrawalQueue;
+        uint256 aceToLockOnWithdrawalQueue;
         uint256 sharesToBurnFromWithdrawalQueue;
         uint256 simulatedSharesToBurn;
         uint256 sharesToBurn;
@@ -1309,7 +1310,7 @@ contract Catalist is Versioned, StACEPermit, AragonApp {
      * Key steps:
      * 1. Take a snapshot of the current (pre-) state
      * 2. Pass the report data to sanity checker (reverts if malformed)
-     * 3. Pre-calculate the ether to lock for withdrawal queue and shares to be burnt
+     * 3. Pre-calculate the ace to lock for withdrawal queue and shares to be burnt
      * 4. Pass the accounting values to sanity checker to smoothen positive token rebase
      *    (i.e., postpone the extra rewards to be applied during the next rounds)
      * 5. Invoke finalization of the withdrawal requests
@@ -1349,11 +1350,11 @@ contract Catalist is Versioned, StACEPermit, AragonApp {
         _checkAccountingOracleReport(contracts, _reportedData, reportContext);
 
         // Step 3.
-        // Pre-calculate the ether to lock for withdrawal queue and shares to be burnt
+        // Pre-calculate the ace to lock for withdrawal queue and shares to be burnt
         // due to withdrawal requests to finalize
         if (_reportedData.withdrawalFinalizationBatches.length != 0) {
             (
-                reportContext.etherToLockOnWithdrawalQueue,
+                reportContext.aceToLockOnWithdrawalQueue,
                 reportContext.sharesToBurnFromWithdrawalQueue
             ) = _calculateWithdrawals(contracts, _reportedData);
 
@@ -1384,19 +1385,19 @@ contract Catalist is Versioned, StACEPermit, AragonApp {
                 _reportedData.withdrawalVaultBalance,
                 _reportedData.elRewardsVaultBalance,
                 _reportedData.sharesRequestedToBurn,
-                reportContext.etherToLockOnWithdrawalQueue,
+                reportContext.aceToLockOnWithdrawalQueue,
                 reportContext.sharesToBurnFromWithdrawalQueue
             );
 
         // Step 5.
-        // Invoke finalization of the withdrawal requests (send ether to withdrawal queue, assign shares to be burnt)
+        // Invoke finalization of the withdrawal requests (send ace to withdrawal queue, assign shares to be burnt)
         _collectRewardsAndProcessWithdrawals(
             contracts,
             withdrawals,
             elRewards,
             _reportedData.withdrawalFinalizationBatches,
             _reportedData.simulatedShareRate,
-            reportContext.etherToLockOnWithdrawalQueue
+            reportContext.aceToLockOnWithdrawalQueue
         );
 
         emit ACEDistributed(
@@ -1443,7 +1444,7 @@ contract Catalist is Versioned, StACEPermit, AragonApp {
                 .checkSimulatedShareRate(
                     postTotalPooledAce,
                     postTotalShares,
-                    reportContext.etherToLockOnWithdrawalQueue,
+                    reportContext.aceToLockOnWithdrawalQueue,
                     reportContext.sharesToBurn.sub(
                         reportContext.simulatedSharesToBurn
                     ),

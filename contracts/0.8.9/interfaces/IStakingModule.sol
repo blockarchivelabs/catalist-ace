@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2023 Catalist <info@catalist.fi>
+// SPDX-FileCopyrightText: 2023 Lido <info@lido.fi>
 // SPDX-License-Identifier: GPL-3.0
 
 pragma solidity 0.8.9;
@@ -89,8 +89,8 @@ interface IStakingModule {
         uint256 _limit
     ) external view returns (uint256[] memory nodeOperatorIds);
 
-    /// @notice Called by StakingRouter to signal that stACE rewards were minted for this module.
-    /// @param _totalShares Amount of stACE shares that were minted to reward all node operators.
+    /// @notice Called by StakingRouter to signal that bACE rewards were minted for this module.
+    /// @param _totalShares Amount of bACE shares that were minted to reward all node operators.
     /// @dev IMPORTANT: this method SHOULD revert with empty error data ONLY because of "out of gas".
     ///      Details about error data: https://docs.soliditylang.org/en/v0.8.9/control-structures.html#error-handling-assert-require-revert-and-exceptions
     function onRewardsMinted(uint256 _totalShares) external;

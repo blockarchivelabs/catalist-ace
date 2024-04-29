@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2021 Catalist <info@catalist.fi>
+// SPDX-FileCopyrightText: 2021 Lido <info@lido.fi>
 // SPDX-License-Identifier: GPL-3.0
 
 /* See contracts/COMPILERS.md */
@@ -54,7 +54,7 @@ contract CatalistExecutionLayerRewardsVault {
     /**
      * Ctor
      *
-     * @param _catalist the Catalist token (stACE) address
+     * @param _catalist the Catalist token (bACE) address
      * @param _treasury the Catalist treasury address (see ERC20/ERC721-recovery interfaces)
      */
     constructor(address _catalist, address _treasury) {
@@ -87,7 +87,7 @@ contract CatalistExecutionLayerRewardsVault {
         uint256 balance = address(this).balance;
         amount = (balance > _maxAmount) ? _maxAmount : balance;
         if (amount > 0) {
-            ICatalist(CATALIST).receiveELRewards{ value: amount }();
+            ICatalist(CATALIST).receiveELRewards{value: amount}();
         }
         return amount;
     }

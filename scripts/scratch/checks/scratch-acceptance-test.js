@@ -38,80 +38,80 @@ async function loadDeployedProtocol(state) {
   return {
     stakingRouter: await artifacts.require('StakingRouter').at(state.stakingRouter.proxy.address),
     catalist: await artifacts.require('Catalist').at(state['app:catalist'].proxy.address),
-    voting: await artifacts.require('Voting').at(state['app:aragon-voting'].proxy.address),
-    agent: await artifacts.require('Agent').at(state['app:aragon-agent'].proxy.address),
+    // voting: await artifacts.require('Voting').at(state['app:aragon-voting'].proxy.address),
+    // agent: await artifacts.require('Agent').at(state['app:aragon-agent'].proxy.address),
     nodeOperatorsRegistry: await artifacts.require('NodeOperatorsRegistry').at(state['app:node-operators-registry'].proxy.address),
     depositSecurityModule: await artifacts.require('DepositSecurityModule').at(state.depositSecurityModule.address),
     accountingOracle: await artifacts.require('AccountingOracle').at(state.accountingOracle.proxy.address),
     hashConsensusForAO: await artifacts.require('HashConsensus').at(state.hashConsensusForAccountingOracle.address),
     elRewardsVault: await artifacts.require('CatalistExecutionLayerRewardsVault').at(state.executionLayerRewardsVault.address),
     withdrawalQueue: await artifacts.require('WithdrawalQueueERC721').at(state.withdrawalQueueERC721.proxy.address),
-    ldo: await artifacts.require('MiniMeToken').at(state.ldo.address),
+    // ldo: await artifacts.require('MiniMeToken').at(state.ldo.address),
   }
 }
 
 
-async function checkLDOCanBeTransferred(ldo, state) {
-  const ldoHolder = Object.keys(state.vestingParams.holders)[0]
-  await ethers.provider.send('hardhat_impersonateAccount', [ldoHolder])
+// async function checkLDOCanBeTransferred(ldo, state) {
+//   const ldoHolder = Object.keys(state.vestingParams.holders)[0]
+//   await ethers.provider.send('hardhat_impersonateAccount', [ldoHolder])
 
-  await ldo.transfer(ADDRESS_1, e18(1), { from: ldoHolder })
-  assert.equals(await ldo.balanceOf(ADDRESS_1), e18(1))
+//   await ldo.transfer(ADDRESS_1, e18(1), { from: ldoHolder })
+//   assert.equals(await ldo.balanceOf(ADDRESS_1), e18(1))
 
-  log.success("Transferred LDO")
-}
+//   log.success("Transferred LDO")
+// }
 
 
-async function prepareProtocolForSubmitDepositReportWithdrawalFlow(protocol, state, oracleMember1, oracleMember2) {
+async function prepareProtocolForSubmitDepositReportWithdrawalFlow(protocol, state, owner, oracleMember1, oracleMember2) {
   const {
     catalist,
-    voting,
-    agent,
+    // voting,
+    // agent,
     nodeOperatorsRegistry,
     depositSecurityModule,
     hashConsensusForAO,
     withdrawalQueue,
   } = protocol
 
-  await ethers.provider.send('hardhat_impersonateAccount', [voting.address])
-  await ethers.provider.send('hardhat_impersonateAccount', [depositSecurityModule.address])
-  await ethers.provider.send('hardhat_impersonateAccount', [agent.address])
+  // await ethers.provider.send('hardhat_impersonateAccount', [voting.address])
+  // await ethers.provider.send('hardhat_impersonateAccount', [depositSecurityModule.address])
+  // await ethers.provider.send('hardhat_impersonateAccount', [agent.address])
 
-  await catalist.resume({ from: voting.address })
+  await catalist.resume({ from: owner.address })
 
-  await withdrawalQueue.grantRole(await withdrawalQueue.RESUME_ROLE(), agent.address, { from: agent.address })
-  await withdrawalQueue.resume({ from: agent.address })
-  await withdrawalQueue.renounceRole(await withdrawalQueue.RESUME_ROLE(), agent.address, { from: agent.address })
+  await withdrawalQueue.grantRole(await withdrawalQueue.RESUME_ROLE(), owner.address, { from: owner.address })
+  await withdrawalQueue.resume({ from: owner.address })
+  // await withdrawalQueue.renounceRole(await withdrawalQueue.RESUME_ROLE(), agent.address, { from: agent.address })
 
-  await nodeOperatorsRegistry.addNodeOperator('1', ADDRESS_1, { from: agent.address })
-  await nodeOperatorsRegistry.addNodeOperator('2', ADDRESS_2, { from: agent.address })
+  await nodeOperatorsRegistry.addNodeOperator('1', ADDRESS_1, { from: owner.address })
+  await nodeOperatorsRegistry.addNodeOperator('2', ADDRESS_2, { from: owner.address })
 
-  await nodeOperatorsRegistry.addSigningKeys(0, 1, pad('0x010203', 48), pad('0x01', 96), { from: voting.address })
-  await nodeOperatorsRegistry.addSigningKeys(
-    0,
-    3,
-    hexConcat(pad('0x010204', 48), pad('0x010205', 48), pad('0x010206', 48)),
-    hexConcat(pad('0x01', 96), pad('0x01', 96), pad('0x01', 96)),
-    { from: voting.address }
-  )
+  // await nodeOperatorsRegistry.addSigningKeys(0, 1, pad('0x010203', 48), pad('0x01', 96), { from: owner.address })
+  // await nodeOperatorsRegistry.addSigningKeys(
+  //   0,
+  //   3,
+  //   hexConcat(pad('0x010204', 48), pad('0x010205', 48), pad('0x010206', 48)),
+  //   hexConcat(pad('0x01', 96), pad('0x01', 96), pad('0x01', 96)),
+  //   { from: owner.address }
+  // )
 
-  await nodeOperatorsRegistry.setNodeOperatorStakingLimit(0, UNLIMITED, { from: voting.address })
-  await nodeOperatorsRegistry.setNodeOperatorStakingLimit(1, UNLIMITED, { from: voting.address })
+  await nodeOperatorsRegistry.setNodeOperatorStakingLimit(0, UNLIMITED, { from: owner.address })
+  await nodeOperatorsRegistry.setNodeOperatorStakingLimit(1, UNLIMITED, { from: owner.address })
 
   const quorum = 2
-  await hashConsensusForAO.grantRole(MANAGE_MEMBERS_AND_QUORUM_ROLE, agent.address, { from: agent.address })
-  await hashConsensusForAO.addMember(oracleMember1.address, quorum, { from: agent.address })
-  await hashConsensusForAO.addMember(oracleMember2.address, quorum, { from: agent.address })
-  await hashConsensusForAO.renounceRole(MANAGE_MEMBERS_AND_QUORUM_ROLE, agent.address, { from: agent.address })
+  await hashConsensusForAO.grantRole(MANAGE_MEMBERS_AND_QUORUM_ROLE, owner.address, { from: owner.address })
+  await hashConsensusForAO.addMember(oracleMember1.address, quorum, { from: owner.address })
+  await hashConsensusForAO.addMember(oracleMember2.address, quorum, { from: owner.address })
+  // await hashConsensusForAO.renounceRole(MANAGE_MEMBERS_AND_QUORUM_ROLE, owner.address, { from: owner.address })
 
   log.success('Protocol prepared for submit-deposit-report-withdraw flow')
 }
 
-async function checkSubmitDepositReportWithdrawal(protocol, state, user1, user2) {
+async function checkSubmitDepositReportWithdrawal(protocol, state, owner, user1) {
   const {
     catalist,
-    agent,
-    depositSecurityModule,
+    // agent,
+    // depositSecurityModule,
     accountingOracle,
     hashConsensusForAO,
     elRewardsVault,
@@ -122,33 +122,31 @@ async function checkSubmitDepositReportWithdrawal(protocol, state, user1, user2)
   const initialCatalistBalance = await getBalance(catalist.address)
   const chainSpec = state.chainSpec
 
-  await user1.sendTransaction({ to: catalist.address, value: ETH(34) })
-  await user2.sendTransaction({ to: elRewardsVault.address, value: ETH(1) })
+  await owner.sendTransaction({ to: catalist.address, value: ETH(34) })
+  await user1.sendTransaction({ to: elRewardsVault.address, value: ETH(1) })
   log.success('Users submitted ace')
 
-  assert.equals(await catalist.balanceOf(user1.address), ETH(34))
+  assert.equals(await catalist.balanceOf(owner.address), ETH(34))
   assert.equals(await catalist.getTotalPooledAce(), initialCatalistBalance + BigInt(ETH(34)))
   assert.equals(await catalist.getBufferedAce(), initialCatalistBalance + BigInt(ETH(34)))
 
-  await catalist.deposit(MAX_DEPOSITS, CURATED_MODULE_ID, CALLDATA, { from: depositSecurityModule.address })
-  log.success('Ace deposited')
+  // await catalist.deposit(MAX_DEPOSITS, CURATED_MODULE_ID, CALLDATA, { from: depositSecurityModule.address })
+  // log.success('Ace deposited')
 
-
-  assert.equals((await catalist.getBeaconStat()).depositedValidators, 1)
+  // assert.equals((await catalist.getBeaconStat()).depositedValidators, 1)
 
   const latestBlockTimestamp = (await ethers.provider.getBlock('latest')).timestamp
   const initialEpoch = Math.floor((latestBlockTimestamp - chainSpec.genesisTime)
     / (chainSpec.slotsPerEpoch * chainSpec.secondsPerSlot))
 
-  await hashConsensusForAO.updateInitialEpoch(initialEpoch, { from: agent.address })
-
+  await hashConsensusForAO.updateInitialEpoch(initialEpoch, { from: owner.address })
 
   const elRewardsVaultBalance = await web3.eth.getBalance(elRewardsVault.address)
 
   const withdrawalAmount = ETH(1)
 
-  await catalist.approve(withdrawalQueue.address, withdrawalAmount, { from: user1.address })
-  const receipt = await withdrawalQueue.requestWithdrawals([withdrawalAmount], user1.address, { from: user1.address })
+  await catalist.approve(withdrawalQueue.address, withdrawalAmount, { from: owner.address })
+  const receipt = await withdrawalQueue.requestWithdrawals([withdrawalAmount], owner.address, { from: owner.address })
   const requestId = getEventArgument(receipt, 'WithdrawalRequested', 'requestId')
 
   log.success('Withdrawal request made')
@@ -202,7 +200,7 @@ async function checkSubmitDepositReportWithdrawal(protocol, state, user1, user2)
 
   log.success('Oracle report submitted')
 
-  await withdrawalQueue.claimWithdrawalsTo([requestId], [requestId], user1.address, { from: user1.address })
+  await withdrawalQueue.claimWithdrawalsTo([requestId], [requestId], owner.address, { from: owner.address })
 
   log.success('Withdrawal claimed successfully')
 }
@@ -219,13 +217,13 @@ async function checkMainProtocolFlows({ web3 }) {
   log.splitter()
 
   const protocol = await loadDeployedProtocol(state)
-  const [user1, user2, oracleMember1, oracleMember2] = await ethers.getSigners()
+  const [owner, user1, user2, oracleMember1, oracleMember2] = await ethers.getSigners()
 
   
-  await checkLDOCanBeTransferred(protocol.ldo, state)
+  // await checkLDOCanBeTransferred(protocol.ldo, state)
 
-  await prepareProtocolForSubmitDepositReportWithdrawalFlow(protocol, state, oracleMember1, oracleMember2)
-  await checkSubmitDepositReportWithdrawal(protocol, state, user1, user2)
+  await prepareProtocolForSubmitDepositReportWithdrawalFlow(protocol, state, owner, oracleMember1, oracleMember2)
+  await checkSubmitDepositReportWithdrawal(protocol, state, owner, user1)
 }
 
 

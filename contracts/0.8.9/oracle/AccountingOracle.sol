@@ -1,13 +1,13 @@
-// SPDX-FileCopyrightText: 2023 Catalist <info@catalist.fi>
+// SPDX-FileCopyrightText: 2023 Lido <info@lido.fi>
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity 0.8.9;
 
-import { SafeCast } from "@openzeppelin/contracts-v4.4/utils/math/SafeCast.sol";
+import {SafeCast} from "@openzeppelin/contracts-v4.4/utils/math/SafeCast.sol";
 
-import { ICatalistLocator } from "../../common/interfaces/ICatalistLocator.sol";
-import { UnstructuredStorage } from "../lib/UnstructuredStorage.sol";
+import {ICatalistLocator} from "../../common/interfaces/ICatalistLocator.sol";
+import {UnstructuredStorage} from "../lib/UnstructuredStorage.sol";
 
-import { BaseOracle, IConsensusContract } from "./BaseOracle.sol";
+import {BaseOracle, IConsensusContract} from "./BaseOracle.sol";
 
 interface ICatalist {
     function handleOracleReport(
@@ -271,7 +271,7 @@ contract AccountingOracle is BaseOracle {
         /// WithdrawalQueue.calculateFinalizationBatches. Empty array means that no withdrawal
         /// requests should be finalized.
         uint256[] withdrawalFinalizationBatches;
-        /// @dev The share/ACE rate with the 10^27 precision (i.e. the price of one stACE share
+        /// @dev The share/ACE rate with the 10^27 precision (i.e. the price of one bACE share
         /// in ACE where one ACE is denominated as 10^27) that would be effective as the result of
         /// applying this oracle report at the reference slot, with withdrawalFinalizationBatches
         /// set to empty array and simulatedShareRate set to 0.

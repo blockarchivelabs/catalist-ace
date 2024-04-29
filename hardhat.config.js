@@ -15,6 +15,7 @@ require('hardhat-ignore-warnings')
 require('./foundry/skip-sol-tests-compilation')
 
 const NETWORK_NAME = getNetworkName()
+const DEPLOYER_PK = process.env.DEPLOYER_PK
 const ETH_ACCOUNT_NAME = process.env.ETH_ACCOUNT_NAME
 const RPC_URL = process.env.RPC_URL
 
@@ -78,12 +79,27 @@ const getNetConfig = (networkName, ethAccountName) => {
         gasPrice: 0,
       },
     },
-    ace_test: {
-      url: 'http://20.197.51.29:8545',
-      ensAddress: netState.ensAddress,
-      timeout: 100000,
-      accounts: ['f11a771308f235a1331b098d0212db69ac049e56c9f1e0da739a39e8b743363c'],
-      gasPrice: 10100,
+    ace_devnet: {
+      ...base,
+      // url: 'http://20.197.51.29:8545',
+      url: RPC_URL,
+      // ensAddress: netState.ensAddress,
+      timeout: 60000 * 15,
+      chainId: 6480000002,
+      accounts: [process.env.DEPLOYER_PK],
+      // gasPrice: 1010000000,
+      // gas: 3000000,
+    },
+    ace_mainnet: {
+      ...base,
+      // url: 'http://20.197.13.207:8545',
+      url: RPC_URL,
+      timeout: 60000 * 15,
+      chainId: 648,
+      // ensAddress: netState.ensAddress,
+      accounts: [process.env.DEPLOYER_PK],
+      // gasPrice: 10100,
+      // gas: 1000000,
     },
     goerli: {
       ...base,
@@ -100,6 +116,7 @@ const getNetConfig = (networkName, ethAccountName) => {
     holesky: {
       ...base,
       url: RPC_URL,
+      accounts: ['f11a771308f235a1331b098d0212db69ac049e56c9f1e0da739a39e8b743363c'],
       chainId: 17000,
       timeout: 60000 * 15,
     },
