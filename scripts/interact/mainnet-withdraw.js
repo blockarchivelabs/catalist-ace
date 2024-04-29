@@ -24,28 +24,15 @@ async function main() {
   const nodeOperatorRegistry = await ethers.getContractAt('NodeOperatorsRegistry', NodeOperatorRegistryAddress)
   const depositSecurityModule = await ethers.getContractAt('DepositSecurityModule', DepositSecurityModuleAddress)
 
-  const deployerAddress = '0x63cac65c5eb17E6Dd47D9313e23169f79d1Ab058'
-  const deployerPrivateKey = 'f11a771308f235a1331b098d0212db69ac049e56c9f1e0da739a39e8b743363c'
-  const oracleMemberAddress = '0xB458c332C242247C46e065Cf987a05bAf7612904'
   const testerAddress = '0x26AC28D33EcBf947951d6B7d8a1e6569eE73d076'
-  const testerAddress1 = '0x20a22E6579f6Ed3ffd8DFDe526DF1A967edd0007'
 
-  // console.log()
-  // console.log('unfinalizedBACE...')
-  // const unfinalizedBACE = await withdrawalQueueERC721.unfinalizedStACE({
-  //   gasLimit: 1000000,
-  //   gasPrice: 100000,
-  // })
-  // console.log('- Unfinalized BACE:', +unfinalizedBACE)
-
-  /*
-  *                       1713776532
-  * report timestamp2   = 1713904212
-  * report timestamp    = 1713858132
-  * withdraw1 timestamp = 1713858300
-  * withdraw2 timestamp = 1713859092
-  * 즉, 리포트 timestamp가 앞선 상태였기 때문에 withdraw 요청이 반영 안된거다
-  */
+  console.log()
+  console.log('unfinalizedBACE...')
+  const unfinalizedBACE = await withdrawalQueueERC721.unfinalizedStACE({
+    gasLimit: 1000000,
+    gasPrice: 100000,
+  })
+  console.log('- Unfinalized BACE:', +unfinalizedBACE)
 
   console.log()
   console.log('Querying getWithdrawalRequests()...')
@@ -73,28 +60,6 @@ async function main() {
     }
   )
   console.log('- Withdrawal Status:', withdrawalStatus)
-
-  // console.log()
-  // console.log('Querying getLastCheckpointIndex()...')
-  // const lastCheckpointIndex = await withdrawalQueueERC721.getLastCheckpointIndex({
-  //   gasLimit: 1000000,
-  //   gasPrice: 100000,
-  // })
-  // console.log('- Last Checkpoint Index:', +lastCheckpointIndex)
-
-  // console.log()
-  // console.log('Querying findCheckpointHints()...')
-  // const firstIdx = lastCheckpointIndex - 1
-  // const checkpointHints = await withdrawalQueueERC721.findCheckpointHints(
-  //   requestIds,
-  //   firstIdx,
-  //   +lastCheckpointIndex,
-  //   {
-  //     gasLimit: 1000000,
-  //     gasPrice: 100000,
-  //   }
-  // )
-  // console.log('- Checkpoint Hints:', checkpointHints)
 }
 
 main()

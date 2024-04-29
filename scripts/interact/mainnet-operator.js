@@ -36,15 +36,12 @@ async function main() {
 
 
 
-  // 오퍼레이터 이름
-  const OPERATOR_NAME = 'test-operator'
-  
-  //오퍼레이터 보상 수령 주소
-  const REWARD_ADDRESS = deployerAddress
-  
-
   // console.log();
   // console.log('Add node operator...');
+  // // 오퍼레이터 이름
+  // const OPERATOR_NAME = 'test-operator'
+  // //오퍼레이터 보상 수령 주소
+  // const REWARD_ADDRESS = deployerAddress
   // await nodeOperatorRegistry.addNodeOperator(
   //   OPERATOR_NAME,
   //   REWARD_ADDRESS,

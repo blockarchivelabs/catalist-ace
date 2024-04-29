@@ -43,9 +43,6 @@ async function main() {
   const aragonAcl = await ethers.getContractAt('ACL', AragonAclAddress)
 
   const deployerAddress = '0x63cac65c5eb17E6Dd47D9313e23169f79d1Ab058'
-  const deployerPrivateKey = 'f11a771308f235a1331b098d0212db69ac049e56c9f1e0da739a39e8b743363c'
-  const oracleMemberAddress = '0xB458c332C242247C46e065Cf987a05bAf7612904'
-  const testerAddress = '0x26AC28D33EcBf947951d6B7d8a1e6569eE73d076'
 
   const chainSpec = JSON.parse(fs.readFileSync(fileName, 'utf-8')).chainSpec
   const GENESIS_TIME = chainSpec.genesisTime

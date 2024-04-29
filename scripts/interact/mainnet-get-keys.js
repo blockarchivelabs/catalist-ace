@@ -4,11 +4,10 @@ const { hexConcat, pad, ETH, e27, e18, toBN } = require('./utils')
 const fs = require('fs')
 const { DSMAttestMessage } = require('../../test/helpers/signatures')
 
-// RPC_URL=http://20.197.13.207:8545 npx hardhat run scripts/interact/add-validator-keys.js --network ace_mainnet
+// RPC_URL=http://20.197.13.207:8545 npx hardhat run scripts/interact/mainnet-get-keys.js --network ace_mainnet
 async function main() {
   console.log('Getting the deposit contract...')
-  const FILE_NAME = './deployed-ace-mainnet-stACE.json'
-  const addresses = JSON.parse(fs.readFileSync(FILE_NAME, 'utf-8'))
+  const addresses = JSON.parse(fs.readFileSync('./deployed-ace-mainnet-stACE.json', 'utf-8'))
   const depositContractAddress = addresses.chainSpec.depositContract
   const CatalistAddress = addresses['app:catalist'].proxy.address
   const HashConsensusAddress = addresses.hashConsensusForAccountingOracle.address
@@ -33,34 +32,22 @@ async function main() {
   }
 
 
-  
-  // 키 관리할 오퍼레이터 지정하기
+  // 키 관리할 오퍼레이터 아이디
   const NODE_OPERATOR_ID = 0
+  
+  // 키 인덱스 시작점 & 종료점
+  const START = 0
+  const END = 2
 
-  // validator key 파일 이름 입력
-  const DEPOSIT_DATA_FILE = './deposit_data-1712068080.json'
-  
-  
   console.log()
-  console.log('Add signing keys...')
-  
-  const KEY_DATA = JSON.parse(fs.readFileSync(DEPOSIT_DATA_FILE, 'utf-8'))
-  const pubkeys = KEY_DATA.map(data => data.pubkey)
-  const signatures = KEY_DATA.map(data => data.signature)
-  const KEY_COUNT = pubkeys.length
-  
-  console.log('- count:', KEY_COUNT)
-
-  await nodeOperatorRegistry.addSigningKeys(
+  console.log('Get validator singing keys...')
+  const signingKeys = await nodeOperatorRegistry.getSigningKeys(
     NODE_OPERATOR_ID,
-    KEY_COUNT,
-    hexConcat(...pubkeys),
-    hexConcat(...signatures),
+    START,
+    END,
     GAS_INFO
   )
-
-  console.log()
-  console.log('Complete.')
+  console.log('- Signing Keys:', signingKeys)
 }
 
 main()

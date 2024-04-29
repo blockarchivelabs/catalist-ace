@@ -32,24 +32,6 @@ async function main() {
   const STAKING_MODULE_ID = 1
 
   console.log()
-  console.log('Add owner to deposit security module...')
-  await depositSecurityModule.setOwner(
-    oracleMemberAddress,
-    {
-      gasLimit: 1000000,
-      gasPrice: 100000,
-    }
-  )
-
-  console.log()
-  console.log('Querying getMaxDeposits()...')
-  const MAX_DEPOSITS = await depositSecurityModule.getMaxDeposits({
-    gasLimit: 1000000,
-    gasPrice: 100000,
-  })
-  console.log('- Max Deposits:', +MAX_DEPOSITS)
-
-  console.log()
   console.log('Check Deposit Security Module can deposit...')
   const SECURITY_MODULE_CAN_DEPOSIT = await depositSecurityModule.canDeposit(
     STAKING_MODULE_ID,
@@ -68,104 +50,59 @@ async function main() {
   )
   console.log('- Staking Module Status:', STAKING_MODULE_STATUS)
 
-  await depositSecurityModule.addGuardian(
-    oracleMemberAddress,
-    1,
-    {
-      gasLimit: 1000000,
-      gasPrice: 100000,
-    }
-  )
-
   console.log()
-  console.log('Get Guardian Quorum...')
-  const guardianQuorum = await depositSecurityModule.getGuardianQuorum({
-    gasLimit: 1000000,
-    gasPrice: 100000,
-  })
-  console.log('- Guardian Quorum:', guardianQuorum)
-
-  console.log()
-  console.log('Get guardians...')
-  const guardians = await depositSecurityModule.getGuardians({
-    gasLimit: 1000000,
-    gasPrice: 100000,
-  })
-  console.log('- Guardians:', guardians)
-
-  console.log()
-  console.log('Check deposit state...')
-  const STAKING_MODULE_IS_ACTIVE = await stakingRouter.getStakingModuleIsActive(
+  console.log('Get deposit data...')
+  const STAKING_MODULE_NONCE = await stakingRouter.getStakingModuleNonce(
     STAKING_MODULE_ID,
     {
       gasLimit: 1000000,
       gasPrice: 100000,
     }
   )
-  console.log('- Staking Module Is Active:', STAKING_MODULE_IS_ACTIVE)
+  console.log('- Staking Module Nonce:', +STAKING_MODULE_NONCE)
 
-  const CAN_DEPOSIT = await depositSecurityModule.canDeposit(
+  const latestBlock = await ethers.provider.getBlock('latest')
+  console.log('- Latest Block Number:', latestBlock.number)
+  console.log('- Latest Block Hash:', latestBlock.hash)
+
+  const DEPOSIT_ROOT = await depositContract.get_deposit_root({
+    gasLimit: 1000000,
+    gasPrice: 100000,
+  })
+  console.log('- Deposit Root:', DEPOSIT_ROOT)
+
+  const ATTEST_MESSAGE_PREFIX = await depositSecurityModule.ATTEST_MESSAGE_PREFIX({
+    gasLimit: 1000000,
+    gasPrice: 100000,
+  })
+
+  DSMAttestMessage.setMessagePrefix(ATTEST_MESSAGE_PREFIX)
+  let validAttestMessage = new DSMAttestMessage(
+    latestBlock.number, 
+    latestBlock.hash, 
+    DEPOSIT_ROOT, 
+    STAKING_MODULE_ID, 
+    +STAKING_MODULE_NONCE
+  )
+
+  const deployerSign = validAttestMessage.sign(deployerPrivateKey)
+  console.log('- Deployer Sign:', deployerSign)
+
+  console.log()
+  console.log('Trying deposit buffered ACE...')
+  await depositSecurityModule.depositBufferedAce(
+    latestBlock.number,
+    latestBlock.hash,
+    DEPOSIT_ROOT,
     STAKING_MODULE_ID,
+    +STAKING_MODULE_NONCE,
+    '0x00',
+    [deployerSign],
     {
       gasLimit: 1000000,
       gasPrice: 100000,
     }
   )
-  console.log('- Can Deposit:', CAN_DEPOSIT)
-
-  // console.log()
-  // console.log('Get deposit data...')
-  // const STAKING_MODULE_NONCE = await stakingRouter.getStakingModuleNonce(
-  //   STAKING_MODULE_ID,
-  //   {
-  //     gasLimit: 1000000,
-  //     gasPrice: 100000,
-  //   }
-  // )
-  // console.log('- Staking Module Nonce:', +STAKING_MODULE_NONCE)
-
-  // const latestBlock = await ethers.provider.getBlock('latest')
-  // console.log('- Latest Block Number:', latestBlock.number)
-  // console.log('- Latest Block Hash:', latestBlock.hash)
-
-  // const DEPOSIT_ROOT = await depositContract.get_deposit_root({
-  //   gasLimit: 1000000,
-  //   gasPrice: 100000,
-  // })
-  // console.log('- Deposit Root:', DEPOSIT_ROOT)
-
-  // const ATTEST_MESSAGE_PREFIX = await depositSecurityModule.ATTEST_MESSAGE_PREFIX({
-  //   gasLimit: 1000000,
-  //   gasPrice: 100000,
-  // })
-
-  // DSMAttestMessage.setMessagePrefix(ATTEST_MESSAGE_PREFIX)
-  // let validAttestMessage = new DSMAttestMessage(
-  //   latestBlock.number, 
-  //   latestBlock.hash, 
-  //   DEPOSIT_ROOT, 
-  //   STAKING_MODULE_ID, 
-  //   +STAKING_MODULE_NONCE
-  // )
-
-  // const deployerSign = validAttestMessage.sign(deployerPrivateKey)
-  // console.log('- Deployer Sign:', deployerSign)
-
-  // console.log()
-  // console.log('Trying deposit buffered ACE...')
-  // await depositSecurityModule.depositBufferedAce(
-  //   latestBlock.number,
-  //   latestBlock.hash,
-  //   DEPOSIT_ROOT,
-  //   STAKING_MODULE_ID,
-  //   +STAKING_MODULE_NONCE,
-  //   '0x00',
-  //   [deployerSign],
-  //   {
-  //     gasLimit: 1000000,
-  //     gasPrice: 100000,
-  //   }
-  // )
 
   console.log()
   console.log('Complete.')
