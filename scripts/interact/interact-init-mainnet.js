@@ -68,7 +68,6 @@ async function main() {
     GAS_INFO
   )
 
-  console.log()
   console.log('Grant STAKING_CONTROL_ROLE to owner in Catalist...')
   const STAKING_CONTROL_ROLE = await catalist.STAKING_CONTROL_ROLE(GAS_INFO)
   await aragonAcl.grantPermission(
@@ -185,12 +184,11 @@ async function main() {
   )
   console.log('- status:', stakingModuleStatus)
 
-  console.log()
   console.log('Grant MANAGE_NODE_OPERATOR_ROLE to owner in NodeOperatorsRegistry...')
-  const MANAGE_NODE_OPERATOR_ROLE = await nodeOperatorsRegistry.MANAGE_NODE_OPERATOR_ROLE(GAS_INFO)
+  const MANAGE_NODE_OPERATOR_ROLE = await nodeOperatorRegistry.MANAGE_NODE_OPERATOR_ROLE(GAS_INFO)
   await aragonAcl.grantPermission(
     deployerAddress,
-    NodeOperatorsRegistryAddress,
+    NodeOperatorRegistryAddress,
     MANAGE_NODE_OPERATOR_ROLE,
     GAS_INFO
   )

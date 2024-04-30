@@ -1,7 +1,8 @@
 const fs = require('fs')
 const path = require('path')
 const { TASK_COMPILE } = require('hardhat/builtin-tasks/task-names')
-
+const dotenv = require('dotenv');
+dotenv.config()
 require('@aragon/hardhat-aragon')
 require('@nomiclabs/hardhat-web3')
 require('@nomiclabs/hardhat-ethers')
