@@ -183,6 +183,7 @@ function withArgs(...args) {
 }
 
 async function getDeployTxParams(deployer) {
+  console.log(deployer)
   const [deployerSigner] = await hre.ethers.getSigners();
   if (deployer !== deployerSigner.address) {
     console.log({deployerSigner})
