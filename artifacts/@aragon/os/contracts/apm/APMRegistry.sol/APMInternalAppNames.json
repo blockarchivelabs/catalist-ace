@@ -1,0 +1,10 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "APMInternalAppNames",
+  "sourceName": "@aragon/os/contracts/apm/APMRegistry.sol",
+  "abi": [],
+  "bytecode": "0x6080604052348015600f57600080fd5b50603580601d6000396000f3006080604052600080fd00a165627a7a7230582095ff15c32ed0d832a6a003b3f113e73242b011324bed190efbd07b3cb3813fb40029",
+  "deployedBytecode": "0x6080604052600080fd00a165627a7a7230582095ff15c32ed0d832a6a003b3f113e73242b011324bed190efbd07b3cb3813fb40029",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

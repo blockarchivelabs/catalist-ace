@@ -1,0 +1,33 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "IKernelEvents",
+  "sourceName": "@aragon/os/contracts/kernel/IKernel.sol",
+  "abi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "namespace",
+          "type": "bytes32"
+        },
+        {
+          "indexed": true,
+          "name": "appId",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "name": "app",
+          "type": "address"
+        }
+      ],
+      "name": "SetApp",
+      "type": "event"
+    }
+  ],
+  "bytecode": "0x6080604052348015600f57600080fd5b50603580601d6000396000f3006080604052600080fd00a165627a7a72305820aca2564abe94438187d3bbb8a4ef33e87e3170c7a7e44a8fa262ca73cd6cc7550029",
+  "deployedBytecode": "0x6080604052600080fd00a165627a7a72305820aca2564abe94438187d3bbb8a4ef33e87e3170c7a7e44a8fa262ca73cd6cc7550029",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

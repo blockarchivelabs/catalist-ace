@@ -1,0 +1,55 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "IOracleReportSanityChecker",
+  "sourceName": "contracts/0.8.9/oracle/AccountingOracle.sol",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_extraDataListItemsCount",
+          "type": "uint256"
+        }
+      ],
+      "name": "checkAccountingExtraDataListItemsCount",
+      "outputs": [],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_exitedValidatorsCount",
+          "type": "uint256"
+        }
+      ],
+      "name": "checkExitedValidatorsRatePerDay",
+      "outputs": [],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_itemIndex",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_nodeOperatorsCount",
+          "type": "uint256"
+        }
+      ],
+      "name": "checkNodeOperatorsPerExtraDataItemCount",
+      "outputs": [],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

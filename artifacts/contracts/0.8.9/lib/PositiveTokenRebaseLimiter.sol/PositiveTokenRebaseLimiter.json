@@ -1,0 +1,52 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "PositiveTokenRebaseLimiter",
+  "sourceName": "contracts/0.8.9/lib/PositiveTokenRebaseLimiter.sol",
+  "abi": [
+    {
+      "inputs": [],
+      "name": "NegativeTotalPooledAce",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "TooHighTokenRebaseLimit",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "TooLowTokenRebaseLimit",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "LIMITER_PRECISION_BASE",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "UNLIMITED_REBASE",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x60a2610038600b82828239805160001a607314602b57634e487b7160e01b600052600060045260246000fd5b30600052607381538281f3fe7300000000000000000000000000000000000000003014608060405260043610603d5760003560e01c80634f1c3fd514604257806376b74743146062575b600080fd5b605067ffffffffffffffff81565b60405190815260200160405180910390f35b6050633b9aca008156fea2646970667358221220e514ceed369ccb2106313ef394e064631020f9e39344903091dcf1ce6542cb8f64736f6c63430008090033",
+  "deployedBytecode": "0x7300000000000000000000000000000000000000003014608060405260043610603d5760003560e01c80634f1c3fd514604257806376b74743146062575b600080fd5b605067ffffffffffffffff81565b60405190815260200160405180910390f35b6050633b9aca008156fea2646970667358221220e514ceed369ccb2106313ef394e064631020f9e39344903091dcf1ce6542cb8f64736f6c63430008090033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

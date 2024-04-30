@@ -1,0 +1,10 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "ENSConstants",
+  "sourceName": "@aragon/os/contracts/ens/ENSConstants.sol",
+  "abi": [],
+  "bytecode": "0x6080604052348015600f57600080fd5b50603580601d6000396000f3006080604052600080fd00a165627a7a72305820140f7a98b29b6fd730bd985138220e9b4ff8d83e5632dc4e458e9671919e56cb0029",
+  "deployedBytecode": "0x6080604052600080fd00a165627a7a72305820140f7a98b29b6fd730bd985138220e9b4ff8d83e5632dc4e458e9671919e56cb0029",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

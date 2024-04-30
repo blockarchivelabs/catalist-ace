@@ -1,0 +1,10 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "ReentrancyGuard",
+  "sourceName": "@aragon/os/contracts/common/ReentrancyGuard.sol",
+  "abi": [],
+  "bytecode": "0x6080604052348015600f57600080fd5b50603580601d6000396000f3006080604052600080fd00a165627a7a723058208a21fae23d6c78bef61217b612079789b3f2280471a9f324ab50756ec43a4d0f0029",
+  "deployedBytecode": "0x6080604052600080fd00a165627a7a723058208a21fae23d6c78bef61217b612079789b3f2280471a9f324ab50756ec43a4d0f0029",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

@@ -1,0 +1,39 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "AppStorage",
+  "sourceName": "@aragon/os/contracts/apps/AppStorage.sol",
+  "abi": [
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "appId",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "kernel",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x608060405234801561001057600080fd5b50610114806100206000396000f300608060405260043610602c5760003560e01c63ffffffff16806380afdea8146031578063d4aae0c4146055575b600080fd5b348015603c57600080fd5b5060436090565b60408051918252519081900360200190f35b348015606057600080fd5b50606760be565b6040805173ffffffffffffffffffffffffffffffffffffffff9092168252519081900360200190f35b600060b97fd625496217aa6a3453eecb9c3489dc5a53e6c67b444329ea2b2cbc9ff547639b60e4565b905090565b600060b97f4172f0f7d2289153072b0a6ca36959e0cbe2efc3afe50fc81636caa96338137b5b54905600a165627a7a723058206520a925c9096e2f6450ab87fb674f368a864773fb407bea67e15e85950d95ab0029",
+  "deployedBytecode": "0x608060405260043610602c5760003560e01c63ffffffff16806380afdea8146031578063d4aae0c4146055575b600080fd5b348015603c57600080fd5b5060436090565b60408051918252519081900360200190f35b348015606057600080fd5b50606760be565b6040805173ffffffffffffffffffffffffffffffffffffffff9092168252519081900360200190f35b600060b97fd625496217aa6a3453eecb9c3489dc5a53e6c67b444329ea2b2cbc9ff547639b60e4565b905090565b600060b97f4172f0f7d2289153072b0a6ca36959e0cbe2efc3afe50fc81636caa96338137b5b54905600a165627a7a723058206520a925c9096e2f6450ab87fb674f368a864773fb407bea67e15e85950d95ab0029",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

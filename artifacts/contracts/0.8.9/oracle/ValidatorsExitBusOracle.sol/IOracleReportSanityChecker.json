@@ -1,0 +1,24 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "IOracleReportSanityChecker",
+  "sourceName": "contracts/0.8.9/oracle/ValidatorsExitBusOracle.sol",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_exitRequestsCount",
+          "type": "uint256"
+        }
+      ],
+      "name": "checkExitBusOracleReport",
+      "outputs": [],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

@@ -1,0 +1,89 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "PausableUntil",
+  "sourceName": "contracts/0.8.9/utils/PausableUntil.sol",
+  "abi": [
+    {
+      "inputs": [],
+      "name": "PauseUntilMustBeInFuture",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "PausedExpected",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "ResumedExpected",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "ZeroPauseDuration",
+      "type": "error"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "duration",
+          "type": "uint256"
+        }
+      ],
+      "name": "Paused",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [],
+      "name": "Resumed",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "PAUSE_INFINITELY",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getResumeSinceTimestamp",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "isPaused",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x608060405234801561001057600080fd5b5061010b806100206000396000f3fe6080604052348015600f57600080fd5b5060043610603c5760003560e01c8063589ff76c146041578063a302ee3814605a578063b187bd26146062575b600080fd5b60476077565b6040519081526020015b60405180910390f35b604760001981565b606860a5565b60405190151581526020016051565b600060a07f32640ac550357e2bfe4fa43fd3d4a9291f58d5d66cbabb5b8fe11db1552007e35490565b905090565b600060ce7f32640ac550357e2bfe4fa43fd3d4a9291f58d5d66cbabb5b8fe11db1552007e35490565b421090509056fea2646970667358221220819bc07e0c76d1a1ee463ae0c59da224dc75696fc2bc8f36f330d868c3e7d51364736f6c63430008090033",
+  "deployedBytecode": "0x6080604052348015600f57600080fd5b5060043610603c5760003560e01c8063589ff76c146041578063a302ee3814605a578063b187bd26146062575b600080fd5b60476077565b6040519081526020015b60405180910390f35b604760001981565b606860a5565b60405190151581526020016051565b600060a07f32640ac550357e2bfe4fa43fd3d4a9291f58d5d66cbabb5b8fe11db1552007e35490565b905090565b600060ce7f32640ac550357e2bfe4fa43fd3d4a9291f58d5d66cbabb5b8fe11db1552007e35490565b421090509056fea2646970667358221220819bc07e0c76d1a1ee463ae0c59da224dc75696fc2bc8f36f330d868c3e7d51364736f6c63430008090033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

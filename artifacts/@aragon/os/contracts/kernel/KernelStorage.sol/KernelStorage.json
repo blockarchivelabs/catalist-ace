@@ -1,0 +1,48 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "KernelStorage",
+  "sourceName": "@aragon/os/contracts/kernel/KernelStorage.sol",
+  "abi": [
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "bytes32"
+        },
+        {
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "name": "apps",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "recoveryVaultAppId",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x608060405234801561001057600080fd5b5060f88061001f6000396000f300608060405260043610602c5760003560e01c63ffffffff1680634558850c14603157806386070cfe146072575b600080fd5b348015603c57600080fd5b5060496004356024356096565b6040805173ffffffffffffffffffffffffffffffffffffffff9092168252519081900360200190f35b348015607d57600080fd5b50608460c6565b60408051918252519081900360200190f35b600060208181529281526040808220909352908152205473ffffffffffffffffffffffffffffffffffffffff1681565b600154815600a165627a7a72305820478e859c7dea697ada1135a69622fbc6175c5b7651b5aa2fc1763b77234f8e830029",
+  "deployedBytecode": "0x608060405260043610602c5760003560e01c63ffffffff1680634558850c14603157806386070cfe146072575b600080fd5b348015603c57600080fd5b5060496004356024356096565b6040805173ffffffffffffffffffffffffffffffffffffffff9092168252519081900360200190f35b348015607d57600080fd5b50608460c6565b60408051918252519081900360200190f35b600060208181529281526040808220909352908152205473ffffffffffffffffffffffffffffffffffffffff1681565b600154815600a165627a7a72305820478e859c7dea697ada1135a69622fbc6175c5b7651b5aa2fc1763b77234f8e830029",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

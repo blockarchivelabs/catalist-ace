@@ -1,0 +1,10 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "DummyEmptyContract",
+  "sourceName": "contracts/0.8.9/test_helpers/DummyEmptyContract.sol",
+  "abi": [],
+  "bytecode": "0x6080604052348015600f57600080fd5b50603f80601d6000396000f3fe6080604052600080fdfea264697066735822122035138d1ee1b422a870f6649a1b229662619490bc5d4a64084f24a37d4247e21464736f6c63430008090033",
+  "deployedBytecode": "0x6080604052600080fdfea264697066735822122035138d1ee1b422a870f6649a1b229662619490bc5d4a64084f24a37d4247e21464736f6c63430008090033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

@@ -1,0 +1,34 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "IWithdrawalQueue",
+  "sourceName": "contracts/0.8.9/oracle/AccountingOracle.sol",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "bool",
+          "name": "isBunkerMode",
+          "type": "bool"
+        },
+        {
+          "internalType": "uint256",
+          "name": "prevReportTimestamp",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "currentReportTimestamp",
+          "type": "uint256"
+        }
+      ],
+      "name": "onOracleReport",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

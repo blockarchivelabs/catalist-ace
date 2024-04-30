@@ -1,0 +1,68 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "Versioned",
+  "sourceName": "contracts/0.8.9/utils/Versioned.sol",
+  "abi": [
+    {
+      "inputs": [],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [],
+      "name": "InvalidContractVersionIncrement",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "NonZeroContractVersionOnInit",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "expected",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "received",
+          "type": "uint256"
+        }
+      ],
+      "name": "UnexpectedContractVersion",
+      "type": "error"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "version",
+          "type": "uint256"
+        }
+      ],
+      "name": "ContractVersionSet",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "getContractVersion",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x608060405234801561001057600080fd5b5061004a6000197ff812f8d799ea071b4ecf0f6612f1129571268aad3c9d7f3535c25db1f887577261004f60201b6100731790919060201c565b610053565b9055565b60ad806100616000396000f3fe6080604052348015600f57600080fd5b506004361060285760003560e01c80638aa1043514602d575b600080fd5b60336045565b60405190815260200160405180910390f35b6000606e7ff812f8d799ea071b4ecf0f6612f1129571268aad3c9d7f3535c25db1f88757725490565b905090565b905556fea26469706673582212200c3b28060de49fdb0693e744aa038a2b5d7b3425a5182c39952bfe7adc9b81e864736f6c63430008090033",
+  "deployedBytecode": "0x6080604052348015600f57600080fd5b506004361060285760003560e01c80638aa1043514602d575b600080fd5b60336045565b60405190815260200160405180910390f35b6000606e7ff812f8d799ea071b4ecf0f6612f1129571268aad3c9d7f3535c25db1f88757725490565b905090565b905556fea26469706673582212200c3b28060de49fdb0693e744aa038a2b5d7b3425a5182c39952bfe7adc9b81e864736f6c63430008090033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

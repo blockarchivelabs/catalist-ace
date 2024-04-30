@@ -1,0 +1,10 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "IsContract",
+  "sourceName": "@aragon/os/contracts/common/IsContract.sol",
+  "abi": [],
+  "bytecode": "0x6080604052348015600f57600080fd5b50603580601d6000396000f3006080604052600080fd00a165627a7a72305820d74565b6a3de097891aaabfc471d5631b3011db5c7dce229b9c06bbdfb6992630029",
+  "deployedBytecode": "0x6080604052600080fd00a165627a7a72305820d74565b6a3de097891aaabfc471d5631b3011db5c7dce229b9c06bbdfb6992630029",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

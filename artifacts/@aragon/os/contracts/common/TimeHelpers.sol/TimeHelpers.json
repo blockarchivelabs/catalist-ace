@@ -1,0 +1,10 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "TimeHelpers",
+  "sourceName": "@aragon/os/contracts/common/TimeHelpers.sol",
+  "abi": [],
+  "bytecode": "0x6080604052348015600f57600080fd5b50603580601d6000396000f3006080604052600080fd00a165627a7a723058206362f687cffdb1185b16a883731c623efbf81e361ec753d345c2445b2e4148d20029",
+  "deployedBytecode": "0x6080604052600080fd00a165627a7a723058206362f687cffdb1185b16a883731c623efbf81e361ec753d345c2445b2e4148d20029",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

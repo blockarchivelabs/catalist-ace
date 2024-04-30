@@ -1,0 +1,164 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "IOracleReportSanityChecker",
+  "sourceName": "contracts/0.4.24/Catalist.sol",
+  "abi": [
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "_postTotalPooledAce",
+          "type": "uint256"
+        },
+        {
+          "name": "_postTotalShares",
+          "type": "uint256"
+        },
+        {
+          "name": "_aceLockedOnWithdrawalQueue",
+          "type": "uint256"
+        },
+        {
+          "name": "_sharesBurntDueToWithdrawals",
+          "type": "uint256"
+        },
+        {
+          "name": "_simulatedShareRate",
+          "type": "uint256"
+        }
+      ],
+      "name": "checkSimulatedShareRate",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "_lastFinalizableRequestId",
+          "type": "uint256"
+        },
+        {
+          "name": "_reportTimestamp",
+          "type": "uint256"
+        }
+      ],
+      "name": "checkWithdrawalQueueOracleReport",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "_timeElapsed",
+          "type": "uint256"
+        },
+        {
+          "name": "_preCLBalance",
+          "type": "uint256"
+        },
+        {
+          "name": "_postCLBalance",
+          "type": "uint256"
+        },
+        {
+          "name": "_withdrawalVaultBalance",
+          "type": "uint256"
+        },
+        {
+          "name": "_elRewardsVaultBalance",
+          "type": "uint256"
+        },
+        {
+          "name": "_sharesRequestedToBurn",
+          "type": "uint256"
+        },
+        {
+          "name": "_preCLValidators",
+          "type": "uint256"
+        },
+        {
+          "name": "_postCLValidators",
+          "type": "uint256"
+        }
+      ],
+      "name": "checkAccountingOracleReport",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "_preTotalPooledAce",
+          "type": "uint256"
+        },
+        {
+          "name": "_preTotalShares",
+          "type": "uint256"
+        },
+        {
+          "name": "_preCLBalance",
+          "type": "uint256"
+        },
+        {
+          "name": "_postCLBalance",
+          "type": "uint256"
+        },
+        {
+          "name": "_withdrawalVaultBalance",
+          "type": "uint256"
+        },
+        {
+          "name": "_elRewardsVaultBalance",
+          "type": "uint256"
+        },
+        {
+          "name": "_sharesRequestedToBurn",
+          "type": "uint256"
+        },
+        {
+          "name": "_aceToLockForWithdrawals",
+          "type": "uint256"
+        },
+        {
+          "name": "_newSharesToBurnForWithdrawals",
+          "type": "uint256"
+        }
+      ],
+      "name": "smoothenTokenRebase",
+      "outputs": [
+        {
+          "name": "withdrawals",
+          "type": "uint256"
+        },
+        {
+          "name": "elRewards",
+          "type": "uint256"
+        },
+        {
+          "name": "simulatedSharesToBurn",
+          "type": "uint256"
+        },
+        {
+          "name": "sharesToBurn",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

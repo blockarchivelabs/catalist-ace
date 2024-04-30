@@ -1,0 +1,164 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "IStakingRouter",
+  "sourceName": "contracts/0.4.24/Catalist.sol",
+  "abi": [
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "_stakingModuleId",
+          "type": "uint256"
+        },
+        {
+          "name": "_maxDepositsValue",
+          "type": "uint256"
+        }
+      ],
+      "name": "getStakingModuleMaxDepositsCount",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "TOTAL_BASIS_POINTS",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getWithdrawalCredentials",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getTotalFeeE4Precision",
+      "outputs": [
+        {
+          "name": "totalFee",
+          "type": "uint16"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_depositsCount",
+          "type": "uint256"
+        },
+        {
+          "name": "_stakingModuleId",
+          "type": "uint256"
+        },
+        {
+          "name": "_depositCalldata",
+          "type": "bytes"
+        }
+      ],
+      "name": "deposit",
+      "outputs": [],
+      "payable": true,
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_stakingModuleIds",
+          "type": "uint256[]"
+        },
+        {
+          "name": "_totalShares",
+          "type": "uint256[]"
+        }
+      ],
+      "name": "reportRewardsMinted",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getStakingRewardsDistribution",
+      "outputs": [
+        {
+          "name": "recipients",
+          "type": "address[]"
+        },
+        {
+          "name": "stakingModuleIds",
+          "type": "uint256[]"
+        },
+        {
+          "name": "stakingModuleFees",
+          "type": "uint96[]"
+        },
+        {
+          "name": "totalFee",
+          "type": "uint96"
+        },
+        {
+          "name": "precisionPoints",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getStakingFeeAggregateDistributionE4Precision",
+      "outputs": [
+        {
+          "name": "modulesFee",
+          "type": "uint16"
+        },
+        {
+          "name": "treasuryFee",
+          "type": "uint16"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

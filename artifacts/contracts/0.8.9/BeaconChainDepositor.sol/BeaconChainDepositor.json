@@ -1,0 +1,72 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "BeaconChainDepositor",
+  "sourceName": "contracts/0.8.9/BeaconChainDepositor.sol",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_depositContract",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [],
+      "name": "DepositContractZeroAddress",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "actual",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "expected",
+          "type": "uint256"
+        }
+      ],
+      "name": "InvalidPublicKeysBatchLength",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "actual",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "expected",
+          "type": "uint256"
+        }
+      ],
+      "name": "InvalidSignaturesBatchLength",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "DEPOSIT_CONTRACT",
+      "outputs": [
+        {
+          "internalType": "contract IDepositContract",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x60a060405234801561001057600080fd5b5060405161015438038061015483398101604081905261002f91610067565b6001600160a01b03811661005657604051637c5f8bcf60e11b815260040160405180910390fd5b6001600160a01b0316608052610097565b60006020828403121561007957600080fd5b81516001600160a01b038116811461009057600080fd5b9392505050565b60805160a56100af60003960006031015260a56000f3fe6080604052348015600f57600080fd5b506004361060285760003560e01c80636b96736b14602d575b600080fd5b60537f000000000000000000000000000000000000000000000000000000000000000081565b6040516001600160a01b03909116815260200160405180910390f3fea2646970667358221220ecd88ba6a6eeb9e1ede783781508d1d411c478f8f9b29f62e5b6324c687ec84864736f6c63430008090033",
+  "deployedBytecode": "0x6080604052348015600f57600080fd5b506004361060285760003560e01c80636b96736b14602d575b600080fd5b60537f000000000000000000000000000000000000000000000000000000000000000081565b6040516001600160a01b03909116815260200160405180910390f3fea2646970667358221220ecd88ba6a6eeb9e1ede783781508d1d411c478f8f9b29f62e5b6324c687ec84864736f6c63430008090033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

@@ -1,0 +1,10 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "EVMScriptRegistryConstants",
+  "sourceName": "@aragon/os/contracts/evmscript/IEVMScriptRegistry.sol",
+  "abi": [],
+  "bytecode": "0x6080604052348015600f57600080fd5b50603580601d6000396000f3006080604052600080fd00a165627a7a7230582073292d194ecfe1516e605192a227ef74accaa2d068b9e55b8ed83ef57055dfe70029",
+  "deployedBytecode": "0x6080604052600080fd00a165627a7a7230582073292d194ecfe1516e605192a227ef74accaa2d068b9e55b8ed83ef57055dfe70029",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

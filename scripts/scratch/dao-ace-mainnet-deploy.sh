@@ -1,8 +1,12 @@
 #!/bin/bash
 set -e +u
-set -o pipefail
+#set -o pipefail
+set -o allexport
 
-source ../../.env
+# .env 파일의 경로 설정
+ENV_FILE="/home/uncommon/project/catalist/catalist-ace/.env"
+source "$ENV_FILE"
+
 # bash scripts/scratch/dao-ace-mainnet-deploy.sh
 
 if [[ -z "$DEPLOYER" ]]; then
@@ -21,6 +25,6 @@ fi
 
 export NETWORK_STATE_FILE="deployed-${NETWORK}.json"
 
-bash ./dao-deploy.sh
+bash scripts/scratch/dao-deploy.sh
 
-npx hardhat run ../interact/interact-init-mainnet.js
+npx hardhat run scripts/interact/interact-init-mainnet.js
