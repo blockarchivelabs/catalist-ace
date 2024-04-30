@@ -21,6 +21,6 @@ fi
 
 export NETWORK_STATE_FILE="deployed-${NETWORK}.json"
 
-bash scripts/scratch/dao-deploy.sh
+bash ./dao-deploy.sh
 
-npx hardhat run scripts/interact/interact-init-mainnet.js
+npx hardhat run ../interact/interact-init-mainnet.js
