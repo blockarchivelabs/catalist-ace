@@ -1,5 +1,7 @@
 const { ethers } = require('hardhat')
 const fs = require('fs')
+const DEPLOYER = process.env.DEPLOYER
+const ORACLE_MEMBER_ADDRESS = process.env.ORACLE_MEMBER_ADDRESS
 
 // RPC_URL=http://20.197.13.207:8545 npx hardhat run scripts/interact/interact-init-mainnet.js --network ace_mainnet
 async function main() {
@@ -36,8 +38,8 @@ async function main() {
   const SLOTS_PER_EPOCH = chainSpec.slotsPerEpoch
   const SECONDS_PER_SLOT = chainSpec.secondsPerSlot
 
-  const deployerAddress = '0x63cac65c5eb17E6Dd47D9313e23169f79d1Ab058'
-  const oracleMemberAddress = '0xB458c332C242247C46e065Cf987a05bAf7612904'
+  const deployerAddress = DEPLOYER
+  const oracleMemberAddress = ORACLE_MEMBER_ADDRESS
 
   // 최초 배포시 초기화 코드
 

@@ -6,6 +6,7 @@ const { deployWithoutProxy, deployBehindOssifiableProxy, updateProxyImplementati
 const { APP_NAMES } = require('../constants')
 
 const DEPLOYER = process.env.DEPLOYER || ''
+const TREASURY_ADDRESS = process.env.TREASURY_ADDRESS || ''
 const REQUIRED_NET_STATE = [
   `app:${APP_NAMES.CATALIST}`,
   `app:${APP_NAMES.ORACLE}`,
@@ -38,7 +39,8 @@ async function deployNewContracts({ web3, artifacts }) {
   const proxyContractsOwner = DEPLOYER
   const admin = DEPLOYER
   const deployer = DEPLOYER
-  const treasuryAddress = DEPLOYER
+  
+  const treasuryAddress = TREASURY_ADDRESS
 
   const sanityChecks = state["oracleReportSanityChecker"].deployParameters
   logWideSplitter()
