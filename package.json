@@ -1,9 +1,9 @@
 {
-  "name": "@lido/dao",
-  "version": "0.0.1",
+  "name": "@blockarchivelabs/catalist-ace",
+  "version": "1.0.1",
   "private": true,
-  "author": "Lido <info@lido.fi>",
-  "homepage": "https://lido.fi/",
+  "author": "Catalist",
+  "homepage": "",
   "license": "GPL-3.0",
   "workspaces": [
     "apps/*/app",
