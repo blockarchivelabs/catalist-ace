@@ -1,49 +1,58 @@
-# compiled output
-/dist
-/node_modules
-/src/generated
-
-# Env
 .env
+.env.dev
+.env.local
+.idea
+.vscode
+**/build/
+**/node_modules/
+**/lib/abi/*.json
+**/artifacts/
+**/artifacts-userdoc/
+.cache
+**/cache/
+dist/
+tmp/
+venv
+out
 
-# Logs
-logs
+/coverage/
+/coverage.json
+.coverage_*/
+
+aragon-apps/
+aragon-client/
+cli/vendor
+
+**/data/
 *.log
-npm-debug.log*
-pnpm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-lerna-debug.log*
 
-# OS
+# Yarn stuff
+.yarn/*
+
+.pnp.*
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Geth chaindata
+.chaindata/
+
+# Sensitive data
+/accounts.json
+# e2e temp data
+/deployed-e2e.json
+
+/deployed-local.json
+
+# OS relative
 .DS_Store
 
-# Tests
-/coverage
-/.nyc_output
+# foundry artifacts
+foundry/cache
+foundry/out
 
-# IDEs and editors
-/.idea
-.project
-.classpath
-.c9/
-*.launch
-.settings/
-*.sublime-workspace
-
-# IDE - VSCode
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-
-# Docker-related
-/.images
-/.volumes
-
-# Tests
-/.jest
-
-# benchmarks
-/benchmarks/output.json
+logs
+**/verificator_diffs/
