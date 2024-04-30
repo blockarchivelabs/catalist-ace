@@ -111,8 +111,10 @@ async function main() {
   console.log()
   console.log('Update initial epoch...')
   const latestBlockTimestamp = (await ethers.provider.getBlock('latest')).timestamp
-  const initialEpoch = Math.floor((latestBlockTimestamp - GENESIS_TIME)
+  let initialEpoch = Math.floor((latestBlockTimestamp - GENESIS_TIME)
     / (SLOTS_PER_EPOCH * SECONDS_PER_SLOT))
+  initialEpoch = 12824 // 2024-04-30 06:00:00 (UTC)
+  
   await hashConsensusForAccountingOracle.updateInitialEpoch(
     initialEpoch, 
     GAS_INFO
