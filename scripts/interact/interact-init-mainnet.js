@@ -8,26 +8,40 @@ async function main() {
   console.log('Getting the deposit contract...')
   const fileName = './deployed-ace_mainnet.json'
   const addresses = JSON.parse(fs.readFileSync(fileName, 'utf-8'))
+  const depositContractAddress = addresses.chainSpec.depositContract
   const CatalistAddress = addresses['app:catalist'].proxy.address
   const HashConsensusForAccountingOracleAddress = addresses.hashConsensusForAccountingOracle.address
-  const HashConsensusForValidatorsExitBusOracle = addresses.hashConsensusForValidatorsExitBusOracle.address
-  const NodeOperatorsRegistryAddress = addresses['app:node-operators-registry'].proxy.address
+  const HashConsensusForForValidatorsExitBusOracle = addresses.hashConsensusForValidatorsExitBusOracle.address
   const StakingRouterAddress = addresses.stakingRouter.proxy.address
   const AccountingOracleAddress = addresses.accountingOracle.proxy.address
   const WithdrawalQueueERC721Address = addresses.withdrawalQueueERC721.proxy.address
+  const NodeOperatorRegistryAddress = addresses['app:node-operators-registry'].proxy.address
   const DepositSecurityModuleAddress = addresses.depositSecurityModule.address
-  const ValidatorsExitBusOracle = addresses.validatorsExitBusOracle.proxy.address
+  const CatalistLocatorAddress = addresses.catalistLocator.proxy.address
+  const ValidatorsExitBusOracleAddress = addresses.validatorsExitBusOracle.proxy.address
+  const AragonKernelAddress = addresses['aragon-kernel'].proxy.address
+  const AragonAclAddress = addresses['aragon-acl'].proxy.address
+  const OracleReportSanityCheckerAddress = addresses.oracleReportSanityChecker.address
 
+  const depositContract = await ethers.getContractAt('DepositContract', depositContractAddress)
   const catalist = await ethers.getContractAt('Catalist', CatalistAddress)
+  const catalistProxy = await ethers.getContractAt('AppProxyUpgradeable', CatalistAddress)
+  const catalistAragonApp = await ethers.getContractAt('AragonApp', CatalistAddress)
   const hashConsensusForAccountingOracle = await ethers.getContractAt('HashConsensus', HashConsensusForAccountingOracleAddress)
-  const hashConsensusForValidatorsExitBusOracle = await ethers.getContractAt('HashConsensus', HashConsensusForValidatorsExitBusOracle)
+  const hashConsensusForValidatorsExitBusOracle = await ethers.getContractAt('HashConsensus', HashConsensusForForValidatorsExitBusOracle)
   const stakingRouter = await ethers.getContractAt('StakingRouter', StakingRouterAddress)
   const accountingOracle = await ethers.getContractAt('AccountingOracle', AccountingOracleAddress)
   const withdrawalQueueERC721 = await ethers.getContractAt('WithdrawalQueueERC721', WithdrawalQueueERC721Address)
-  const nodeOperatorsRegistry = await ethers.getContractAt('NodeOperatorsRegistry', NodeOperatorsRegistryAddress)
+  const nodeOperatorRegistry = await ethers.getContractAt('NodeOperatorsRegistry', NodeOperatorRegistryAddress)
   const depositSecurityModule = await ethers.getContractAt('DepositSecurityModule', DepositSecurityModuleAddress)
-  const validatorsExitBusOracle = await ethers.getContractAt('ValidatorsExitBusOracle', ValidatorsExitBusOracle)
-
+  const catalistLocator = await ethers.getContractAt('CatalistLocator', CatalistLocatorAddress)
+  const catalistLocatorProxy = await ethers.getContractAt('OssifiableProxy', CatalistLocatorAddress)
+  const validatorsExitBusOracle = await ethers.getContractAt('ValidatorsExitBusOracle', ValidatorsExitBusOracleAddress)
+  const aragonKernel = await ethers.getContractAt('Kernel', AragonKernelAddress)
+  const aragonKernelProxy = await ethers.getContractAt('KernelProxy', AragonKernelAddress)
+  const aragonAcl = await ethers.getContractAt('ACL', AragonAclAddress)
+  const oracleReportSanityChecker = await ethers.getContractAt('OracleReportSanityChecker', OracleReportSanityCheckerAddress)
+  
   const GAS_INFO = {
     gasLimit: 1000000,
     gasPrice: 100000,
