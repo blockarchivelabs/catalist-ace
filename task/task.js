@@ -1,5 +1,19 @@
 const { task } = require("hardhat/config");
 
+task("total-ace", "Get total ACE balance")
+  .setAction(async (taskArgs, { ethers }) => {
+    const getContracts = require("../scripts/interact/loader");
+
+    const loader = await getContracts();
+    const catalist = loader.Catalist.contract;
+
+    const data = await catalist.getTotalPooledAce();
+    const decimals = await catalist.decimals();
+    const pooledAce = data / (10 ** +decimals);
+    console.log();
+    console.log("- Total Polled ACE:", pooledAce.toFixed(+decimals));
+  });
+
 task("add-operator", "Add validator operator")
   .addParam("name", "The operator name")
   .addParam("address", "The operator reward address")
@@ -44,6 +58,10 @@ task("add-key", "Add validator singing keys")
 
     const loader = await getContracts();
 
+    console.log()
+    console.log("- operator:", NODE_OPERATOR_ID);
+    console.log("- file:", DEPOSIT_DATA_FILE);
+
     const KEY_DATA = JSON.parse(fs.readFileSync(DEPOSIT_DATA_FILE, "utf-8"));
     const pubkeys = KEY_DATA.map((data) => data.pubkey);
     const signatures = KEY_DATA.map((data) => data.signature);
@@ -84,7 +102,11 @@ task("get-keys", "Get validator singing keys")
     const loader = await getContracts();
 
     console.log();
-    console.log("Get validator singing keys...");
+    console.log("- operator:", NODE_OPERATOR_ID);
+    console.log("- start:", START);
+    console.log("- end:", END);
+    console.log();
+
     const signingKeys = await loader.NodeOperatorsRegistry.contract.getSigningKeys(
       NODE_OPERATOR_ID,
       START,
