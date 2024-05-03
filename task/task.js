@@ -111,25 +111,37 @@ task("remove-keys", "Remove validator singing keys")
 task("add-keys", "Add validator singing keys")
   .addParam("operator", "The operator id")
   .addParam("file", "Operator signing keys file path")
+  .addOptionalParam("start", "The start signing key index")
+  .addOptionalParam("count", "The number of signing keys to add")
   .setAction(async (taskArgs, { ethers }) => {
     const { hexConcat } = require('../scripts/interact/utils')
     const getContracts = require("../scripts/interact/loader");
     const loader = await getContracts();
     const NODE_OPERATOR_ID = taskArgs.operator;
     const DEPOSIT_DATA_FILE = path.resolve(__dirname, "../" + taskArgs.file);
+    const START = taskArgs.start || 0;
+    const COUNT = taskArgs.count || 0;
 
     console.log()
     console.log("- operator:", NODE_OPERATOR_ID);
     console.log("- file:", DEPOSIT_DATA_FILE);
 
     const KEY_DATA = JSON.parse(fs.readFileSync(DEPOSIT_DATA_FILE, "utf-8"));
-    const pubkeys = KEY_DATA.map((data) => data.pubkey);
-    const signatures = KEY_DATA.map((data) => data.signature);
-    const KEY_COUNT = pubkeys.length;
+    let pubkeys = KEY_DATA.map((data) => data.pubkey);
+    let signatures = KEY_DATA.map((data) => data.signature);
+
+    if (START != 0 || COUNT != 0) {
+      pubkeys = pubkeys.splice(START, COUNT);
+      signatures = signatures.splice(START, COUNT);
+    }
+
+    const KEY_COUNT = COUNT || pubkeys.length;
 
     console.log();
     console.log("Add signing keys...");
+    console.log("- start:", START);
     console.log("- count:", KEY_COUNT);
+    console.log("- pubkeys:", pubkeys);
 
     const tx = await loader.NodeOperatorsRegistry.contract.addSigningKeys(
       NODE_OPERATOR_ID,
