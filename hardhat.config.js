@@ -13,6 +13,7 @@ require('solidity-coverage')
 require('hardhat-contract-sizer')
 require('hardhat-ignore-warnings')
 require('./foundry/skip-sol-tests-compilation')
+require('./task/task')
 
 const NETWORK_NAME = getNetworkName()
 const ETH_ACCOUNT_NAME = process.env.ETH_ACCOUNT_NAME
