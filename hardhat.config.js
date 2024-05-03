@@ -14,6 +14,7 @@ require('solidity-coverage')
 require('hardhat-contract-sizer')
 require('hardhat-ignore-warnings')
 require('./foundry/skip-sol-tests-compilation')
+require('./task/task')
 
 const NETWORK_NAME = getNetworkName()
 const DEPLOYER_PK = process.env.DEPLOYER_PK
