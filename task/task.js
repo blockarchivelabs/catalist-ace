@@ -65,7 +65,7 @@ task("add-operator", "Add validator operator")
     console.log("- name:", OPERATOR_NAME);
     console.log("- address:", OPERATOR_ADDRESS);
 
-    const tx = await loader.NodeOperatorsRegistry.contract.addOperator(
+    const tx = await loader.NodeOperatorsRegistry.contract.addNodeOperator(
       OPERATOR_NAME,
       OPERATOR_ADDRESS,
       GAS_INFO
