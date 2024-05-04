@@ -141,7 +141,6 @@ task("add-keys", "Add validator singing keys")
     console.log("Add signing keys...");
     console.log("- start:", START);
     console.log("- count:", KEY_COUNT);
-    console.log("- pubkeys:", pubkeys);
 
     const tx = await loader.NodeOperatorsRegistry.contract.addSigningKeys(
       NODE_OPERATOR_ID,
