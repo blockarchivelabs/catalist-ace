@@ -6,6 +6,32 @@ const GAS_INFO = {
   gasPrice: 100000,
 };
 
+task("set-staking-limit", "Set staking limit")
+  .addParam("operator", "The operator id")
+  .addOptionalParam("limit", "The staking limit")
+  .setAction(async (taskArgs, { ethers }) => {
+    const getContracts = require("../scripts/interact/loader");
+    const loader = await getContracts();
+    const NODE_OPERATOR_ID = taskArgs.operator;
+    const STAKING_LIMIT = taskArgs.limit || 1000000000;
+
+    console.log();
+    console.log("- operator:", NODE_OPERATOR_ID);
+    console.log("- limit:", STAKING_LIMIT);
+
+    const tx = await loader.NodeOperatorsRegistry.contract.setNodeOperatorStakingLimit(
+      NODE_OPERATOR_ID,
+      STAKING_LIMIT,
+      GAS_INFO
+    );
+
+    console.log();
+    console.log("- transaction hash:", tx.hash);
+
+    console.log();
+    console.log("Complete.");
+  });
+
 task("staking-module-summary", "Get staking module summary")
   .addParam("module", "The staking module id (>= 1)")
   .setAction(async (taskArgs, { ethers }) => {
