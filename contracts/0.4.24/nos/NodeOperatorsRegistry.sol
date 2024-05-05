@@ -1517,7 +1517,7 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
         bytes _signatures
     ) internal {
         _onlyExistedNodeOperator(_nodeOperatorId);
-        _onlyNodeOperatorManager(msg.sender, _nodeOperatorId);
+        _isActiveOperator(msg.sender, _nodeOperatorId);
 
         _requireValidRange(_keysCount != 0 && _keysCount <= UINT64_MAX);
 
@@ -1612,7 +1612,7 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
         uint256 _keysCount
     ) internal {
         _onlyExistedNodeOperator(_nodeOperatorId);
-        _onlyNodeOperatorManager(msg.sender, _nodeOperatorId);
+        _isActiveOperator(msg.sender, _nodeOperatorId);
 
         // preserve the previous behavior of the method here and just return earlier
         if (_keysCount == 0) return;
@@ -2106,17 +2106,12 @@ contract NodeOperatorsRegistry is AragonApp, Versioned {
         _requireAuth(canPerform(msg.sender, _role, new uint256[](0)));
     }
 
-    function _onlyNodeOperatorManager(
+    function _isActiveOperator(
         address _sender,
         uint256 _nodeOperatorId
     ) internal view {
-        bool isRewardAddress = _sender ==
-            _nodeOperators[_nodeOperatorId].rewardAddress;
         bool isActive = _nodeOperators[_nodeOperatorId].active;
-        require(
-            isRewardAddress && isActive,
-            "NOT_REWARD_ADDRESS_OR_NOT_ACTIVE"
-        );
+        require(isActive, "NOT_ACTIVE");
     }
 
     function _onlyExistedNodeOperator(uint256 _nodeOperatorId) internal view {
