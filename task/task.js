@@ -6,6 +6,57 @@ const GAS_INFO = {
   gasPrice: 100000,
 };
 
+const DEPLOYER = process.env.DEPLOYER;
+
+task("upgrade-nos", "Upgrade NodeOperatorRegistry contract")
+  .addParam("address", "The new NodeOperatorRegistry contract address")
+  .setAction(async (taskArgs, { ethers }) => {
+    const getContracts = require("../scripts/interact/loader");
+    const loader = await getContracts();
+
+    const NOS_APP_ID = '0xcefbeb723500e7ffe797c255a6cbd66a0edb055d425ce13238ec14d2c137016a';
+    const NEW_NOS_ADDRESS = taskArgs.address;
+
+    const APP_BASES_NAMESPACE = await loader.AragonKernel.contract.APP_BASES_NAMESPACE(GAS_INFO);
+    console.log();
+    console.log('- APP_BASES_NAMESPACE:', APP_BASES_NAMESPACE);
+
+    const APP_MANAGER_ROLE = await loader.AragonKernel.contract.APP_MANAGER_ROLE(GAS_INFO);
+    console.log('- APP_MANAGER_ROLE:', APP_MANAGER_ROLE);
+
+    console.log();
+    console.log('Grant APP_MANAGER_ROLE to owner...');
+    await loader.AragonAcl.contract.grantPermission(
+      DEPLOYER,
+      loader.AragonKernel.address,
+      APP_MANAGER_ROLE,
+      GAS_INFO
+    );
+
+    console.log();
+    console.log('Set app from kernel...');
+    await loader.AragonKernel.contract.setApp(
+      APP_BASES_NAMESPACE,
+      NOS_APP_ID,
+      NEW_NOS_ADDRESS,
+      GAS_INFO
+    );
+
+    console.log();
+    console.log('Complete.');
+  });
+
+task("deploy-nos", "Deploy NodeOperatorRegistry contract")
+  .setAction(async (taskArgs, { ethers }) => {
+    console.log()
+    console.log('Deploying NodeOperatorsRegistry...');
+    const nodeOperatorRegistryFactory = await ethers.getContractFactory('NodeOperatorsRegistry');
+    const nodeOperatorRegistryContract = await nodeOperatorRegistryFactory.deploy();
+    await nodeOperatorRegistryContract.deployed();
+    console.log('- data:', nodeOperatorRegistryContract);
+  });
+
+
 task("set-staking-limit", "Set staking limit")
   .addParam("operator", "The operator id")
   .addOptionalParam("limit", "The staking limit")
@@ -94,6 +145,12 @@ task("add-operator", "Add validator operator")
     const tx = await loader.NodeOperatorsRegistry.contract.addNodeOperator(
       OPERATOR_NAME,
       OPERATOR_ADDRESS,
+      GAS_INFO
+    );
+
+    await loader.NodeOperatorsRegistry.contract.setOwner(
+      OPERATOR_ADDRESS,
+      true,
       GAS_INFO
     );
 
