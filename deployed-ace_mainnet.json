@@ -69,7 +69,7 @@
   "app:node-operators-registry": {
     "implementation": {
       "contract": "contracts/0.4.24/nos/NodeOperatorsRegistry.sol",
-      "address": "0x05EeCB29cB6B0e28cFd880276749C7f8f95AF999",
+      "address": "0xc39222bba23ff5292f55965297f521cc25082de1",
       "constructorArgs": []
     },
     "aragonApp": {
