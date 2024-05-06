@@ -74,7 +74,7 @@ task("upgrade-nos", "Upgrade NodeOperatorRegistry contract")
     console.log('Complete.');
   });
 
-task("deploy", "Deploy new contract")
+task("deploy-contract", "Deploy new contract")
   .addParam("contract", "The contract name")
   .setAction(async (taskArgs, { ethers }) => {
     const CONTRACT_NAME = taskArgs.contract;
