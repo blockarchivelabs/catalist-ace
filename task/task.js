@@ -7,6 +7,38 @@ const GAS_INFO = {
 };
 
 const DEPLOYER = process.env.DEPLOYER;
+const ARAGON_PROXY = [
+  "Catalist", "NodeOperatorsRegistry", "AragonKernel", "AragonAcl"
+];
+const OSSIFIABLE_PROXY = [
+  "StakingRouter", "AccountingOracle", "WithdrawalQueueERC721", "CatalistLocator", "ValidatorsExitBusOracle"
+];
+const NO_PROXY = [
+  "DepositContract", "HashConsensusForAccountingOracle", "HashConsensusForValidatorsExitBusOracle", "DepositSecurityModule"
+];
+
+task("get-impl", "Get implementation contract address")
+  .addParam("contract", "The contract name")
+  .setAction(async (taskArgs, { ethers }) => {
+    const getContracts = require("../scripts/interact/loader");
+    const loader = await getContracts();
+    const CONTRACT = taskArgs.contract;
+
+    console.log();
+    console.log("- contract:", CONTRACT);
+
+    if (ARAGON_PROXY.includes(CONTRACT)) {
+      const PROXY_IMPL = await loader[CONTRACT].proxy.implementation();
+      console.log("- implementation:", PROXY_IMPL);
+    }
+    else if (OSSIFIABLE_PROXY.includes(CONTRACT)) {
+      const PROXY_IMPL = await loader[CONTRACT].proxy.proxy__getImplementation();
+      console.log("- implementation:", PROXY_IMPL);
+    }
+    else {
+      console.log("- implementation:", loader[CONTRACT].address);
+    }
+  });
 
 task("upgrade-nos", "Upgrade NodeOperatorRegistry contract")
   .addParam("address", "The new NodeOperatorRegistry contract address")
@@ -18,11 +50,7 @@ task("upgrade-nos", "Upgrade NodeOperatorRegistry contract")
     const NEW_NOS_ADDRESS = taskArgs.address;
 
     const APP_BASES_NAMESPACE = await loader.AragonKernel.contract.APP_BASES_NAMESPACE(GAS_INFO);
-    console.log();
-    console.log('- APP_BASES_NAMESPACE:', APP_BASES_NAMESPACE);
-
     const APP_MANAGER_ROLE = await loader.AragonKernel.contract.APP_MANAGER_ROLE(GAS_INFO);
-    console.log('- APP_MANAGER_ROLE:', APP_MANAGER_ROLE);
 
     console.log();
     console.log('Grant APP_MANAGER_ROLE to owner...');
@@ -46,14 +74,19 @@ task("upgrade-nos", "Upgrade NodeOperatorRegistry contract")
     console.log('Complete.');
   });
 
-task("deploy-nos", "Deploy NodeOperatorRegistry contract")
+task("deploy", "Deploy new contract")
+  .addParam("contract", "The contract name")
   .setAction(async (taskArgs, { ethers }) => {
+    const CONTRACT_NAME = taskArgs.contract;
+
     console.log()
-    console.log('Deploying NodeOperatorsRegistry...');
-    const nodeOperatorRegistryFactory = await ethers.getContractFactory('NodeOperatorsRegistry');
-    const nodeOperatorRegistryContract = await nodeOperatorRegistryFactory.deploy();
-    await nodeOperatorRegistryContract.deployed();
-    console.log('- data:', nodeOperatorRegistryContract);
+    console.log('Deploying new contract...');
+    console.log("- contract:", CONTRACT_NAME);
+    
+    const contractFactory = await ethers.getContractFactory(CONTRACT_NAME);
+    const newContract = await contractFactory.deploy();
+    await newContract.deployed();
+    console.log('- data:', newContract);
   });
 
 
