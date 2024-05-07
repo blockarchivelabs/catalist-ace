@@ -2,8 +2,8 @@ const fs = require("fs");
 const path = require("path");
 const { task } = require("hardhat/config");
 const GAS_INFO = {
-  gasLimit: 1000000,
-  gasPrice: 100000,
+  gasLimit: 2000000,
+  gasPrice: 200000,
 };
 
 const DEPLOYER = process.env.DEPLOYER;
@@ -367,45 +367,49 @@ task("add-keys", "Add validator singing keys")
   .addParam("file", "Operator signing keys file path")
   .addOptionalParam("start", "The start signing key index")
   .addOptionalParam("count", "The number of signing keys to add")
+  .addOptionalParam("iter", "Recursive add keys")
   .setAction(async (taskArgs, { ethers }) => {
     const { hexConcat } = require('../scripts/interact/utils')
     const getContracts = require("../scripts/interact/loader");
     const loader = await getContracts();
     const NODE_OPERATOR_ID = taskArgs.operator;
     const DEPOSIT_DATA_FILE = path.resolve(__dirname, "../" + taskArgs.file);
-    const START = taskArgs.start || 0;
-    const COUNT = taskArgs.count || 0;
-
+    
     console.log()
     console.log("- operator:", NODE_OPERATOR_ID);
     console.log("- file:", DEPOSIT_DATA_FILE);
-
+    
     const KEY_DATA = JSON.parse(fs.readFileSync(DEPOSIT_DATA_FILE, "utf-8"));
-    let pubkeys = KEY_DATA.map((data) => data.pubkey);
-    let signatures = KEY_DATA.map((data) => data.signature);
 
-    if (START != 0 || COUNT != 0) {
-      pubkeys = pubkeys.splice(START, COUNT);
-      signatures = signatures.splice(START, COUNT);
+    const START = +taskArgs.start || 0;
+    const COUNT = +taskArgs.count || KEY_DATA.length;
+    const ITER = +taskArgs.iter || 1;
+
+    for (let i = 0; i < ITER; i++) {
+      const splicedPubkeys = KEY_DATA.map((data) => data.pubkey).splice(START + COUNT * i, COUNT);
+      const splicedSignatures = KEY_DATA.map((data) => data.signature).splice(START + COUNT * i, COUNT);
+      const KEY_COUNT = splicedPubkeys.length;
+      const INDEX = START + KEY_COUNT * i;
+
+      if (KEY_COUNT === 0) {
+        break;
+      }
+
+      console.log();
+      console.log("Add signing keys...");
+      console.log("- index:", INDEX);
+      console.log("- count:", KEY_COUNT);
+
+      const tx = await loader.NodeOperatorsRegistry.contract.addSigningKeys(
+        NODE_OPERATOR_ID,
+        KEY_COUNT,
+        hexConcat(...splicedPubkeys),
+        hexConcat(...splicedSignatures),
+        GAS_INFO
+      );
+
+      console.log("- transaction hash:", tx.hash);
     }
-
-    const KEY_COUNT = COUNT || pubkeys.length;
-
-    console.log();
-    console.log("Add signing keys...");
-    console.log("- start:", START);
-    console.log("- count:", KEY_COUNT);
-
-    const tx = await loader.NodeOperatorsRegistry.contract.addSigningKeys(
-      NODE_OPERATOR_ID,
-      KEY_COUNT,
-      hexConcat(...pubkeys),
-      hexConcat(...signatures),
-      GAS_INFO
-    );
-
-    console.log();
-    console.log("- transaction hash:", tx.hash);
 
     console.log();
     console.log("Complete.");
