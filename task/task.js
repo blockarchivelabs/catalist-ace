@@ -17,6 +17,33 @@ const NO_PROXY = [
   "DepositContract", "HashConsensusForAccountingOracle", "HashConsensusForValidatorsExitBusOracle", "DepositSecurityModule"
 ];
 
+task("set-reward-address", "Set operator reward address")
+  .addParam("operator", "The operator id")
+  .addParam("address", "The new reward address")
+  .setAction(async (taskArgs, { ethers }) => {
+    const getContracts = require("../scripts/interact/loader");
+    const loader = await getContracts();
+
+    const NODE_OPERATOR_ID = taskArgs.operator;
+    const NEW_REWARD_ADDRESS = taskArgs.address;
+
+    console.log();
+    console.log("- operator:", NODE_OPERATOR_ID);
+    console.log("- address:", NEW_REWARD_ADDRESS);
+
+    const tx = await loader.NodeOperatorsRegistry.contract.setNodeOperatorRewardAddress(
+      NODE_OPERATOR_ID,
+      NEW_REWARD_ADDRESS,
+      GAS_INFO
+    );
+
+    console.log();
+    console.log("- transaction hash:", tx.hash);
+
+    console.log();
+    console.log("Complete.");
+  });
+
 task("get-impl", "Get implementation contract address")
   .addParam("contract", "The contract name")
   .setAction(async (taskArgs, { ethers }) => {
@@ -131,22 +158,19 @@ task("staking-module-summary", "Get staking module summary")
     console.log("- Staking Module Summary:", data);
   });
 
-task("node-operator-summary", "Get node operator summary")
-  .addParam("module", "The staking module id (>= 1)")
+task("node-operator-info", "Get node operator info")
   .addParam("operator", "The node operator id (>= 0)")
   .setAction(async (taskArgs, { ethers }) => {
     const getContracts = require("../scripts/interact/loader");
     const loader = await getContracts();
-    const STAKING_MODULE_ID = taskArgs["module-id"] > 1? taskArgs["module-id"] : 1;
-    const NODE_OPERATOR_ID = taskArgs["operator-id"] > 0? taskArgs["operator-id"] : 0;
+    const NODE_OPERATOR_ID = taskArgs["operator"] > 0? taskArgs["operator"] : 0;
 
     console.log();
-    console.log("- staking module id:", STAKING_MODULE_ID);
     console.log("- node operator id:", NODE_OPERATOR_ID);
 
-    const data = await loader.StakingRouter.contract.getNodeOperatorSummary(STAKING_MODULE_ID, NODE_OPERATOR_ID, GAS_INFO);
+    const data = await loader.NodeOperatorsRegistry.contract.getNodeOperator(NODE_OPERATOR_ID, GAS_INFO);
     console.log();
-    console.log("- Node Operator Summary:", data);
+    console.log("- Node Operator Info:", data);
   });
 
 task("total-ace", "Get total ACE balance")
