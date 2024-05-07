@@ -17,6 +17,97 @@ const NO_PROXY = [
   "DepositContract", "HashConsensusForAccountingOracle", "HashConsensusForValidatorsExitBusOracle", "DepositSecurityModule"
 ];
 
+
+task("withdraw-info", "Get withdrawal info")
+  .addParam("address", "The account address")
+  .setAction(async (taskArgs, { ethers }) => {
+    const getContracts = require("../scripts/interact/loader");
+    const loader = await getContracts();
+    const ACCOUNT = taskArgs.address;
+
+    console.log();
+    console.log('- address:', ACCOUNT);
+    const withdrawalRequests = await loader.WithdrawalQueueERC721.contract.getWithdrawalRequests(
+      ACCOUNT,
+      GAS_INFO
+    ); 
+    const copiedWithdrawalRequests = withdrawalRequests.map((request) => {
+      return +request;
+    });
+    const requestIds = copiedWithdrawalRequests.sort((a, b) => a - b);
+    console.log('- Withdrawal Requests:', requestIds);
+
+    const withdrawalStatus = await loader.WithdrawalQueueERC721.contract.getWithdrawalStatus(
+      requestIds,
+      GAS_INFO
+    );
+    console.log('- Withdrawal Status:', withdrawalStatus);
+    });
+
+task("withdraw-queue-info", "Get withdrawal queue info")
+  .setAction(async (taskArgs, { ethers }) => {
+    const getContracts = require("../scripts/interact/loader");
+    const loader = await getContracts();
+
+    const lastRequestId = await loader.WithdrawalQueueERC721.contract.getLastRequestId(GAS_INFO);
+    const lastFinalizedRequestId = await loader.WithdrawalQueueERC721.contract.getLastFinalizedRequestId(GAS_INFO);
+    const unfinalizedBACE = await loader.WithdrawalQueueERC721.contract.unfinalizedBACE(GAS_INFO);
+
+    console.log();
+    console.log("- last request id:", +lastRequestId);
+    console.log("- last finalized request id:", +lastFinalizedRequestId);
+    console.log("- unfinalized bACE:", +unfinalizedBACE);
+  });
+
+task("set-frame-config", "Set frame config")
+  .addParam("epoch", "Epoch per frame")
+  .setAction(async (taskArgs, { ethers }) => {
+    const getContracts = require("../scripts/interact/loader");
+    const loader = await getContracts();
+
+    const EPOCH_PER_FRAME = taskArgs.epoch;
+    console.log();
+    console.log("- epoch per frame:", EPOCH_PER_FRAME);
+
+    const tx = await loader.HashConsensusForAccountingOracle.contract.setFrameConfig(
+      EPOCH_PER_FRAME,
+      10,
+      GAS_INFO
+    );
+    const tx2 = await loader.HashConsensusForValidatorsExitBusOracle.contract.setFrameConfig(
+      EPOCH_PER_FRAME,
+      10,
+      GAS_INFO
+    );
+
+    console.log();
+    console.log("- transaction hash:", tx.hash);
+    console.log("- transaction hash:", tx2.hash);
+
+    console.log();
+    console.log("Complete.");
+  });
+
+task("get-staking-modules", "Get staking modules")
+  .setAction(async (taskArgs, { ethers }) => {
+    const getContracts = require("../scripts/interact/loader");
+    const loader = await getContracts();
+
+    const data = await loader.StakingRouter.contract.getStakingModules(GAS_INFO);
+    console.log();
+    console.log("- Staking Modules:", data);
+  });
+
+task("get-staking-limit", "Get staking limit")
+  .setAction(async (taskArgs, { ethers }) => {
+    const getContracts = require("../scripts/interact/loader");
+    const loader = await getContracts();
+
+    const data = await loader.Catalist.contract.getStakeLimitFullInfo(GAS_INFO);
+    console.log();
+    console.log("- Staking Limit:", data);
+  });
+
 task("set-reward-address", "Set operator reward address")
   .addParam("operator", "The operator id")
   .addParam("address", "The new reward address")
@@ -171,6 +262,9 @@ task("node-operator-info", "Get node operator info")
     const data = await loader.NodeOperatorsRegistry.contract.getNodeOperator(NODE_OPERATOR_ID, GAS_INFO);
     console.log();
     console.log("- Node Operator Info:", data);
+
+    const isPenalized = await loader.NodeOperatorsRegistry.contract.isOperatorPenalized(NODE_OPERATOR_ID, GAS_INFO);
+    console.log("- Is Penalized:", isPenalized);
   });
 
 task("total-ace", "Get total ACE balance")
@@ -179,11 +273,23 @@ task("total-ace", "Get total ACE balance")
     const loader = await getContracts();
     const catalist = loader.Catalist.contract;
 
-    const data = await catalist.getTotalPooledAce(GAS_INFO);
-    const decimals = await catalist.decimals(GAS_INFO);
-    const pooledAce = data / (10 ** +decimals);
+    const pooledACE = await catalist.getTotalPooledAce(GAS_INFO);
     console.log();
-    console.log("- Total Polled ACE:", pooledAce.toFixed(+decimals));
+    console.log("- Total Polled ACE:", ethers.utils.formatEther(pooledACE));
+  });
+
+task("balance", "Get account balance")
+  .addParam("address", "The account address")
+  .setAction(async (taskArgs, { ethers }) => {
+    const getContracts = require("../scripts/interact/loader");
+    const loader = await getContracts();
+    const ACCOUNT = taskArgs.address;
+
+    console.log();
+    console.log('- address:', ACCOUNT)
+
+    const balance = await loader.Catalist.contract.balanceOf(ACCOUNT, GAS_INFO);
+    console.log("- balance:", ethers.utils.formatEther(balance));
   });
 
 task("add-operator", "Add validator operator")
