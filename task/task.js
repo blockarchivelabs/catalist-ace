@@ -328,27 +328,32 @@ task("remove-keys", "Remove validator singing keys")
   .addParam("operator", "The operator id")
   .addParam("index", "The key index")
   .addParam("count", "The key count")
+  .addOptionalParam("recursive", "Recursive remove keys")
   .setAction(async (taskArgs, { ethers }) => {
     const getContracts = require("../scripts/interact/loader");
     const loader = await getContracts();
     const NODE_OPERATOR_ID = taskArgs.operator;
     const KEY_INDEX = taskArgs.index;
     const KEY_COUNT = taskArgs.count;
+    let recursive = taskArgs.recursive || 1;
 
-    console.log();
-    console.log("- operator:", NODE_OPERATOR_ID);
-    console.log("- index:", KEY_INDEX);
-    console.log("- count:", KEY_COUNT);
+    while(recursive > 0) {
+      console.log();
+      console.log("- operator:", NODE_OPERATOR_ID);
+      console.log("- index:", KEY_INDEX);
+      console.log("- count:", KEY_COUNT);
 
-    const tx = await loader.NodeOperatorsRegistry.contract.removeSigningKeys(
-      NODE_OPERATOR_ID,
-      KEY_INDEX,
-      KEY_COUNT,
-      GAS_INFO
-    );
+      const tx = await loader.NodeOperatorsRegistry.contract.removeSigningKeys(
+        NODE_OPERATOR_ID,
+        KEY_INDEX,
+        KEY_COUNT,
+        GAS_INFO
+      );
 
-    console.log();
-    console.log("- transaction hash:", tx.hash);
+      console.log();
+      console.log("- transaction hash:", tx.hash);
+      recursive--;
+    }
 
     console.log();
     console.log("Complete.");
