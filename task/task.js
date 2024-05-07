@@ -52,11 +52,13 @@ task("withdraw-queue-info", "Get withdrawal queue info")
     const lastRequestId = await loader.WithdrawalQueueERC721.contract.getLastRequestId(GAS_INFO);
     const lastFinalizedRequestId = await loader.WithdrawalQueueERC721.contract.getLastFinalizedRequestId(GAS_INFO);
     const unfinalizedBACE = await loader.WithdrawalQueueERC721.contract.unfinalizedBACE(GAS_INFO);
+    const lockedAce = await loader.WithdrawalQueueERC721.contract.getLockedAceAmount(GAS_INFO);
 
     console.log();
     console.log("- last request id:", +lastRequestId);
     console.log("- last finalized request id:", +lastFinalizedRequestId);
-    console.log("- unfinalized bACE:", +unfinalizedBACE);
+    console.log("- unfinalized bACE:", +ethers.utils.formatEther(unfinalizedBACE));
+    console.log("- locked ACE:", +ethers.utils.formatEther(lockedAce));
   });
 
 task("set-frame-config", "Set frame config")
@@ -274,8 +276,11 @@ task("total-ace", "Get total ACE balance")
     const catalist = loader.Catalist.contract;
 
     const pooledACE = await catalist.getTotalPooledAce(GAS_INFO);
+    const lockedAce = await loader.WithdrawalQueueERC721.contract.getLockedAceAmount(GAS_INFO);
+
     console.log();
-    console.log("- Total Polled ACE:", ethers.utils.formatEther(pooledACE));
+    console.log("- Total Polled ACE:", +ethers.utils.formatEther(pooledACE));
+    console.log("- Locked ACE:", +ethers.utils.formatEther(lockedAce));
   });
 
 task("balance", "Get account balance")
@@ -289,7 +294,7 @@ task("balance", "Get account balance")
     console.log('- address:', ACCOUNT)
 
     const balance = await loader.Catalist.contract.balanceOf(ACCOUNT, GAS_INFO);
-    console.log("- balance:", ethers.utils.formatEther(balance));
+    console.log("- balance:", +ethers.utils.formatEther(balance));
   });
 
 task("add-operator", "Add validator operator")
