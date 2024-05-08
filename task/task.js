@@ -26,19 +26,17 @@ task("share-image", "Build share image")
     const getContracts = require("../scripts/interact/loader");
     const loader = await getContracts();
     const EVENT = 'TransferShares';
-    const CONTRACT = loader.Catalist.contract;
-    const CONTRACT_ADDRESS = loader.Catalist.address;
-    const CONTRACT_NAME = loader.Catalist.name;
+    const catalist = loader.Catalist.contract;
 
-    const dir = path.resolve(__dirname, "../lib/abi", `${CONTRACT_NAME}.json`);
+    const dir = path.resolve(__dirname, "../lib/abi", `${loader.Catalist.name}.json`);
     const file = fs.readFileSync(dir, "utf8");
     const abi = JSON.parse(file);
 
     const filter = {
-      address: CONTRACT_ADDRESS,
+      address: loader.Catalist.address,
       fromBlock: 0,
       toBlock: 10000000,
-      topics: [CONTRACT.filters[EVENT]().topics]
+      topics: [catalist.filters[EVENT]().topics]
     };
 
     const logs = await ethers.provider.getLogs(filter);
@@ -71,10 +69,16 @@ task("share-image", "Build share image")
     delete sharesMap[ZERO_ADDRESS];
     delete sharesMap[INITIAL_TOKEN_HOLDER];
 
+    const totalPooledAce = await catalist.getTotalPooledAce(GAS_INFO);
+    const TOTAL_POOLED_ACE = new BN(totalPooledAce.toString());
+
+    const totalShares = await catalist.getTotalShares(GAS_INFO);
+    const TOTAL_SHARES = new BN(totalShares.toString());
+
     for (const account of Object.keys(sharesMap)) {
       if (account !== ZERO_ADDRESS && account !== INITIAL_TOKEN_HOLDER) {
-        const balance = await CONTRACT.balanceOf(account, GAS_INFO);
-        sharesMap[account].balance = +ethers.utils.formatEther(balance);
+        const balance = sharesMap[account].shares.mul(TOTAL_POOLED_ACE).div(TOTAL_SHARES);
+        sharesMap[account].balance = +ethers.utils.formatEther(balance.toString());
         sharesMap[account].shares = sharesMap[account].shares.toString();
       }
     }
