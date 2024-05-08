@@ -21,7 +21,7 @@ const NO_PROXY = [
 ];
 
 
-task("share-image", "Build share image")
+task("shares-image", "Build share image")
   .setAction(async (taskArgs, { ethers }) => {
     const getContracts = require("../scripts/interact/loader");
     const loader = await getContracts();
@@ -68,6 +68,10 @@ task("share-image", "Build share image")
 
     delete sharesMap[ZERO_ADDRESS];
     delete sharesMap[INITIAL_TOKEN_HOLDER];
+    
+    for (const contract of Object.keys(loader)) {
+      delete sharesMap[loader[contract].address];
+    }
 
     const totalPooledAce = await catalist.getTotalPooledAce(GAS_INFO);
     const TOTAL_POOLED_ACE = new BN(totalPooledAce.toString());
