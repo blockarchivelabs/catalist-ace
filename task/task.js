@@ -1,6 +1,9 @@
 const fs = require("fs");
 const path = require("path");
+const BN = require("bn.js");
 const { task } = require("hardhat/config");
+const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
+const INITIAL_TOKEN_HOLDER = "0x000000000000000000000000000000000000dEaD";
 const GAS_INFO = {
   gasLimit: 2000000,
   gasPrice: 200000,
@@ -17,6 +20,67 @@ const NO_PROXY = [
   "DepositContract", "HashConsensusForAccountingOracle", "HashConsensusForValidatorsExitBusOracle", "DepositSecurityModule"
 ];
 
+
+task("share-image", "Build share image")
+  .setAction(async (taskArgs, { ethers }) => {
+    const getContracts = require("../scripts/interact/loader");
+    const loader = await getContracts();
+    const EVENT = 'TransferShares';
+    const CONTRACT = loader.Catalist.contract;
+    const CONTRACT_ADDRESS = loader.Catalist.address;
+    const CONTRACT_NAME = loader.Catalist.name;
+
+    const dir = path.resolve(__dirname, "../lib/abi", `${CONTRACT_NAME}.json`);
+    const file = fs.readFileSync(dir, "utf8");
+    const abi = JSON.parse(file);
+
+    const filter = {
+      address: CONTRACT_ADDRESS,
+      fromBlock: 0,
+      toBlock: 10000000,
+      topics: [CONTRACT.filters[EVENT]().topics]
+    };
+
+    const logs = await ethers.provider.getLogs(filter);
+    const iface = new ethers.utils.Interface(abi);
+    const sharesMap = {};
+
+    logs.forEach((log) => {
+      const decodedData = iface.decodeEventLog(EVENT, log.data, log.topics);
+      const from = decodedData.from;
+      const to = decodedData.to;
+      const sharesValue = new BN(decodedData.sharesValue.toString());
+
+      if (!sharesMap[from]) {
+        sharesMap[from] = {
+          shares: new BN(0),
+          balance: new BN(0),
+        };
+      }
+      if (!sharesMap[to]) {
+        sharesMap[to] = {
+          shares: new BN(0),
+          balance: new BN(0),
+        };
+      }
+
+      sharesMap[from].shares = sharesMap[from].shares.sub(sharesValue);
+      sharesMap[to].shares = sharesMap[to].shares.add(sharesValue);
+    });
+
+    delete sharesMap[ZERO_ADDRESS];
+    delete sharesMap[INITIAL_TOKEN_HOLDER];
+
+    for (const account of Object.keys(sharesMap)) {
+      if (account !== ZERO_ADDRESS && account !== INITIAL_TOKEN_HOLDER) {
+        const balance = await CONTRACT.balanceOf(account, GAS_INFO);
+        sharesMap[account].balance = +ethers.utils.formatEther(balance);
+        sharesMap[account].shares = sharesMap[account].shares.toString();
+      }
+    }
+
+    console.log(sharesMap);
+  });
 
 task("withdraw-info", "Get withdrawal info")
   .addParam("address", "The account address")
@@ -276,10 +340,12 @@ task("total-ace", "Get total ACE balance")
     const catalist = loader.Catalist.contract;
 
     const pooledACE = await catalist.getTotalPooledAce(GAS_INFO);
+    const bufferedACE = await catalist.getBufferedAce(GAS_INFO);
     const lockedAce = await loader.WithdrawalQueueERC721.contract.getLockedAceAmount(GAS_INFO);
 
     console.log();
-    console.log("- Total Polled ACE:", +ethers.utils.formatEther(pooledACE));
+    console.log("- Total Pooled ACE:", +ethers.utils.formatEther(pooledACE));
+    console.log("- Buffered ACE:", +ethers.utils.formatEther(bufferedACE));
     console.log("- Locked ACE:", +ethers.utils.formatEther(lockedAce));
   });
 
