@@ -3,8 +3,6 @@ const { ethers } = require('hardhat');
 const path = require('path');
 
 async function getContracts() {
-  console.log('Getting contract information...');
-  
   const FILE_NAME = path.join(__dirname, '../../deployed-ace_mainnet.json');
   const addresses = JSON.parse(fs.readFileSync(FILE_NAME, 'utf-8'));
 
