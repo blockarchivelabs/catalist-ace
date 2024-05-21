@@ -1331,8 +1331,8 @@
       ]
     },
     "/home/uncommon/project/catalist/catalist-ace/contracts/0.4.24/nos/NodeOperatorsRegistry.sol": {
-      "lastModificationDate": 1714442945782,
-      "contentHash": "ecac413fef19889a25c6dd50f3d4fb0d",
+      "lastModificationDate": 1714969921416,
+      "contentHash": "872781f6bb37d9c938afeac890262a33",
       "sourceName": "contracts/0.4.24/nos/NodeOperatorsRegistry.sol",
       "solcConfig": {
         "version": "0.4.24",

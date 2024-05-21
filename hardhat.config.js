@@ -32,7 +32,11 @@ task('accounts', 'Prints the list of accounts', async (taskArgs, hre) => {
 
 const accounts = readJson(`./accounts.json`) || {
   eth: { dev: 'remote' },
-  etherscan: { apiKey: undefined },
+  etherscan: { apiKey: 
+	  {
+		  endurance: 'a'
+	  }
+  },
   infura: { projectId: undefined },
   infura_ipfs: { projectId: undefined, projectSecret: undefined },
 }
@@ -100,6 +104,17 @@ const getNetConfig = (networkName, ethAccountName) => {
       chainId: 648,
       // ensAddress: netState.ensAddress,
       accounts: [process.env.DEPLOYER_PK],
+      // gasPrice: 10100,
+      // gas: 1000000,
+    },
+    ace_mainnet_addkey: {
+      ...base,
+      // url: 'http://20.197.13.207:8545',
+      url: RPC_URL,
+      timeout: 60000 * 15,
+      chainId: 648,
+      // ensAddress: netState.ensAddress,
+      accounts: [process.env.CL_REWARD_PK],
       // gasPrice: 10100,
       // gas: 1000000,
     },
@@ -232,6 +247,14 @@ module.exports = {
           browserURL: 'https://holesky.etherscan.io',
         },
       },
+      {
+        network: 'endurance',
+        chainId: 648,
+        urls: {
+          apiURL: 'https://explorer-endurance.fusionist.io/api',
+          browserURL: 'https://explorer-endurance.fusionist.io/',
+        },
+      }
     ],
   },
   ipfs: {

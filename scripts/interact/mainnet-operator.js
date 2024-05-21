@@ -7,7 +7,7 @@ const { DSMAttestMessage } = require('../../test/helpers/signatures');
 // RPC_URL=http://20.197.13.207:8545 npx hardhat run scripts/interact/mainnet-operator.js --network ace_mainnet
 async function main() {
   console.log('Getting the deposit contract...')
-  const FILE_NAME = './deployed-ace-mainnet-stACE.json'
+  const FILE_NAME = './deployed-ace_mainnet.json'
   const addresses = JSON.parse(fs.readFileSync(FILE_NAME, 'utf-8'))
   const depositContractAddress = addresses.chainSpec.depositContract
   const CatalistAddress = addresses['app:catalist'].proxy.address
@@ -32,7 +32,8 @@ async function main() {
     gasPrice: 100000,
   }
   
-  const deployerAddress = '0x63cac65c5eb17E6Dd47D9313e23169f79d1Ab058';
+  //const deployerAddress = '0xef326a73277a333851c2e6fbce909f14944740b4';
+  const deployerAddress = '0x9773b10cf67ad8070c21aa93549fe9af0751b698';
 
 
 
@@ -65,18 +66,19 @@ async function main() {
   // });
   // console.log('- operators count:', +operatorsCount);
 
-  // console.log();
-  // console.log('Set node operator reward address...');
-  // const operatorId = 0
-  // await nodeOperatorRegistry.setNodeOperatorRewardAddress(
-  //   operatorId,
-  //   testerAddress,
-  //   {
-  //     gasLimit: 1000000,
-  //     gasPrice: 100000,
-  //   }
-  // )
-
+   
+   console.log();
+   console.log('Set node operator reward address...');
+   const operatorId = 0
+   await nodeOperatorRegistry.setNodeOperatorRewardAddress(
+     operatorId,
+     deployerAddress,
+     {
+       gasLimit: 1000000,
+       gasPrice: 100000,
+     }
+   )
+/*
   console.log()
   console.log('Get node operator info...')
   const OPERATOR_ID = 0
@@ -93,7 +95,7 @@ async function main() {
     GAS_INFO
   )
   console.log('- Is Operator Penalized:', isOperatorPenalized)
-
+*/
   console.log()
   console.log('Complete.')
 }
