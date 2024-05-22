@@ -232,6 +232,40 @@ task("get-impl", "Get implementation contract address")
     }
   });
 
+task("upgrade-catalist", "Upgrade Catalist contract")
+  .addParam("address", "The new Catalist contract address")
+  .setAction(async (taskArgs, { ethers }) => {
+    const getContracts = require("../scripts/interact/loader");
+    const loader = await getContracts();
+
+    const CATALIST_APP_ID = '0xfe7e515193fc7331eedd97433fad4b507d16473770a68882c43677c8f27ebcd8';
+    const NEW_CATALIST_ADDRESS = taskArgs.address;
+
+    const APP_BASES_NAMESPACE = await loader.AragonKernel.contract.APP_BASES_NAMESPACE(GAS_INFO);
+    const APP_MANAGER_ROLE = await loader.AragonKernel.contract.APP_MANAGER_ROLE(GAS_INFO);
+
+    console.log();
+    console.log('Grant APP_MANAGER_ROLE to owner...');
+    await loader.AragonAcl.contract.grantPermission(
+      DEPLOYER,
+      loader.AragonKernel.address,
+      APP_MANAGER_ROLE,
+      GAS_INFO
+    );
+
+    console.log();
+    console.log('Set app from kernel...');
+    await loader.AragonKernel.contract.setApp(
+      APP_BASES_NAMESPACE,
+      CATALIST_APP_ID,
+      NEW_CATALIST_ADDRESS,
+      GAS_INFO
+    );
+
+    console.log();
+    console.log('Complete.');
+  });
+
 task("upgrade-nos", "Upgrade NodeOperatorRegistry contract")
   .addParam("address", "The new NodeOperatorRegistry contract address")
   .setAction(async (taskArgs, { ethers }) => {
