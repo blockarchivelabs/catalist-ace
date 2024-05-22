@@ -240,11 +240,11 @@ module.exports = {
     apiKey: accounts.etherscan.apiKey,
     customChains: [
       {
-        network: 'holesky',
-        chainId: 17000,
+        network: 'endurance',
+        chainId: 648,
         urls: {
-          apiURL: 'https://api-holesky.etherscan.io/api',
-          browserURL: 'https://holesky.etherscan.io',
+          apiURL: 'https://explorer-endurance.fusionist.io/api/',
+          browserURL: 'https://explorer-endurance.fusionist.io/',
         },
       },
       {

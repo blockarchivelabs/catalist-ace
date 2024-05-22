@@ -57,6 +57,11 @@ async function getContracts() {
       address: addresses.depositSecurityModule.address,
       contract: await ethers.getContractAt('DepositSecurityModule', addresses.depositSecurityModule.address)
     },
+    Burner: {
+      name: 'Burner',
+      address: addresses.burner.address,
+      contract: await ethers.getContractAt('Burner', addresses.burner.address),
+    },
     CatalistLocator: {
       name: 'CatalistLocator',
       address: addresses.catalistLocator.proxy.address,
