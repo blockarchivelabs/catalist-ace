@@ -48,7 +48,7 @@
   "app:catalist": {
     "implementation": {
       "contract": "contracts/0.4.24/Catalist.sol",
-      "address": "0x860Ba6cDFfA6D0303e1E6F1841080E15e8527348",
+      "address": "0x8b89421a5B44d33387692A27714408384f86b3Ca",
       "constructorArgs": []
     },
     "aragonApp": {
@@ -298,7 +298,7 @@
   },
   "eip712BACE": {
     "contract": "contracts/0.8.9/EIP712BACE.sol",
-    "address": "0x63De20c7B30c36d96dCcCb8745dB7bAAfEFE2D4D",
+    "address": "0x4e23D671f6E2185973222E49D0baddfA37D0383A",
     "constructorArgs": [
       "0xEc46D5a0EE47e585fab59A15976d0F2413BFBB82"
     ]
@@ -496,7 +496,7 @@
   },
   "wbACE": {
     "contract": "contracts/0.6.12/WbACE.sol",
-    "address": "0x33A95777785e9dCb9B95477C925b4E7144bC1849",
+    "address": "0x8888b55C6DE8509355aCC0984963D6B22b7E6B9D",
     "constructorArgs": [
       "0xEc46D5a0EE47e585fab59A15976d0F2413BFBB82"
     ]
@@ -518,7 +518,7 @@
     },
     "implementation": {
       "contract": "contracts/0.8.9/WithdrawalQueueERC721.sol",
-      "address": "0xBeb901b48831Ab0aa4B722C255b84F2C1597d8B6",
+      "address": "0xE98451b9a51914B819CA2Afbe3E09BdCb22a2714",
       "constructorArgs": [
         "0x33A95777785e9dCb9B95477C925b4E7144bC1849",
         "Catalist: bACE Withdrawal NFT",

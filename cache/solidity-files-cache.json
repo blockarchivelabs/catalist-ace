@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/home/uncommon/project/catalist/catalist-ace/contracts/0.4.24/BACE.sol": {
-      "lastModificationDate": 1714442945778,
-      "contentHash": "db3c07d2404d239374ca7bcb66833292",
+      "lastModificationDate": 1716362181174,
+      "contentHash": "a8a1a529b03758499a8f83f22ce37c0f",
       "sourceName": "contracts/0.4.24/BACE.sol",
       "solcConfig": {
         "version": "0.4.24",
@@ -238,8 +238,8 @@
       ]
     },
     "/home/uncommon/project/catalist/catalist-ace/contracts/0.4.24/Catalist.sol": {
-      "lastModificationDate": 1714442945782,
-      "contentHash": "821dcd1a8e768eefee8c66c3a1ddf104",
+      "lastModificationDate": 1716362181174,
+      "contentHash": "a074ce713ad668cdb33a30f65c58d5e9",
       "sourceName": "contracts/0.4.24/Catalist.sol",
       "solcConfig": {
         "version": "0.4.24",
@@ -4727,8 +4727,8 @@
       ]
     },
     "/home/uncommon/project/catalist/catalist-ace/contracts/0.8.9/EIP712BACE.sol": {
-      "lastModificationDate": 1714442945782,
-      "contentHash": "4945c75b4249f7b62fcab8751c625837",
+      "lastModificationDate": 1716440852367,
+      "contentHash": "9b0f05b90a30920561ed95509fc0ad1d",
       "sourceName": "contracts/0.8.9/EIP712BACE.sol",
       "solcConfig": {
         "version": "0.8.9",
@@ -5860,8 +5860,8 @@
       ]
     },
     "/home/uncommon/project/catalist/catalist-ace/contracts/0.6.12/WbACE.sol": {
-      "lastModificationDate": 1714442945782,
-      "contentHash": "6fa9153b4fc24db235bb551b5035819a",
+      "lastModificationDate": 1716440852367,
+      "contentHash": "17fcee67d77e83f090aaecc2e35e064e",
       "sourceName": "contracts/0.6.12/WbACE.sol",
       "solcConfig": {
         "version": "0.6.12",

@@ -53,7 +53,7 @@ verify withdrawalVault.proxy
 verify withdrawalVault.implementation
 verify catalistLocator.proxy
 verify catalistLocator.implementation
-#verify app:catalist.implementation
+verify app:catalist.implementation
 verify app:oracle.implementation
 verify app:node-operators-registry.implementation
 #verify app:aragon-voting.implementation

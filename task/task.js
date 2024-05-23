@@ -5,7 +5,7 @@ const { task } = require("hardhat/config");
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 const INITIAL_TOKEN_HOLDER = "0x000000000000000000000000000000000000dEaD";
 const GAS_INFO = {
-  gasLimit: 2000000,
+  gasLimit: 10000000,
   gasPrice: 200000,
 };
 
@@ -328,7 +328,6 @@ task("deploy-eip", "Deploy new WithdrawalQueueERC721 contract")
   });
 
 task("deploy-wq", "Deploy new WithdrawalQueueERC721 contract")
-  .addParam("wbace", "The WBACE contract address")
   .setAction(async (taskArgs, { ethers }) => {
     const CONTRACT_NAME = 'WithdrawalQueueERC721';
 
@@ -337,11 +336,11 @@ task("deploy-wq", "Deploy new WithdrawalQueueERC721 contract")
     console.log("- contract:", CONTRACT_NAME);
     
     const contractFactory = await ethers.getContractFactory(CONTRACT_NAME);
-    const newContract = await contractFactory.deploy([
-      taskArgs.wbace,
+    const newContract = await contractFactory.deploy(
+      "0x8888b55C6DE8509355aCC0984963D6B22b7E6B9D",
       "Catalist: bACE Withdrawal NFT",
       "unbACE"
-    ], GAS_INFO);
+    , GAS_INFO);
     await newContract.deployed();
     console.log('- data:', newContract);
   });
