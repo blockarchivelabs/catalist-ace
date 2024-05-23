@@ -232,6 +232,18 @@ task("get-impl", "Get implementation contract address")
     }
   });
 
+task("upgrade-wq", "Upgrade WithdrawalQueueERC721 contract")
+  .addParam("address", "The new WithdrawalQueueERC721 contract address")
+  .setAction(async (taskArgs, { ethers }) => {
+    const getContracts = require("../scripts/interact/loader");
+    const loader = await getContracts();
+
+    await loader.WithdrawalQueueERC721.proxy.proxy__upgradeTo(taskArgs.address, GAS_INFO);
+
+    console.log();
+    console.log('Complete.');
+  });
+
 task("upgrade-catalist", "Upgrade Catalist contract")
   .addParam("address", "The new Catalist contract address")
   .setAction(async (taskArgs, { ethers }) => {
@@ -298,6 +310,39 @@ task("upgrade-nos", "Upgrade NodeOperatorRegistry contract")
 
     console.log();
     console.log('Complete.');
+  });
+
+task("deploy-wq", "Deploy new WithdrawalQueueERC721 contract")
+  .addParam("wbace", "The WBACE contract address")
+  .setAction(async (taskArgs, { ethers }) => {
+    const CONTRACT_NAME = 'WithdrawalQueueERC721';
+
+    console.log()
+    console.log('Deploying new contract...');
+    console.log("- contract:", CONTRACT_NAME);
+    
+    const contractFactory = await ethers.getContractFactory(CONTRACT_NAME);
+    const newContract = await contractFactory.deploy([
+      taskArgs.wbace,
+      "Catalist: bACE Withdrawal NFT",
+      "unbACE"
+    ]);
+    await newContract.deployed();
+    console.log('- data:', newContract);
+  });
+
+task("deploy-wbace", "Deploy new WBACE contract")
+  .setAction(async (taskArgs, { ethers }) => {
+    const CONTRACT_NAME = 'WBACE';
+
+    console.log()
+    console.log('Deploying new contract...');
+    console.log("- contract:", CONTRACT_NAME);
+    
+    const contractFactory = await ethers.getContractFactory(CONTRACT_NAME);
+    const newContract = await contractFactory.deploy(["0xEc46D5a0EE47e585fab59A15976d0F2413BFBB82"]);
+    await newContract.deployed();
+    console.log('- data:', newContract);
   });
 
 task("deploy-contract", "Deploy new contract")
