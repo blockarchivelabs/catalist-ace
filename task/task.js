@@ -312,6 +312,21 @@ task("upgrade-nos", "Upgrade NodeOperatorRegistry contract")
     console.log('Complete.');
   });
 
+task("deploy-eip", "Deploy new WithdrawalQueueERC721 contract")
+  .addParam("wbace", "The WBACE contract address")
+  .setAction(async (taskArgs, { ethers }) => {
+    const CONTRACT_NAME = 'EIP712BACE';
+
+    console.log()
+    console.log('Deploying new contract...');
+    console.log("- contract:", CONTRACT_NAME);
+    
+    const contractFactory = await ethers.getContractFactory(CONTRACT_NAME);
+    const newContract = await contractFactory.deploy("0xEc46D5a0EE47e585fab59A15976d0F2413BFBB82", GAS_INFO);
+    await newContract.deployed();
+    console.log('- data:', newContract);
+  });
+
 task("deploy-wq", "Deploy new WithdrawalQueueERC721 contract")
   .addParam("wbace", "The WBACE contract address")
   .setAction(async (taskArgs, { ethers }) => {
@@ -326,21 +341,21 @@ task("deploy-wq", "Deploy new WithdrawalQueueERC721 contract")
       taskArgs.wbace,
       "Catalist: bACE Withdrawal NFT",
       "unbACE"
-    ]);
+    ], GAS_INFO);
     await newContract.deployed();
     console.log('- data:', newContract);
   });
 
 task("deploy-wbace", "Deploy new WBACE contract")
   .setAction(async (taskArgs, { ethers }) => {
-    const CONTRACT_NAME = 'WBACE';
+    const CONTRACT_NAME = 'WbACE';
 
     console.log()
     console.log('Deploying new contract...');
     console.log("- contract:", CONTRACT_NAME);
     
     const contractFactory = await ethers.getContractFactory(CONTRACT_NAME);
-    const newContract = await contractFactory.deploy(["0xEc46D5a0EE47e585fab59A15976d0F2413BFBB82"]);
+    const newContract = await contractFactory.deploy("0xEc46D5a0EE47e585fab59A15976d0F2413BFBB82", GAS_INFO);
     await newContract.deployed();
     console.log('- data:', newContract);
   });
@@ -355,7 +370,7 @@ task("deploy-contract", "Deploy new contract")
     console.log("- contract:", CONTRACT_NAME);
     
     const contractFactory = await ethers.getContractFactory(CONTRACT_NAME);
-    const newContract = await contractFactory.deploy();
+    const newContract = await contractFactory.deploy(GAS_INFO);
     await newContract.deployed();
     console.log('- data:', newContract);
   });
