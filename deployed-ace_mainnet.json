@@ -152,16 +152,12 @@
     "implementation": {
       "contract": "@aragon/os/contracts/kernel/Kernel.sol",
       "address": "0x7aCd577C505D15500F6f530023539fdb2feA192E",
-      "constructorArgs": [
-        true
-      ]
+      "constructorArgs": [true]
     },
     "proxy": {
       "address": "0xB82f7E37848A489A77969B80c1F4e369f1947084",
       "contract": "@aragon/os/contracts/kernel/KernelProxy.sol",
-      "constructorArgs": [
-        "0x7aCd577C505D15500F6f530023539fdb2feA192E"
-      ]
+      "constructorArgs": ["0x7aCd577C505D15500F6f530023539fdb2feA192E"]
     }
   },
   "aragonEnsLabelName": "aragonpm",
@@ -299,9 +295,7 @@
   "eip712BACE": {
     "contract": "contracts/0.8.9/EIP712BACE.sol",
     "address": "0x4e23D671f6E2185973222E49D0baddfA37D0383A",
-    "constructorArgs": [
-      "0xEc46D5a0EE47e585fab59A15976d0F2413BFBB82"
-    ]
+    "constructorArgs": ["0xEc46D5a0EE47e585fab59A15976d0F2413BFBB82"]
   },
   "ens": {
     "address": "0xAba6C7d3B6D1A619D45E7A27159BDd50fADf56DA"
@@ -400,10 +394,7 @@
     },
     "contract": "contracts/0.8.9/OracleDaemonConfig.sol",
     "address": "0xc94d1e2831db15caf4978F4b61B1f49AB75c5c0A",
-    "constructorArgs": [
-      "0x9773b10cf67Ad8070C21AA93549fe9af0751B698",
-      []
-    ]
+    "constructorArgs": ["0x9773b10cf67Ad8070C21AA93549fe9af0751B698", []]
   },
   "oracleReportSanityChecker": {
     "deployParameters": {
@@ -422,29 +413,8 @@
     "constructorArgs": [
       "0xc0fB23Eb1f39Aa386AAF37CC60A8767c77666224",
       "0x9773b10cf67Ad8070C21AA93549fe9af0751B698",
-      [
-        1500,
-        500,
-        2000,
-        250,
-        2000,
-        100,
-        100,
-        128,
-        5000000
-      ],
-      [
-        [],
-        [],
-        [],
-        [],
-        [],
-        [],
-        [],
-        [],
-        [],
-        []
-      ]
+      [1500, 500, 2000, 250, 2000, 100, 100, 128, 5000000],
+      [[], [], [], [], [], [], [], [], [], []]
     ]
   },
   "stakingRouter": {
@@ -460,9 +430,7 @@
     "implementation": {
       "contract": "contracts/0.8.9/StakingRouter.sol",
       "address": "0xA3ce2a6ae452C01120154Ab42F13961c285bA60c",
-      "constructorArgs": [
-        "0xace0000000000000000000000000000000000aCe"
-      ]
+      "constructorArgs": ["0xace0000000000000000000000000000000000aCe"]
     }
   },
   "validatorsExitBusOracle": {
@@ -497,9 +465,7 @@
   "wbACE": {
     "contract": "contracts/0.6.12/WbACE.sol",
     "address": "0x8888b55C6DE8509355aCC0984963D6B22b7E6B9D",
-    "constructorArgs": [
-      "0xEc46D5a0EE47e585fab59A15976d0F2413BFBB82"
-    ]
+    "constructorArgs": ["0xEc46D5a0EE47e585fab59A15976d0F2413BFBB82"]
   },
   "withdrawalQueueERC721": {
     "deployParameters": {
@@ -511,7 +477,7 @@
       "contract": "contracts/0.8.9/proxy/OssifiableProxy.sol",
       "address": "0x348fefa428c592b287FDE1DF326B5b35f09ba87F",
       "constructorArgs": [
-        "0xBeb901b48831Ab0aa4B722C255b84F2C1597d8B6",
+        "0xE98451b9a51914B819CA2Afbe3E09BdCb22a2714",
         "0x9773b10cf67Ad8070C21AA93549fe9af0751B698",
         "0x"
       ]
@@ -520,7 +486,7 @@
       "contract": "contracts/0.8.9/WithdrawalQueueERC721.sol",
       "address": "0xE98451b9a51914B819CA2Afbe3E09BdCb22a2714",
       "constructorArgs": [
-        "0x33A95777785e9dCb9B95477C925b4E7144bC1849",
+        "0x8888b55C6DE8509355aCC0984963D6B22b7E6B9D",
         "Catalist: bACE Withdrawal NFT",
         "unbACE"
       ]
