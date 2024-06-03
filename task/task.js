@@ -503,6 +503,23 @@ task('staking-module-summary', 'Get staking module summary')
     console.log('- Staking Module Summary:', data);
   });
 
+task('grant-frame-config-role', 'Grant Frame Config role')
+  .addParam('address', 'address')
+  .setAction(async (taskArgs, { ethers }) => {
+    const getContracts = require('../scripts/interact/loader');
+    const loader = await getContracts();
+
+    await loader.consensus.grantRole(
+      await consensus.MANAGE_FRAME_CONFIG_ROLE(),
+      taskArgs.address,
+      { from: taskArgs.address },
+      GAS_INFO,
+    );
+
+    console.log();
+    console.log('- complete');
+  });
+
 task('node-operator-info', 'Get node operator info')
   .addParam('operator', 'The node operator id (>= 0)')
   .setAction(async (taskArgs, { ethers }) => {
