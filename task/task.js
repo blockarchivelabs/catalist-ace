@@ -510,16 +510,20 @@ task('grant-frame-config-role', 'Grant Frame Config role')
     const loader = await getContracts();
 
     await loader.HashConsensusForAccountingOracle.contract.grantRole(
-      await loader.HashConsensusForAccountingOracle.contract.MANAGE_FRAME_CONFIG_ROLE(),
+      await loader.HashConsensusForAccountingOracle.contract.MANAGE_FRAME_CONFIG_ROLE(
+        GAS_INFO,
+      ),
       taskArgs.address,
-      { from: taskArgs.address },
+      // { from: taskArgs.address },
       GAS_INFO,
     );
 
     await loader.HashConsensusForValidatorsExitBusOracle.contract.grantRole(
-      await loader.HashConsensusForAccountingOracle.contract.MANAGE_FRAME_CONFIG_ROLE(),
+      await loader.HashConsensusForAccountingOracle.contract.MANAGE_FRAME_CONFIG_ROLE(
+        GAS_INFO,
+      ),
       taskArgs.address,
-      { from: taskArgs.address },
+      // { from: taskArgs.address },
       GAS_INFO,
     );
 
