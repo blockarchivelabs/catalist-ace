@@ -509,7 +509,14 @@ task('grant-frame-config-role', 'Grant Frame Config role')
     const getContracts = require('../scripts/interact/loader');
     const loader = await getContracts();
 
-    await loader.consensus.grantRole(
+    await loader.HashConsensusForAccountingOracle.contract.grantRole(
+      await consensus.MANAGE_FRAME_CONFIG_ROLE(),
+      taskArgs.address,
+      { from: taskArgs.address },
+      GAS_INFO,
+    );
+
+    await loader.HashConsensusForValidatorsExitBusOracle.contract.grantRole(
       await consensus.MANAGE_FRAME_CONFIG_ROLE(),
       taskArgs.address,
       { from: taskArgs.address },
