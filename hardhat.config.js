@@ -1,63 +1,66 @@
-const fs = require('fs')
-const path = require('path')
-const { TASK_COMPILE } = require('hardhat/builtin-tasks/task-names')
+const fs = require('fs');
+const path = require('path');
+const { TASK_COMPILE } = require('hardhat/builtin-tasks/task-names');
 const dotenv = require('dotenv');
-dotenv.config()
-require('@aragon/hardhat-aragon')
-require('@nomiclabs/hardhat-web3')
-require('@nomiclabs/hardhat-ethers')
-require('@nomiclabs/hardhat-truffle5')
-require('@nomiclabs/hardhat-ganache')
-require('@nomiclabs/hardhat-etherscan')
-require('hardhat-gas-reporter')
-require('solidity-coverage')
-require('hardhat-contract-sizer')
-require('hardhat-ignore-warnings')
-require('./foundry/skip-sol-tests-compilation')
-require('./task/task')
+dotenv.config();
+require('@aragon/hardhat-aragon');
+require('@nomiclabs/hardhat-web3');
+require('@nomiclabs/hardhat-ethers');
+require('@nomiclabs/hardhat-truffle5');
+require('@nomiclabs/hardhat-ganache');
+require('@nomiclabs/hardhat-etherscan');
+require('hardhat-gas-reporter');
+require('solidity-coverage');
+require('hardhat-contract-sizer');
+require('hardhat-ignore-warnings');
+require('./foundry/skip-sol-tests-compilation');
+require('./task/task');
 
-const NETWORK_NAME = getNetworkName()
-const DEPLOYER_PK = process.env.DEPLOYER_PK
-const ETH_ACCOUNT_NAME = process.env.ETH_ACCOUNT_NAME
-const RPC_URL = process.env.RPC_URL
+const NETWORK_NAME = getNetworkName();
+const DEPLOYER_PK = process.env.DEPLOYER_PK;
+const ETH_ACCOUNT_NAME = process.env.ETH_ACCOUNT_NAME;
+const RPC_URL = process.env.RPC_URL;
 
 // eslint-disable-next-line no-undef
 task('accounts', 'Prints the list of accounts', async (taskArgs, hre) => {
-  const accounts = await hre.ethers.getSigners()
+  const accounts = await hre.ethers.getSigners();
 
   for (const account of accounts) {
-    console.log(account.address)
+    console.log(account.address);
   }
-})
+});
 
 const accounts = readJson(`./accounts.json`) || {
   eth: { dev: 'remote' },
-  etherscan: { apiKey: 
-	  {
-		  endurance: 'a'
-	  }
+  etherscan: {
+    apiKey: {
+      endurance: 'a',
+    },
   },
   infura: { projectId: undefined },
   infura_ipfs: { projectId: undefined, projectSecret: undefined },
-}
+};
 
 const getNetConfig = (networkName, ethAccountName) => {
-  const netState = readJson(`./deployed-${networkName}.json`) || {}
-  const ethAccts = accounts.eth || {}
+  const netState = readJson(`./deployed-${networkName}.json`) || {};
+  const ethAccts = accounts.eth || {};
 
   if (RPC_URL === undefined && networkName !== 'hardhat') {
-    console.error('ERROR: RPC_URL env variable is not set')
-    process.exit(1)
+    console.error('ERROR: RPC_URL env variable is not set');
+    process.exit(1);
   }
 
   const base = {
     accounts:
       ethAccountName === 'remote'
         ? 'remote'
-        : ethAccts[ethAccountName] || ethAccts[networkName] || ethAccts.dev || 'remote',
+        : ethAccts[ethAccountName] ||
+          ethAccts[networkName] ||
+          ethAccts.dev ||
+          'remote',
     ensAddress: netState.ensAddress,
     timeout: 60000,
-  }
+  };
   const byNetName = {
     mainnetfork: {
       ...base,
@@ -107,6 +110,17 @@ const getNetConfig = (networkName, ethAccountName) => {
       // gasPrice: 10100,
       // gas: 1000000,
     },
+    ace_mainnet_oracle: {
+      ...base,
+      // url: 'http://20.197.13.207:8545',
+      url: RPC_URL,
+      timeout: 60000 * 15,
+      chainId: 648,
+      // ensAddress: netState.ensAddress,
+      accounts: [process.env.ORACLE_PK],
+      // gasPrice: 10100,
+      // gas: 1000000,
+    },
     ace_mainnet_addkey: {
       ...base,
       // url: 'http://20.197.13.207:8545',
@@ -133,7 +147,9 @@ const getNetConfig = (networkName, ethAccountName) => {
     holesky: {
       ...base,
       url: RPC_URL,
-      accounts: ['f11a771308f235a1331b098d0212db69ac049e56c9f1e0da739a39e8b743363c'],
+      accounts: [
+        'f11a771308f235a1331b098d0212db69ac049e56c9f1e0da739a39e8b743363c',
+      ],
       chainId: 17000,
       timeout: 60000 * 15,
     },
@@ -151,13 +167,13 @@ const getNetConfig = (networkName, ethAccountName) => {
         url: RPC_URL,
       },
     },
-  }
-  const netConfig = byNetName[networkName]
+  };
+  const netConfig = byNetName[networkName];
   if (networkName === 'hardhat' && process.env.HARDHAT_FORKING_URL) {
-    netConfig.forking = { url: process.env.HARDHAT_FORKING_URL }
+    netConfig.forking = { url: process.env.HARDHAT_FORKING_URL };
   }
-  return netConfig ? { [networkName]: netConfig } : {}
-}
+  return netConfig ? { [networkName]: netConfig } : {};
+};
 
 const solcSettings4 = {
   optimizer: {
@@ -165,21 +181,21 @@ const solcSettings4 = {
     runs: 200,
   },
   evmVersion: 'constantinople',
-}
+};
 const solcSettings6 = {
   optimizer: {
     enabled: true,
     runs: 200,
   },
   evmVersion: 'istanbul',
-}
+};
 const solcSettings8 = {
   optimizer: {
     enabled: true,
     runs: 200,
   },
   evmVersion: 'istanbul',
-}
+};
 
 module.exports = {
   defaultNetwork: NETWORK_NAME,
@@ -218,10 +234,11 @@ module.exports = {
           },
         },
       },
-      'contracts/0.4.24/test_helpers/MinFirstAllocationStrategyConsumerMockLegacyVersion.sol': {
-        version: '0.4.24',
-        settings: {},
-      },
+      'contracts/0.4.24/test_helpers/MinFirstAllocationStrategyConsumerMockLegacyVersion.sol':
+        {
+          version: '0.4.24',
+          settings: {},
+        },
     },
   },
   warnings: {
@@ -254,7 +271,7 @@ module.exports = {
           apiURL: 'https://explorer-endurance.fusionist.io/api',
           browserURL: 'https://explorer-endurance.fusionist.io/',
         },
-      }
+      },
     ],
   },
   ipfs: {
@@ -271,71 +288,73 @@ module.exports = {
     strict: true,
     except: ['test_helpers', 'template', 'mocks', '@aragon', 'openzeppelin'],
   },
-}
+};
 
 function getNetworkName() {
   if (process.env.HARDHAT_NETWORK) {
     // Hardhat passes the network to its subprocesses via this env var
-    return process.env.HARDHAT_NETWORK
+    return process.env.HARDHAT_NETWORK;
   }
-  const networkArgIndex = process.argv.indexOf('--network')
+  const networkArgIndex = process.argv.indexOf('--network');
   return networkArgIndex !== -1 && networkArgIndex + 1 < process.argv.length
     ? process.argv[networkArgIndex + 1]
-    : process.env.NETWORK_NAME || 'hardhat'
+    : process.env.NETWORK_NAME || 'hardhat';
 }
 
 function readJson(fileName) {
-  let data
+  let data;
   try {
-    const filePath = path.join(__dirname, fileName)
-    data = fs.readFileSync(filePath)
+    const filePath = path.join(__dirname, fileName);
+    data = fs.readFileSync(filePath);
   } catch (err) {
-    return null
+    return null;
   }
-  return JSON.parse(data)
+  return JSON.parse(data);
 }
 
 if (typeof task === 'function') {
-  require('./scripts/hardhat-tasks')
+  require('./scripts/hardhat-tasks');
 }
 
 // eslint-disable-next-line no-undef
 task(TASK_COMPILE).setAction(async function (args, hre, runSuper) {
   for (const compiler of hre.config.solidity.compilers) {
-    compiler.settings.outputSelection['*']['*'].push('userdoc')
+    compiler.settings.outputSelection['*']['*'].push('userdoc');
   }
-  await runSuper()
-})
+  await runSuper();
+});
 
 // eslint-disable-next-line no-undef
 task('userdoc', 'Generate userdoc JSON files', async function (args, hre) {
-  await hre.run('compile')
+  await hre.run('compile');
 
-  const contractNames = await hre.artifacts.getAllFullyQualifiedNames()
-  const dirPath = path.join(__dirname, '/artifacts-userdoc')
+  const contractNames = await hre.artifacts.getAllFullyQualifiedNames();
+  const dirPath = path.join(__dirname, '/artifacts-userdoc');
 
   if (fs.existsSync(dirPath)) {
-    fs.rmSync(dirPath, { recursive: true, force: true })
+    fs.rmSync(dirPath, { recursive: true, force: true });
   }
 
-  fs.mkdirSync(dirPath)
+  fs.mkdirSync(dirPath);
 
   const contractHandlers = contractNames.map((contractName) =>
     (async () => {
-      const [source, name] = contractName.split(':')
-      const { userdoc } = (await hre.artifacts.getBuildInfo(contractName)).output.contracts[source][name]
+      const [source, name] = contractName.split(':');
+      const { userdoc } = (await hre.artifacts.getBuildInfo(contractName))
+        .output.contracts[source][name];
 
       if (
         !userdoc ||
-        (Object.values(userdoc.methods || {}).length === 0 && Object.values(userdoc.events || {}).length === 0)
+        (Object.values(userdoc.methods || {}).length === 0 &&
+          Object.values(userdoc.events || {}).length === 0)
       ) {
-        return
+        return;
       }
 
-      const filePath = path.join(dirPath, `${name}.json`)
-      await fs.promises.writeFile(filePath, JSON.stringify(userdoc, null, 2))
-    })()
-  )
+      const filePath = path.join(dirPath, `${name}.json`);
+      await fs.promises.writeFile(filePath, JSON.stringify(userdoc, null, 2));
+    })(),
+  );
 
-  await Promise.all(contractHandlers)
-})
+  await Promise.all(contractHandlers);
+});
