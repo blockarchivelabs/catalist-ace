@@ -11,8 +11,9 @@ async function main() {
     gasPrice: 100000,
   }
   
-  //const deployerAddress = '0xef326a73277a333851c2e6fbce909f14944740b4';
-  const deployerAddress = '0x9773b10cf67ad8070c21aa93549fe9af0751b698';
+  //const deployerAddress = '0x9773b10cf67ad8070c21aa93549fe9af0751b698';
+  // reward address = '0xef326a73277a333851c2e6fbce909f14944740b4';
+  const changeAddress = '0xef326a73277a333851c2e6fbce909f14944740b4';
 
 
 
@@ -45,36 +46,33 @@ async function main() {
   // });
   // console.log('- operators count:', +operatorsCount);
 
-  // console.log();
-  // console.log('Set node operator reward address...');
-  // const operatorId = 0
-  // await nodeOperatorRegistry.setNodeOperatorRewardAddress(
-  //   operatorId,
-  //   testerAddress,
-  //   {
-  //     gasLimit: 1000000,
-  //     gasPrice: 100000,
-  //   }
-  // )
-
+   console.log();
+   console.log('Set node operator reward address...');
+   const operatorId = 0
+   await loader.NodeOperatorsRegistry.contract.setNodeOperatorRewardAddress(
+     operatorId,
+     changeAddress,
+     GAS_INFO
+   )
+/*
   console.log()
   console.log('Get node operator info...')
   const OPERATOR_ID = 0
-  
+  */
   // const nodeOperatorInfo = await loader.NodeOperatorsRegistry.contract.getNodeOperator(
   //   OPERATOR_ID,
   //   true,
   //   GAS_INFO
   // )
   // console.log('- Node Operator:', nodeOperatorInfo)
-
+/*
   const isOperatorPenalized = await nodeOperatorRegistry.isOperatorPenalized(
     OPERATOR_ID,
     GAS_INFO
   )
   console.log('- Is Operator Penalized:', isOperatorPenalized)
 
-  console.log()
+  console.log()*/
   console.log('Complete.')
 }
 

@@ -5,7 +5,7 @@ const { task } = require('hardhat/config');
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 const INITIAL_TOKEN_HOLDER = '0x000000000000000000000000000000000000dEaD';
 const GAS_INFO = {
-  gasLimit: 10000000,
+  gasLimit: 20000000,
   gasPrice: 200000,
 };
 
