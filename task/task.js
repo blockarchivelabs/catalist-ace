@@ -788,4 +788,42 @@ task('event-log', 'Interact with mainnet event logs')
     });
   });
 
+task(
+  'grant-role-chunk-validators-',
+  'Grant role for CHURN_VALIDATORS_PER_DAY_LIMIT_MANAGER_ROLE',
+)
+  .addParam('address', 'CHURN_VALIDATORS_PER_DAY_LIMIT_MANAGER_ROLE')
+  .setAction(async (taskArgs, { ethers }) => {
+    const getContracts = require('../scripts/interact/loader');
+    const loader = await getContracts();
+
+    await loader.OracleReportSanityChecker.contract.grantRole(
+      await loader.OracleReportSanityChecker.contract.CHURN_VALIDATORS_PER_DAY_LIMIT_MANAGER_ROLE(
+        GAS_INFO,
+      ),
+      taskArgs.address,
+      // { from: taskArgs.address },
+      GAS_INFO,
+    );
+
+    console.log();
+    console.log('- complete');
+  });
+
+task(
+  'set-chunk-validators',
+  'Sets the new value for the churnValidatorsPerDayLimit',
+)
+  .addParam('limit', '_churnValidatorsPerDayLimit')
+  .setAction(async (taskArgs, { ethers }) => {
+    const getContracts = require('../scripts/interact/loader');
+    const loader = await getContracts();
+
+    await loader.OracleReportSanityChecker.contract.setChurnValidatorsPerDayLimit(
+      taskArgs.limit,
+    );
+
+    console.log();
+    console.log('- complete');
+  });
 module.exports = {};
