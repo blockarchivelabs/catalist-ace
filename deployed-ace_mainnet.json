@@ -477,14 +477,14 @@
       "contract": "contracts/0.8.9/proxy/OssifiableProxy.sol",
       "address": "0x348fefa428c592b287FDE1DF326B5b35f09ba87F",
       "constructorArgs": [
-        "0xE98451b9a51914B819CA2Afbe3E09BdCb22a2714",
+        "0xE507755A7297D2FFe0dA18a322A0E3e0021905BD",
         "0x9773b10cf67Ad8070C21AA93549fe9af0751B698",
         "0x"
       ]
     },
     "implementation": {
       "contract": "contracts/0.8.9/WithdrawalQueueERC721.sol",
-      "address": "0xE98451b9a51914B819CA2Afbe3E09BdCb22a2714",
+      "address": "0xE507755A7297D2FFe0dA18a322A0E3e0021905BD",
       "constructorArgs": [
         "0x8888b55C6DE8509355aCC0984963D6B22b7E6B9D",
         "Catalist: bACE Withdrawal NFT",
