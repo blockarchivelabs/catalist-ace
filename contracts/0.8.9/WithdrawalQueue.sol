@@ -63,7 +63,7 @@ abstract contract WithdrawalQueue is
     /// @notice maximum amount of bACE that is possible to withdraw by a single request
     /// Prevents accumulating too much funds per single request fulfillment in the future.
     /// @dev To withdraw larger amounts, it's recommended to split it to several requests
-    uint256 public constant MAX_BACE_WITHDRAWAL_AMOUNT = 1000 * 1e18;
+    uint256 public constant MAX_BACE_WITHDRAWAL_AMOUNT = 100000 * 1e18;
 
     /// @notice Catalist bACE token address
     IBACE public immutable BACE;
