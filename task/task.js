@@ -321,7 +321,7 @@ task('upgrade-wv', 'Upgrade WithdrawalVault contract')
 
     await loader.WithdrawalVault.proxy.proxy_upgradeTo(
       taskArgs.address,
-      '',
+      [],
       GAS_INFO,
     );
 
