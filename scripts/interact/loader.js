@@ -79,6 +79,18 @@ async function getContracts() {
         addresses.withdrawalQueueERC721.proxy.address,
       ),
     },
+    WithdrawalVault: {
+      name: 'WithdrawalVault',
+      address: addresses.withdrawalVault.proxy.address,
+      contract: await ethers.getContractAt(
+        'WithdrawalVault',
+        addresses.withdrawalVault.proxy.address,
+      ),
+      proxy: await ethers.getContractAt(
+        'WithdrawalsManagerProxy',
+        addresses.withdrawalVault.proxy.address,
+      ),
+    },
     NodeOperatorsRegistry: {
       name: 'NodeOperatorsRegistry',
       address: addresses['app:node-operators-registry'].proxy.address,

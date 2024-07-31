@@ -49,6 +49,11 @@ contract WithdrawalVault is Versioned {
         uint256 tokenId
     );
 
+    /**
+     * Emitted when the vault received ACE
+     */
+    event ACEReceived(uint256 amount);
+
     // Errors
     error CatalistZeroAddress();
     error TreasuryZeroAddress();
@@ -78,6 +83,14 @@ contract WithdrawalVault is Versioned {
      */
     function initialize() external {
         _initializeContractVersionTo(1);
+    }
+
+    /**
+     * @notice Allows the contract to receive ACE
+     * @dev execution layer rewards may be sent as plain ACE transfers
+     */
+    receive() external payable {
+        emit ACEReceived(msg.value);
     }
 
     /**

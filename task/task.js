@@ -313,6 +313,22 @@ task('upgrade-wq', 'Upgrade WithdrawalQueueERC721 contract')
     console.log('Complete.');
   });
 
+task('upgrade-wv', 'Upgrade WithdrawalVault contract')
+  .addParam('address', 'The new WithdrawalVault contract address')
+  .setAction(async (taskArgs, { ethers }) => {
+    const getContracts = require('../scripts/interact/loader');
+    const loader = await getContracts();
+
+    await loader.WithdrawalVault.proxy.proxy_upgradeTo(
+      taskArgs.address,
+      '',
+      GAS_INFO,
+    );
+
+    console.log();
+    console.log('Complete.');
+  });
+
 task('upgrade-catalist', 'Upgrade Catalist contract')
   .addParam('address', 'The new Catalist contract address')
   .setAction(async (taskArgs, { ethers }) => {
@@ -436,6 +452,26 @@ task('deploy-wbace', 'Deploy new WBACE contract').setAction(
     const contractFactory = await ethers.getContractFactory(CONTRACT_NAME);
     const newContract = await contractFactory.deploy(
       '0xEc46D5a0EE47e585fab59A15976d0F2413BFBB82',
+      GAS_INFO,
+    );
+    await newContract.deployed();
+    console.log('- data:', newContract);
+  },
+);
+
+task('deploy-wv', 'Deploy new WithdrawalVault contract').setAction(
+  async (taskArgs, { ethers }) => {
+    const CONTRACT_NAME = 'WithdrawalVault';
+
+    console.log();
+    console.log('Deploying new contract...');
+    console.log('- contract:', CONTRACT_NAME);
+
+    const TREASURY_ADDRESS = process.env.TREASURY_ADDRESS || '';
+
+    const contractFactory = await ethers.getContractFactory(CONTRACT_NAME);
+    const newContract = await contractFactory.deploy(
+      ['0xEc46D5a0EE47e585fab59A15976d0F2413BFBB82', TREASURY_ADDRESS],
       GAS_INFO,
     );
     await newContract.deployed();
