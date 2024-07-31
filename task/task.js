@@ -471,7 +471,8 @@ task('deploy-wv', 'Deploy new WithdrawalVault contract').setAction(
 
     const contractFactory = await ethers.getContractFactory(CONTRACT_NAME);
     const newContract = await contractFactory.deploy(
-      ['0xEc46D5a0EE47e585fab59A15976d0F2413BFBB82', TREASURY_ADDRESS],
+      '0xEc46D5a0EE47e585fab59A15976d0F2413BFBB82',
+      TREASURY_ADDRESS,
       GAS_INFO,
     );
     await newContract.deployed();
