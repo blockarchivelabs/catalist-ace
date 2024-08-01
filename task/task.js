@@ -626,6 +626,26 @@ task('balance', 'Get account balance')
     console.log('- balance:', +ethers.utils.formatEther(balance));
   });
 
+task('pause-staking', 'Pause Staking').setAction(
+  async (taskArgs, { ethers }) => {
+    const getContracts = require('../scripts/interact/loader');
+    const loader = await getContracts();
+    const catalist = loader.Catalist.contract.pauseStaking(GAS_INFO);
+
+    console.log();
+    console.log('- complete');
+  });
+
+task('resume-staking', 'Pause Staking').setAction(
+  async (taskArgs, { ethers }) => {
+    const getContracts = require('../scripts/interact/loader');
+    const loader = await getContracts();
+    const catalist = loader.Catalist.contract.resumeStaking(GAS_INFO);
+
+    console.log();
+    console.log('- complete');
+  });
+
 task('add-operator', 'Add validator operator')
   .addParam('name', 'The operator name')
   .addParam('address', 'The operator reward address')
