@@ -654,7 +654,7 @@ task('grant-staking-modules-role', 'Grant staking modules role').setAction(
     const loader = await getContracts();
 
     const data = await loader.StakingRouter.contract.grantRole(
-      await stakingRouter.STAKING_MODULE_MANAGE_ROLE(GAS_INFO),
+      await loader.StakingRouter.contract.STAKING_MODULE_MANAGE_ROLE(GAS_INFO),
       DEPLOYER,
       GAS_INFO,
     );
