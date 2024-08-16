@@ -114,6 +114,7 @@ async function main() {
   await stakingRouter.grantRole(
     await stakingRouter.STAKING_MODULE_MANAGE_ROLE(),
     deployerAddress,
+    { from: deployerAddress },
     GAS_INFO,
   );
 
