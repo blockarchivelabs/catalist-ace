@@ -625,7 +625,8 @@ task(
     console.log('- node operator id:', NODE_OPERATOR_ID);
 
     const data =
-      await loader.NodeOperatorsRegistry.contract.updateRefundedValidatorsCount(
+      await loader.StakingRouter.contract.updateRefundedValidatorsCount(
+        1,
         NODE_OPERATOR_ID,
         taskArgs.count,
         GAS_INFO,
