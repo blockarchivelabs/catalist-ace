@@ -648,6 +648,22 @@ task(
     console.log('- Is Penalized:', isPenalized);
   });
 
+task('grant-staking-modules-role', 'Grant staking modules role').setAction(
+  async (taskArgs, { ethers }) => {
+    const getContracts = require('../scripts/interact/loader');
+    const loader = await getContracts();
+
+    const data = await loader.StakingRouter.contract.grantRole(
+      await stakingRouter.STAKING_MODULE_MANAGE_ROLE(GAS_INFO),
+      DEPLOYER,
+      GAS_INFO,
+    );
+
+    console.log();
+    console.log('- Grant Staking Modules:', data);
+  },
+);
+
 task('total-ace', 'Get total ACE balance').setAction(
   async (taskArgs, { ethers }) => {
     const getContracts = require('../scripts/interact/loader');
