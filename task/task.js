@@ -592,6 +592,60 @@ task('node-operator-info', 'Get node operator info')
         GAS_INFO,
       );
     console.log('- Is Penalized:', isPenalized);
+
+    const nodeOperatorSummary =
+      await loader.NodeOperatorsRegistry.contract.getNodeOperatorSummary(
+        NODE_OPERATOR_ID,
+        GAS_INFO,
+      );
+    console.log('- Node Operator Summary:', nodeOperatorSummary);
+
+    const allNodeOperator =
+      await loader.StakingRouter.contract.getAllNodeOperatorDigests(
+        1,
+        GAS_INFO,
+      );
+
+    console.log('- Node All Operator:', allNodeOperator);
+  });
+
+task(
+  'update-refunded-validators-count',
+  'Updates the number of the refunded validators for node operator with the given id',
+)
+  .addParam('operator', 'The node operator id (>= 0)')
+  .addParam('count', 'New number of refunded validators of the node operator')
+  .setAction(async (taskArgs, { ethers }) => {
+    const getContracts = require('../scripts/interact/loader');
+    const loader = await getContracts();
+    const NODE_OPERATOR_ID =
+      taskArgs['operator'] > 0 ? taskArgs['operator'] : 0;
+
+    console.log();
+    console.log('- node operator id:', NODE_OPERATOR_ID);
+
+    const data =
+      await loader.NodeOperatorsRegistry.contract.updateRefundedValidatorsCount(
+        NODE_OPERATOR_ID,
+        GAS_INFO,
+      );
+    console.log('Update Complete!!');
+    console.log(data);
+
+    const operatorInfo =
+      await loader.NodeOperatorsRegistry.contract.getNodeOperator(
+        NODE_OPERATOR_ID,
+        GAS_INFO,
+      );
+    console.log();
+    console.log('- Node Operator Info:', operatorInfo);
+
+    const isPenalized =
+      await loader.NodeOperatorsRegistry.contract.isOperatorPenalized(
+        NODE_OPERATOR_ID,
+        GAS_INFO,
+      );
+    console.log('- Is Penalized:', isPenalized);
   });
 
 task('total-ace', 'Get total ACE balance').setAction(
@@ -634,7 +688,8 @@ task('pause-staking', 'Pause Staking').setAction(
 
     console.log();
     console.log('- complete');
-  });
+  },
+);
 
 task('resume-staking', 'Pause Staking').setAction(
   async (taskArgs, { ethers }) => {
@@ -644,7 +699,8 @@ task('resume-staking', 'Pause Staking').setAction(
 
     console.log();
     console.log('- complete');
-  });
+  },
+);
 
 task('add-operator', 'Add validator operator')
   .addParam('name', 'The operator name')
