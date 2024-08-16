@@ -633,13 +633,12 @@ task(
     console.log('Update Complete!!');
     console.log(data);
 
-    const operatorInfo =
-      await loader.NodeOperatorsRegistry.contract.getNodeOperator(
+    const nodeOperatorSummary =
+      await loader.NodeOperatorsRegistry.contract.getNodeOperatorSummary(
         NODE_OPERATOR_ID,
         GAS_INFO,
       );
-    console.log();
-    console.log('- Node Operator Info:', operatorInfo);
+    console.log('- Node Operator Summary:', nodeOperatorSummary);
 
     const isPenalized =
       await loader.NodeOperatorsRegistry.contract.isOperatorPenalized(
