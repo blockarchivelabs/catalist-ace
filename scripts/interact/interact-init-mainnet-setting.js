@@ -112,7 +112,7 @@ async function main() {
   // 최초 배포시 초기화 코드
 
   await stakingRouter.grantRole(
-    await stakingRouter.STAKING_MODULE_MANAGE_ROLE(GAS_INFO),
+    await stakingRouter.STAKING_MODULE_MANAGE_ROLE(),
     deployerAddress,
     GAS_INFO,
   );
