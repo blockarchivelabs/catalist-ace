@@ -627,7 +627,7 @@ task(
     const data =
       await loader.NodeOperatorsRegistry.contract.updateRefundedValidatorsCount(
         NODE_OPERATOR_ID,
-
+        taskArgs.count,
         GAS_INFO,
       );
     console.log('Update Complete!!');
@@ -636,7 +636,6 @@ task(
     const operatorInfo =
       await loader.NodeOperatorsRegistry.contract.getNodeOperator(
         NODE_OPERATOR_ID,
-        taskArgs.count,
         GAS_INFO,
       );
     console.log();
