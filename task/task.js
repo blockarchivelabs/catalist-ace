@@ -649,6 +649,28 @@ task(
     console.log('- Is Penalized:', isPenalized);
   });
 
+task(
+  'clear-node-operator-penalty',
+  'Clear node operator penalty after solving the penalty problem.',
+)
+  .addParam('operator', 'The node operator id (>= 0)')
+  .setAction(async (taskArgs, { ethers }) => {
+    const getContracts = require('../scripts/interact/loader');
+    const loader = await getContracts();
+    const NODE_OPERATOR_ID =
+      taskArgs['operator'] > 0 ? taskArgs['operator'] : 0;
+
+    console.log();
+    console.log('- node operator id:', NODE_OPERATOR_ID);
+
+    const nodeOperatorClear =
+      await loader.NodeOperatorsRegistry.contract.clearNodeOperatorPenalty(
+        NODE_OPERATOR_ID,
+        GAS_INFO,
+      );
+    console.log('- Node Operator Clear:', nodeOperatorClear);
+  });
+
 task('grant-staking-modules-role', 'Grant staking modules role').setAction(
   async (taskArgs, { ethers }) => {
     const getContracts = require('../scripts/interact/loader');
@@ -956,4 +978,20 @@ task(
     console.log();
     console.log('- complete');
   });
+
+task('get-last-requested-validator-indices', '').setAction(
+  async (taskArgs, { ethers }) => {
+    const getContracts = require('../scripts/interact/loader');
+    const loader = await getContracts();
+
+    const result =
+      await loader.ValidatorsExitBusOracle.contract.getLastRequestedValidatorIndices(
+        1,
+        [0],
+      );
+
+    console.log(result);
+    console.log('- complete');
+  },
+);
 module.exports = {};
